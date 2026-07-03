@@ -61,6 +61,15 @@ Configuración en Vercel:
 
 Agrega las variables de entorno en el panel del proyecto.
 
+Checklist obligatorio en Vercel:
+
+- En `Settings > Environment Variables`, configura `VITE_API_URL` para Production y Preview.
+- Usa una URL HTTPS publica del backend, por ejemplo `https://api.midominio.com/api`.
+- Despues de cambiar variables `VITE_*`, ejecuta un nuevo deploy; Vite las inyecta durante el build.
+- En `Settings > General`, confirma que Node.js este en una version compatible con `package.json`: `>=20.19.0 <25`.
+- En `Settings > Deployment Protection`, confirma que el dominio publico no exija login de Vercel.
+- En `Domains`, usa como dominio principal el alias que sirva la app real; no compartas URLs que muestren login de Vercel.
+
 ## 4. Despliegue en Netlify
 
 El proyecto incluye:

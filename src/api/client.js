@@ -1,7 +1,15 @@
 import axios from 'axios'
 
+const apiBaseUrl = import.meta.env.VITE_API_URL
+
+if (!apiBaseUrl) {
+  throw new Error(
+    'Missing VITE_API_URL. Configure the Laravel API URL in Vercel and rebuild.',
+  )
+}
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || '/api',
+  baseURL: apiBaseUrl.replace(/\/+$/, ''),
   timeout: 10000,
   headers: {
     Accept: 'application/json',
