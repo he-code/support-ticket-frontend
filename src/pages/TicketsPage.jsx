@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { Link } from 'react-router'
 import { listCategories, listTickets } from '../api/support'
 import {
@@ -10,8 +10,9 @@ import {
   Panel,
   SkeletonRows,
 } from '../components/SupportUi'
+import PaginationBar from '../components/PaginationBar'
 import { useAsync } from '../hooks/useAsync'
-import { cleanParams, collectionFromPayload } from '../lib/normalizers'
+import { cleanParams, paginationFromPayload } from '../lib/normalizers'
 import { formatDate } from '../lib/formatters'
 import {
   getPriorityMeta,
@@ -34,18 +35,27 @@ function TicketsPage() {
     priority: '',
     category_id: '',
   })
+  const [page, setPage] = useState(1)
 
-  const { data: tickets = [], loading, error } = useAsync(
-    async () => collectionFromPayload(await listTickets(cleanParams(filters))),
-    [JSON.stringify(filters)],
+  const { data: paged, loading, error } = useAsync(
+    async () => {
+      const params = { ...cleanParams(filters), page, per_page: 15 }
+      return paginationFromPayload(await listTickets(params))
+    },
+    [JSON.stringify(filters), page],
   )
 
+  const tickets = paged?.items ?? []
+  const total = paged?.meta?.total ?? 0
+  const totalPages = Math.ceil(total / 15)
+
   const { data: categories = [] } = useAsync(
-    async () => collectionFromPayload(await listCategories()),
+    async () => paginationFromPayload(await listCategories()).items,
     [],
   )
 
   const handleFilterChange = (event) => {
+    setPage(1)
     setFilters((current) => ({
       ...current,
       [event.target.name]: event.target.value,
@@ -53,6 +63,7 @@ function TicketsPage() {
   }
 
   const resetFilters = () => {
+    setPage(1)
     setFilters({
       search: '',
       status: '',
@@ -156,7 +167,7 @@ function TicketsPage() {
       <Panel>
         <div className="border-b border-slate-200 px-5 py-4">
           <h2 className="text-base font-semibold text-zinc-950">
-            {tickets.length} tickets
+            {total} tickets
           </h2>
         </div>
 
@@ -291,6 +302,13 @@ function TicketsPage() {
                 </tbody>
               </table>
             </div>
+
+              <PaginationBar
+                onPageChange={setPage}
+                page={page}
+                total={total}
+                totalPages={totalPages}
+              />
             </>
           )}
         </div>

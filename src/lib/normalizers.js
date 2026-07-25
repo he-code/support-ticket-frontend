@@ -26,3 +26,9 @@ export function cleanParams(params) {
     Object.entries(params).filter(([, value]) => value !== '' && value != null),
   )
 }
+
+export function paginationFromPayload(payload) {
+  const value = payloadFromResponse(payload)
+
+  return { items: collectionFromPayload(value), meta: value?.meta ?? null }
+}
