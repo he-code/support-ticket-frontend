@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useState } from 'react'
 import {
   createUser,
   importUsers,
@@ -17,6 +17,8 @@ import {
   SkeletonRows,
 } from '../components/SupportUi'
 import { useAuth } from '../context/AuthContext'
+import { useAsync } from '../hooks/useAsync'
+import { useMutation } from '../hooks/useMutation'
 import { collectionFromPayload } from '../lib/normalizers'
 import { formatDate, getInitials } from '../lib/formatters'
 import { roleOptions } from '../lib/constants'
@@ -34,8 +36,6 @@ function apiErrorMessage(error, fallback) {
 function UsersPage() {
   const { user } = useAuth()
   const isAdmin = user?.role === 'admin'
-  const [users, setUsers] = useState([])
-  const [imports, setImports] = useState([])
   const [form, setForm] = useState({
     name: '',
     email: '',
@@ -47,65 +47,22 @@ function UsersPage() {
     updateExisting: false,
     defaultPassword: '',
   })
-  const [loading, setLoading] = useState(true)
-  const [importsLoading, setImportsLoading] = useState(true)
+  const [importFileKey, setImportFileKey] = useState(0)
   const [saving, setSaving] = useState(false)
   const [importing, setImporting] = useState(false)
-  const [importFileKey, setImportFileKey] = useState(0)
-  const [error, setError] = useState('')
-  const [notice, setNotice] = useState('')
 
-  const loadUsers = useCallback(async () => {
-    if (!isAdmin) {
-      setLoading(false)
-      return
-    }
+  const { data: users = [], loading, error: usersError, setData: setUsers, reload: reloadUsers } = useAsync(
+    async () => (isAdmin ? collectionFromPayload(await listUsers()) : []),
+    [isAdmin],
+  )
 
-    setLoading(true)
-    setError('')
+  const { data: imports = [], loading: importsLoading, error: importsError, reload: reloadImports } = useAsync(
+    async () => (isAdmin ? collectionFromPayload(await listUserImports()) : []),
+    [isAdmin],
+  )
 
-    try {
-      const data = await listUsers()
-      setUsers(collectionFromPayload(data))
-    } catch {
-      setError('No se pudieron cargar los usuarios.')
-    } finally {
-      setLoading(false)
-    }
-  }, [isAdmin])
-
-  const loadImports = useCallback(async () => {
-    if (!isAdmin) {
-      setImportsLoading(false)
-      return
-    }
-
-    setImportsLoading(true)
-
-    try {
-      const data = await listUserImports()
-      setImports(collectionFromPayload(data))
-    } catch {
-      setError('No se pudo cargar el historial de importaciones.')
-    } finally {
-      setImportsLoading(false)
-    }
-  }, [isAdmin])
-
-  useEffect(() => {
-    let cancelled = false
-
-    Promise.resolve().then(() => {
-      if (!cancelled) {
-        loadUsers()
-        loadImports()
-      }
-    })
-
-    return () => {
-      cancelled = true
-    }
-  }, [loadImports, loadUsers])
+  const { execute, error: mutationError, notice, setError, setNotice } = useMutation()
+  const displayError = mutationError || usersError || importsError
 
   if (!isAdmin) {
     return (
@@ -126,14 +83,12 @@ function UsersPage() {
   const handleSubmit = async (event) => {
     event.preventDefault()
     setSaving(true)
-    setError('')
-    setNotice('')
 
     try {
-      await createUser(form)
+      await execute(createUser, form)
       setForm({ name: '', email: '', role: 'user', password: '' })
       setNotice('Usuario creado.')
-      await loadUsers()
+      reloadUsers()
     } catch (error) {
       setError(apiErrorMessage(error, 'No se pudo crear el usuario.'))
     } finally {
@@ -143,8 +98,6 @@ function UsersPage() {
 
   const handleImportSubmit = async (event) => {
     event.preventDefault()
-    setError('')
-    setNotice('')
 
     if (!importForm.file) {
       setError('Selecciona un archivo CSV, TXT o XLSX.')
@@ -154,7 +107,7 @@ function UsersPage() {
     setImporting(true)
 
     try {
-      const response = await importUsers(importForm)
+      const response = await execute(importUsers, importForm)
       const result = response.import ?? response
 
       setImportForm({
@@ -166,7 +119,8 @@ function UsersPage() {
       setNotice(
         `Importacion completada: ${result.created_count ?? 0} creados, ${result.updated_count ?? 0} actualizados, ${result.skipped_count ?? 0} omitidos.`,
       )
-      await Promise.all([loadUsers(), loadImports()])
+      reloadUsers()
+      reloadImports()
     } catch (error) {
       setError(apiErrorMessage(error, 'No se pudo importar usuarios.'))
     } finally {
@@ -191,11 +145,8 @@ function UsersPage() {
   }
 
   const updateRole = async (targetUser, role) => {
-    setError('')
-    setNotice('')
-
     try {
-      await saveUser(targetUser.id, { role })
+      await execute(saveUser, targetUser.id, { role })
       setUsers((current) =>
         current.map((item) =>
           item.id === targetUser.id ? { ...item, role } : item,
@@ -203,7 +154,7 @@ function UsersPage() {
       )
       setNotice('Rol actualizado.')
     } catch {
-      setError('No se pudo actualizar el rol.')
+      // error handled by useMutation
     }
   }
 
@@ -220,9 +171,9 @@ function UsersPage() {
         </div>
       )}
 
-      {error && (
+      {displayError && (
         <div className="rounded-lg bg-rose-50 px-4 py-3 text-sm text-rose-700">
-          {error}
+          {displayError}
         </div>
       )}
 

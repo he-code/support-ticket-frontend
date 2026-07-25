@@ -8,8 +8,9 @@ import {
   Panel,
 } from '../components/SupportUi'
 import { useAuth } from '../context/AuthContext'
-import { getInitials } from '../lib/formatters'
+import { useMutation } from '../hooks/useMutation'
 import { getRoleLabel } from '../lib/ticket'
+import { getInitials } from '../lib/formatters'
 
 function ProfilePage() {
   const { user, updateUser } = useAuth()
@@ -20,9 +21,7 @@ function ProfilePage() {
     password: '',
     password_confirmation: '',
   }))
-  const [saving, setSaving] = useState(false)
-  const [error, setError] = useState('')
-  const [notice, setNotice] = useState('')
+  const { saving, error, notice, execute, setError, setNotice } = useMutation()
 
   const handleChange = (event) => {
     setForm((current) => ({
@@ -33,25 +32,19 @@ function ProfilePage() {
 
   const handleSubmit = async (event) => {
     event.preventDefault()
-    setSaving(true)
-    setError('')
-    setNotice('')
 
     const payload = {
       name: form.name,
       email: form.email,
     }
 
-    if (form.password) {
-      if (!form.current_password) {
-        setError('Ingresa la contrasena actual para cambiarla.')
-        setSaving(false)
-        return
-      }
+    if (form.password && !form.current_password) {
+      setError('Ingresa la contrasena actual para cambiarla.')
+      return
     }
 
     try {
-      const updated = await updateProfile(payload)
+      const updated = await execute(updateProfile, payload)
 
       if (form.password) {
         await changePassword({
@@ -69,10 +62,8 @@ function ProfilePage() {
         password_confirmation: '',
       }))
       setNotice('Perfil actualizado.')
-    } catch (error) {
-      setError(error.response?.data?.message || 'No se pudo actualizar el perfil.')
-    } finally {
-      setSaving(false)
+    } catch {
+      // error handled by useMutation
     }
   }
 

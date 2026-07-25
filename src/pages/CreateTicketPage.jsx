@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router'
 import { createTicket, listCategories } from '../api/support'
 import {
@@ -8,13 +8,18 @@ import {
   PageHeader,
   Panel,
 } from '../components/SupportUi'
+import { useAsync } from '../hooks/useAsync'
+import { useMutation } from '../hooks/useMutation'
 import { collectionFromPayload } from '../lib/normalizers'
 import { getTicketId } from '../lib/ticket'
 import { priorityOptions } from '../lib/constants'
 
 function CreateTicketPage() {
   const navigate = useNavigate()
-  const [categories, setCategories] = useState([])
+  const { data: categories = [] } = useAsync(
+    async () => collectionFromPayload(await listCategories()),
+    [],
+  )
   const [form, setForm] = useState({
     title: '',
     description: '',
@@ -22,32 +27,7 @@ function CreateTicketPage() {
     priority: 'medium',
   })
   const [attachments, setAttachments] = useState([])
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
-
-  useEffect(() => {
-    let isMounted = true
-
-    const loadCategories = async () => {
-      try {
-        const data = await listCategories()
-
-        if (isMounted) {
-          setCategories(collectionFromPayload(data))
-        }
-      } catch {
-        if (isMounted) {
-          setCategories([])
-        }
-      }
-    }
-
-    loadCategories()
-
-    return () => {
-      isMounted = false
-    }
-  }, [])
+  const { saving: loading, error, execute } = useMutation()
 
   const handleChange = (event) => {
     setForm((current) => ({
@@ -58,8 +38,6 @@ function CreateTicketPage() {
 
   const handleSubmit = async (event) => {
     event.preventDefault()
-    setError('')
-    setLoading(true)
 
     try {
       const payload = {
@@ -68,17 +46,13 @@ function CreateTicketPage() {
         category_id: form.category_id || null,
         priority: form.priority,
       }
-      const created = await createTicket(payload, attachments)
+      const created = await execute(createTicket, payload, attachments)
       const ticket = created.ticket ?? created
       const ticketId = getTicketId(ticket)
 
       navigate(ticketId ? `/tickets/${ticketId}` : '/tickets')
-    } catch (error) {
-      setError(
-        error.response?.data?.message || 'No se pudo crear el ticket.',
-      )
-    } finally {
-      setLoading(false)
+    } catch {
+      // error handled by useMutation
     }
   }
 

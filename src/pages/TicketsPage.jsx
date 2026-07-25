@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router'
 import { listCategories, listTickets } from '../api/support'
 import {
@@ -10,6 +10,7 @@ import {
   Panel,
   SkeletonRows,
 } from '../components/SupportUi'
+import { useAsync } from '../hooks/useAsync'
 import { cleanParams, collectionFromPayload } from '../lib/normalizers'
 import { formatDate } from '../lib/formatters'
 import {
@@ -27,66 +28,22 @@ import {
 import { priorityOptions, statusOptions } from '../lib/constants'
 
 function TicketsPage() {
-  const [tickets, setTickets] = useState([])
-  const [categories, setCategories] = useState([])
   const [filters, setFilters] = useState({
     search: '',
     status: '',
     priority: '',
     category_id: '',
   })
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
 
-  const loadTickets = useCallback(async () => {
-    setLoading(true)
-    setError('')
+  const { data: tickets = [], loading, error } = useAsync(
+    async () => collectionFromPayload(await listTickets(cleanParams(filters))),
+    [JSON.stringify(filters)],
+  )
 
-    try {
-      const data = await listTickets(cleanParams(filters))
-      setTickets(collectionFromPayload(data))
-    } catch {
-      setError('No se pudieron cargar los tickets.')
-    } finally {
-      setLoading(false)
-    }
-  }, [filters])
-
-  useEffect(() => {
-    let cancelled = false
-
-    Promise.resolve().then(() => {
-      if (!cancelled) loadTickets()
-    })
-
-    return () => {
-      cancelled = true
-    }
-  }, [loadTickets])
-
-  useEffect(() => {
-    let isMounted = true
-
-    const loadCategories = async () => {
-      try {
-        const data = await listCategories()
-
-        if (isMounted) {
-          setCategories(collectionFromPayload(data))
-        }
-      } catch {
-        if (isMounted) {
-          setCategories([])
-        }
-      }
-    }
-
-    loadCategories()
-
-    return () => {
-      isMounted = false
-    }
-  }, [])
+  const { data: categories = [] } = useAsync(
+    async () => collectionFromPayload(await listCategories()),
+    [],
+  )
 
   const handleFilterChange = (event) => {
     setFilters((current) => ({

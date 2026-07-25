@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Link, useParams } from 'react-router'
 import {
   addTicketComment,
@@ -20,6 +20,8 @@ import {
   Panel,
   SkeletonRows,
 } from '../components/SupportUi'
+import { useAsync } from '../hooks/useAsync'
+import { useMutation } from '../hooks/useMutation'
 import { collectionFromPayload } from '../lib/normalizers'
 import { formatDate, getInitials } from '../lib/formatters'
 import {
@@ -39,85 +41,64 @@ import { statusOptions } from '../lib/constants'
 
 function TicketDetailPage() {
   const { ticketId } = useParams()
-  const [ticket, setTicket] = useState(null)
-  const [comments, setComments] = useState([])
-  const [attachments, setAttachments] = useState([])
-  const [agents, setAgents] = useState([])
   const [status, setStatus] = useState('')
   const [agentId, setAgentId] = useState('')
   const [comment, setComment] = useState('')
   const [attachment, setAttachment] = useState(null)
   const [attachmentKey, setAttachmentKey] = useState(0)
-  const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState('')
-  const [error, setError] = useState('')
-  const [notice, setNotice] = useState('')
 
-  const loadTicket = useCallback(async () => {
-    setLoading(true)
-    setError('')
+  const { data: mainData, loading, error: asyncError, reload: reloadTicket } = useAsync(async () => {
+    const [ticketData, commentsData, attachmentsData] = await Promise.all([
+      getTicket(ticketId),
+      listTicketComments(ticketId),
+      listTicketAttachments(ticketId),
+    ])
+    const nextTicket = ticketData.ticket ?? ticketData
 
-    try {
-      const [ticketData, commentsData, attachmentsData] = await Promise.all([
-        getTicket(ticketId),
-        listTicketComments(ticketId),
-        listTicketAttachments(ticketId),
-      ])
-      const nextTicket = ticketData.ticket ?? ticketData
-
-      setTicket(nextTicket)
-      setComments(collectionFromPayload(commentsData))
-      setAttachments(collectionFromPayload(attachmentsData))
-      setStatus(nextTicket.status ?? 'open')
-      setAgentId(String(getTicketAgentId(nextTicket) ?? ''))
-    } catch {
-      setError('No se pudo cargar el ticket.')
-    } finally {
-      setLoading(false)
+    return {
+      ticket: nextTicket,
+      comments: collectionFromPayload(commentsData),
+      attachments: collectionFromPayload(attachmentsData),
+      initialStatus: nextTicket.status ?? 'open',
+      initialAgentId: String(getTicketAgentId(nextTicket) ?? ''),
     }
   }, [ticketId])
 
-  const loadAgents = useCallback(async () => {
-    try {
-      const data = await listSupportAgents()
-      const users = collectionFromPayload(data)
+  const ticket = mainData?.ticket ?? null
+  const comments = mainData?.comments ?? []
+  const attachments = mainData?.attachments ?? []
+  const { data: agents = [] } = useAsync(
+    async () => collectionFromPayload(await listSupportAgents()),
+    [],
+  )
 
-      setAgents(users)
-    } catch {
-      setAgents([])
-    }
-  }, [])
+  const { execute, setNotice, setError } = useMutation()
 
-  useEffect(() => {
-    let cancelled = false
-
-    Promise.resolve().then(() => {
-      if (!cancelled) {
-        loadTicket()
-        loadAgents()
-      }
-    })
-
-    return () => {
-      cancelled = true
-    }
-  }, [loadAgents, loadTicket])
+  const error = asyncError
 
   const requester = getTicketRequester(ticket)
   const agent = getTicketAgent(ticket)
   const ticketStatus = getStatusMeta(ticket?.status)
   const ticketPriority = getPriorityMeta(ticket?.priority)
 
+  const withSaving = (name, fn) => async (...args) => {
+    setSaving(name)
+    try {
+      await fn(...args)
+    } finally {
+      setSaving('')
+    }
+  }
+
   const saveStatus = async () => {
     setSaving('status')
-    setNotice('')
-
     try {
-      await updateTicketStatus(ticketId, status)
+      await execute(updateTicketStatus, ticketId, status)
       setNotice('Estado actualizado.')
-      await loadTicket()
+      reloadTicket()
     } catch {
-      setError('No se pudo actualizar el estado.')
+      // error handled by useMutation
     } finally {
       setSaving('')
     }
@@ -125,14 +106,12 @@ function TicketDetailPage() {
 
   const saveAssignment = async () => {
     setSaving('assignment')
-    setNotice('')
-
     try {
-      await assignTicket(ticketId, agentId || null)
+      await execute(assignTicket, ticketId, agentId || null)
       setNotice('Asignacion actualizada.')
-      await loadTicket()
+      reloadTicket()
     } catch {
-      setError('No se pudo actualizar la asignacion.')
+      // error handled by useMutation
     } finally {
       setSaving('')
     }
@@ -143,15 +122,13 @@ function TicketDetailPage() {
     if (!comment.trim()) return
 
     setSaving('comment')
-    setNotice('')
-
     try {
-      await addTicketComment(ticketId, comment.trim())
+      await execute(addTicketComment, ticketId, comment.trim())
       setComment('')
       setNotice('Comentario agregado.')
-      await loadTicket()
+      reloadTicket()
     } catch {
-      setError('No se pudo agregar el comentario.')
+      // error handled by useMutation
     } finally {
       setSaving('')
     }
@@ -162,16 +139,14 @@ function TicketDetailPage() {
     if (!attachment) return
 
     setSaving('attachment')
-    setNotice('')
-
     try {
-      await uploadTicketAttachment(ticketId, attachment)
+      await execute(uploadTicketAttachment, ticketId, attachment)
       setAttachment(null)
       setAttachmentKey((current) => current + 1)
       setNotice('Adjunto cargado.')
-      await loadTicket()
+      reloadTicket()
     } catch {
-      setError('No se pudo cargar el adjunto.')
+      // error handled by useMutation
     } finally {
       setSaving('')
     }

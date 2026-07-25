@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Navigate, useNavigate } from 'react-router'
 import { Icon, inputClass, labelClass } from '../components/SupportUi'
 import { useAuth } from '../context/AuthContext'
+import { useMutation } from '../hooks/useMutation'
 
 function LoginPage() {
   const navigate = useNavigate()
@@ -12,8 +13,7 @@ function LoginPage() {
     password: '',
   })
 
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
+  const { saving: loading, error, execute } = useMutation()
 
   if (isAuthenticated) {
     return <Navigate replace to="/dashboard" />
@@ -28,21 +28,12 @@ function LoginPage() {
 
   const handleSubmit = async (event) => {
     event.preventDefault()
-    setError('')
-    setLoading(true)
 
     try {
-      await login(form)
+      await execute(login, form)
       navigate('/dashboard')
-    } catch (error) {
-      const message =
-        error.response?.data?.message ||
-        error.message ||
-        'No se pudo iniciar sesion.'
-
-      setError(message)
-    } finally {
-      setLoading(false)
+    } catch {
+      // error handled by useMutation
     }
   }
 

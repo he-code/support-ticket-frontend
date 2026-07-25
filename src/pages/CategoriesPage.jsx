@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useState } from 'react'
 import {
   createCategory,
   deleteCategory,
@@ -15,44 +15,23 @@ import {
   Panel,
   SkeletonRows,
 } from '../components/SupportUi'
+import { useAsync } from '../hooks/useAsync'
+import { useMutation } from '../hooks/useMutation'
 import { collectionFromPayload } from '../lib/normalizers'
 
 function CategoriesPage() {
-  const [categories, setCategories] = useState([])
+  const { data: categories = [], loading, error, setData: setCategories } = useAsync(
+    async () => collectionFromPayload(await listCategories()),
+    [],
+  )
   const [form, setForm] = useState({
     name: '',
     description: '',
   })
-  const [loading, setLoading] = useState(true)
-  const [saving, setSaving] = useState(false)
-  const [error, setError] = useState('')
-  const [notice, setNotice] = useState('')
+  const { saving, error: mutationError, notice, execute, setError, setNotice } = useMutation()
 
-  const loadCategories = useCallback(async () => {
-    setLoading(true)
-    setError('')
-
-    try {
-      const data = await listCategories()
-      setCategories(collectionFromPayload(data))
-    } catch {
-      setError('No se pudieron cargar las categorias.')
-    } finally {
-      setLoading(false)
-    }
-  }, [])
-
-  useEffect(() => {
-    let cancelled = false
-
-    Promise.resolve().then(() => {
-      if (!cancelled) loadCategories()
-    })
-
-    return () => {
-      cancelled = true
-    }
-  }, [loadCategories])
+  const displayError = mutationError || error
+  const loadCategories = () => listCategories().then(d => setCategories(collectionFromPayload(d)))
 
   const handleChange = (event) => {
     setForm((current) => ({
@@ -63,32 +42,24 @@ function CategoriesPage() {
 
   const handleSubmit = async (event) => {
     event.preventDefault()
-    setSaving(true)
-    setError('')
-    setNotice('')
 
     try {
-      await createCategory(form)
+      await execute(createCategory, form)
       setForm({ name: '', description: '' })
       setNotice('Categoria creada.')
       await loadCategories()
-    } catch (error) {
-      setError(error.response?.data?.message || 'No se pudo crear la categoria.')
-    } finally {
-      setSaving(false)
+    } catch {
+      // error handled by useMutation
     }
   }
 
   const toggleCategory = async (category) => {
-    setError('')
-    setNotice('')
-
     try {
-      await updateCategory(category.id, { is_active: !category.is_active })
+      await execute(updateCategory, category.id, { is_active: !category.is_active })
       setNotice('Categoria actualizada.')
       await loadCategories()
     } catch {
-      setError('No se pudo actualizar la categoria.')
+      // error handled by useMutation
     }
   }
 
@@ -96,15 +67,12 @@ function CategoriesPage() {
     const confirmed = window.confirm(`Eliminar ${category.name}?`)
     if (!confirmed) return
 
-    setError('')
-    setNotice('')
-
     try {
-      await deleteCategory(category.id)
+      await execute(deleteCategory, category.id)
       setNotice('Categoria eliminada.')
       await loadCategories()
     } catch {
-      setError('No se pudo eliminar la categoria.')
+      // error handled by useMutation
     }
   }
 
@@ -121,9 +89,9 @@ function CategoriesPage() {
         </div>
       )}
 
-      {error && (
+      {displayError && (
         <div className="rounded-lg bg-rose-50 px-4 py-3 text-sm text-rose-700">
-          {error}
+          {displayError}
         </div>
       )}
 

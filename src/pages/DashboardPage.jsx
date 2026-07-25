@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react'
 import { Link } from 'react-router'
 import { getDashboardStats, listTickets } from '../api/support'
 import { Badge, Icon, PageHeader, Panel, SkeletonRows } from '../components/SupportUi'
+import { useAsync } from '../hooks/useAsync'
 import { collectionFromPayload } from '../lib/normalizers'
 import { formatDate } from '../lib/formatters'
 import {
@@ -39,46 +39,28 @@ function StatCard({ icon, title, value, loading, tone = 'slate' }) {
 }
 
 function DashboardPage() {
-  const [stats, setStats] = useState(null)
-  const [recentTickets, setRecentTickets] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
+  const { data, loading, error } = useAsync(async () => {
+    const [statsResult, ticketsResult] = await Promise.allSettled([
+      getDashboardStats(),
+      listTickets({ sort_by: 'created_at', sort_direction: 'desc' }),
+    ])
 
-  useEffect(() => {
-    let isMounted = true
+    const stats = statsResult.status === 'fulfilled' ? statsResult.value : null
+    const tickets = ticketsResult.status === 'fulfilled'
+      ? collectionFromPayload(ticketsResult.value).slice(0, 5)
+      : []
 
-    const loadDashboard = async () => {
-      setLoading(true)
-      setError('')
+    const errorMessage =
+      statsResult.status === 'rejected' && ticketsResult.status === 'rejected'
+        ? 'No se pudo cargar el dashboard.'
+        : null
 
-      const [statsResult, ticketsResult] = await Promise.allSettled([
-        getDashboardStats(),
-        listTickets({ sort_by: 'created_at', sort_direction: 'desc' }),
-      ])
-
-      if (!isMounted) return
-
-      if (statsResult.status === 'fulfilled') {
-        setStats(statsResult.value)
-      }
-
-      if (ticketsResult.status === 'fulfilled') {
-        setRecentTickets(collectionFromPayload(ticketsResult.value).slice(0, 5))
-      }
-
-      if (statsResult.status === 'rejected' && ticketsResult.status === 'rejected') {
-        setError('No se pudo cargar el dashboard.')
-      }
-
-      setLoading(false)
-    }
-
-    loadDashboard()
-
-    return () => {
-      isMounted = false
-    }
+    return { stats, tickets, error: errorMessage }
   }, [])
+
+  const stats = data?.stats ?? null
+  const recentTickets = data?.tickets ?? []
+  const displayError = error || data?.error
 
   const openTickets =
     stats?.by_status?.open ?? stats?.open_tickets ?? stats?.open ?? 0

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useState } from 'react'
 import {
   listNotifications,
   markAllNotificationsRead,
@@ -12,51 +12,23 @@ import {
   Panel,
   SkeletonRows,
 } from '../components/SupportUi'
+import { useAsync } from '../hooks/useAsync'
+import { useMutation } from '../hooks/useMutation'
 import { collectionFromPayload } from '../lib/normalizers'
 import { formatDate } from '../lib/formatters'
 
 function NotificationsPage() {
-  const [notifications, setNotifications] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [saving, setSaving] = useState(false)
-  const [error, setError] = useState('')
-  const [notice, setNotice] = useState('')
-
-  const loadNotifications = useCallback(async () => {
-    setLoading(true)
-    setError('')
-
-    try {
-      const data = await listNotifications()
-      setNotifications(collectionFromPayload(data))
-    } catch {
-      setError('No se pudieron cargar las notificaciones.')
-    } finally {
-      setLoading(false)
-    }
+  const { data, loading, error, setData } = useAsync(async () => {
+    return collectionFromPayload(await listNotifications())
   }, [])
-
-  useEffect(() => {
-    let cancelled = false
-
-    Promise.resolve().then(() => {
-      if (!cancelled) loadNotifications()
-    })
-
-    return () => {
-      cancelled = true
-    }
-  }, [loadNotifications])
+  const notifications = data ?? []
+  const { saving, execute, setError, setNotice } = useMutation()
 
   const markRead = async (notification) => {
-    setSaving(true)
-    setNotice('')
-    setError('')
-
     try {
-      await markNotificationRead(notification.id)
-      setNotifications((current) =>
-        current.map((item) =>
+      await execute(markNotificationRead, notification.id)
+      setData((current) =>
+        (current ?? []).map((item) =>
           item.id === notification.id
             ? { ...item, read_at: item.read_at ?? new Date().toISOString() }
             : item,
@@ -64,30 +36,22 @@ function NotificationsPage() {
       )
       setNotice('Notificacion marcada.')
     } catch {
-      setError('No se pudo actualizar la notificacion.')
-    } finally {
-      setSaving(false)
+      // error handled by useMutation
     }
   }
 
   const markAllRead = async () => {
-    setSaving(true)
-    setNotice('')
-    setError('')
-
     try {
-      await markAllNotificationsRead()
-      setNotifications((current) =>
-        current.map((item) => ({
+      await execute(markAllNotificationsRead)
+      setData((current) =>
+        (current ?? []).map((item) => ({
           ...item,
           read_at: item.read_at ?? new Date().toISOString(),
         })),
       )
       setNotice('Notificaciones actualizadas.')
     } catch {
-      setError('No se pudieron actualizar las notificaciones.')
-    } finally {
-      setSaving(false)
+      // error handled by useMutation
     }
   }
 
