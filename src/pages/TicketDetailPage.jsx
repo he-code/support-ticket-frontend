@@ -22,6 +22,7 @@ import {
 } from '../components/SupportUi'
 import { useAsync } from '../hooks/useAsync'
 import { useMutation } from '../hooks/useMutation'
+import { useToast } from '../context/ToastContext'
 import { collectionFromPayload } from '../lib/normalizers'
 import { formatDate, getInitials } from '../lib/formatters'
 import {
@@ -73,7 +74,8 @@ function TicketDetailPage() {
     [],
   )
 
-  const { execute, setNotice, setError } = useMutation()
+  const { execute } = useMutation()
+  const { showToast } = useToast()
 
   const error = asyncError
 
@@ -82,20 +84,11 @@ function TicketDetailPage() {
   const ticketStatus = getStatusMeta(ticket?.status)
   const ticketPriority = getPriorityMeta(ticket?.priority)
 
-  const withSaving = (name, fn) => async (...args) => {
-    setSaving(name)
-    try {
-      await fn(...args)
-    } finally {
-      setSaving('')
-    }
-  }
-
   const saveStatus = async () => {
     setSaving('status')
     try {
       await execute(updateTicketStatus, ticketId, status)
-      setNotice('Estado actualizado.')
+      showToast('Estado actualizado.')
       reloadTicket()
     } catch {
       // error handled by useMutation
@@ -108,7 +101,7 @@ function TicketDetailPage() {
     setSaving('assignment')
     try {
       await execute(assignTicket, ticketId, agentId || null)
-      setNotice('Asignacion actualizada.')
+      showToast('Asignacion actualizada.')
       reloadTicket()
     } catch {
       // error handled by useMutation
@@ -125,7 +118,7 @@ function TicketDetailPage() {
     try {
       await execute(addTicketComment, ticketId, comment.trim())
       setComment('')
-      setNotice('Comentario agregado.')
+      showToast('Comentario agregado.')
       reloadTicket()
     } catch {
       // error handled by useMutation
@@ -143,7 +136,7 @@ function TicketDetailPage() {
       await execute(uploadTicketAttachment, ticketId, attachment)
       setAttachment(null)
       setAttachmentKey((current) => current + 1)
-      setNotice('Adjunto cargado.')
+      showToast('Adjunto cargado.')
       reloadTicket()
     } catch {
       // error handled by useMutation
@@ -157,7 +150,7 @@ function TicketDetailPage() {
       <PageHeader
         actions={
           <Link
-            className="flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+            className="flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
             to="/tickets"
           >
             <Icon name="arrow" />
@@ -168,14 +161,8 @@ function TicketDetailPage() {
         title={ticket ? getTicketTitle(ticket) : 'Ticket'}
       />
 
-      {notice && (
-        <div className="rounded-lg bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
-          {notice}
-        </div>
-      )}
-
       {error && (
-        <div className="rounded-lg bg-rose-50 px-4 py-3 text-sm text-rose-700">
+        <div className="rounded-lg bg-rose-50 px-4 py-3 text-sm text-rose-700 dark:bg-rose-900/50 dark:text-rose-200">
           {error}
         </div>
       )}
@@ -201,7 +188,7 @@ function TicketDetailPage() {
         <div className="grid gap-6 xl:grid-cols-[1fr_360px]">
           <div className="space-y-6">
             <Panel>
-              <div className="border-b border-slate-200 px-5 py-4">
+              <div className="border-b border-slate-200 px-5 py-4 dark:border-zinc-700">
                 <div className="flex flex-wrap gap-2">
                   <Badge tone={ticketStatus.tone}>{ticketStatus.label}</Badge>
                   <Badge tone={ticketPriority.tone}>{ticketPriority.label}</Badge>
@@ -211,40 +198,40 @@ function TicketDetailPage() {
 
               <div className="space-y-5 p-5">
                 <div>
-                  <p className="text-sm font-semibold text-slate-500">
+                  <p className="text-sm font-semibold text-slate-500 dark:text-zinc-400">
                     Descripcion
                   </p>
-                  <p className="mt-2 whitespace-pre-wrap text-sm leading-6 text-slate-700">
+                  <p className="mt-2 whitespace-pre-wrap text-sm leading-6 text-slate-700 dark:text-zinc-300">
                     {getTicketDescription(ticket) || 'Sin descripcion.'}
                   </p>
                 </div>
 
                 <div className="grid gap-4 md:grid-cols-3">
-                  <div className="rounded-lg border border-slate-200 p-4">
-                    <p className="text-xs font-semibold uppercase text-slate-400">
+                  <div className="rounded-lg border border-slate-200 p-4 dark:border-zinc-700">
+                    <p className="text-xs font-semibold uppercase text-slate-400 dark:text-zinc-500">
                       Solicitante
                     </p>
-                    <p className="mt-2 text-sm font-semibold text-zinc-950">
+                    <p className="mt-2 text-sm font-semibold text-zinc-950 dark:text-zinc-100">
                       {personName(requester, 'Sin solicitante')}
                     </p>
-                    <p className="mt-1 text-xs text-slate-500">
+                    <p className="mt-1 text-xs text-slate-500 dark:text-zinc-400">
                       {requester?.email}
                     </p>
                   </div>
-                  <div className="rounded-lg border border-slate-200 p-4">
-                    <p className="text-xs font-semibold uppercase text-slate-400">
+                  <div className="rounded-lg border border-slate-200 p-4 dark:border-zinc-700">
+                    <p className="text-xs font-semibold uppercase text-slate-400 dark:text-zinc-500">
                       Agente
                     </p>
-                    <p className="mt-2 text-sm font-semibold text-zinc-950">
+                    <p className="mt-2 text-sm font-semibold text-zinc-950 dark:text-zinc-100">
                       {personName(agent)}
                     </p>
-                    <p className="mt-1 text-xs text-slate-500">{agent?.email}</p>
+                    <p className="mt-1 text-xs text-slate-500 dark:text-zinc-400">{agent?.email}</p>
                   </div>
-                  <div className="rounded-lg border border-slate-200 p-4">
-                    <p className="text-xs font-semibold uppercase text-slate-400">
+                  <div className="rounded-lg border border-slate-200 p-4 dark:border-zinc-700">
+                    <p className="text-xs font-semibold uppercase text-slate-400 dark:text-zinc-500">
                       Creado
                     </p>
-                    <p className="mt-2 text-sm font-semibold text-zinc-950">
+                    <p className="mt-2 text-sm font-semibold text-zinc-950 dark:text-zinc-100">
                       {formatDate(getTicketCreatedAt(ticket))}
                     </p>
                   </div>
@@ -253,16 +240,16 @@ function TicketDetailPage() {
             </Panel>
 
             <Panel>
-              <div className="flex items-center gap-2 border-b border-slate-200 px-5 py-4">
+              <div className="flex items-center gap-2 border-b border-slate-200 px-5 py-4 dark:border-zinc-700">
                 <Icon name="message" />
-                <h2 className="text-base font-semibold text-zinc-950">
+                <h2 className="text-base font-semibold text-zinc-950 dark:text-zinc-100">
                   Comentarios
                 </h2>
               </div>
 
               <div className="space-y-5 p-5">
                 {comments.length === 0 ? (
-                  <div className="rounded-lg border border-dashed border-slate-300 px-4 py-8 text-center text-sm text-slate-500">
+                  <div className="rounded-lg border border-dashed border-slate-300 px-4 py-8 text-center text-sm text-slate-500 dark:border-zinc-600 dark:text-zinc-400">
                     Sin comentarios.
                   </div>
                 ) : (
@@ -274,7 +261,7 @@ function TicketDetailPage() {
 
                       return (
                         <article
-                          className="flex gap-3 rounded-lg border border-slate-200 p-4"
+                          className="flex gap-3 rounded-lg border border-slate-200 p-4 dark:border-zinc-700"
                           key={item.id ?? index}
                         >
                           <div className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-emerald-700 text-xs font-bold text-white">
@@ -282,14 +269,14 @@ function TicketDetailPage() {
                           </div>
                           <div className="min-w-0 flex-1">
                             <div className="flex flex-wrap items-center gap-2">
-                              <p className="text-sm font-semibold text-zinc-950">
+                            <p className="text-sm font-semibold text-zinc-950 dark:text-zinc-100">
                                 {personName(author, 'Usuario')}
-                              </p>
-                              <span className="text-xs text-slate-400">
+                            </p>
+                            <span className="text-xs text-slate-400 dark:text-zinc-500">
                                 {formatDate(item.created_at ?? item.createdAt)}
                               </span>
                             </div>
-                            <p className="mt-2 whitespace-pre-wrap text-sm leading-6 text-slate-700">
+                            <p className="mt-2 whitespace-pre-wrap text-sm leading-6 text-slate-700 dark:text-zinc-300">
                               {body}
                             </p>
                           </div>
@@ -311,7 +298,7 @@ function TicketDetailPage() {
                     value={comment}
                   />
                   <button
-                    className="flex items-center gap-2 rounded-lg bg-emerald-700 px-3 py-2 text-sm font-semibold text-white transition hover:bg-emerald-800 disabled:cursor-not-allowed disabled:opacity-60"
+                    className="flex items-center gap-2 rounded-lg bg-emerald-700 px-3 py-2 text-sm font-semibold text-white transition hover:bg-emerald-800 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-emerald-600 dark:hover:bg-emerald-700"
                     disabled={saving === 'comment'}
                     type="submit"
                   >
@@ -325,8 +312,8 @@ function TicketDetailPage() {
 
           <aside className="space-y-6">
             <Panel>
-              <div className="border-b border-slate-200 px-5 py-4">
-                <h2 className="text-base font-semibold text-zinc-950">
+              <div className="border-b border-slate-200 px-5 py-4 dark:border-zinc-700">
+                <h2 className="text-base font-semibold text-zinc-950 dark:text-zinc-100">
                   Gestion
                 </h2>
               </div>
@@ -350,7 +337,7 @@ function TicketDetailPage() {
                     </select>
                     <button
                       aria-label="Guardar estado"
-                      className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-emerald-700 text-white transition hover:bg-emerald-800 disabled:cursor-not-allowed disabled:opacity-60"
+                      className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-emerald-700 text-white transition hover:bg-emerald-800 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-emerald-600 dark:hover:bg-emerald-700"
                       disabled={saving === 'status'}
                       onClick={saveStatus}
                       title="Guardar estado"
@@ -381,7 +368,7 @@ function TicketDetailPage() {
                     </select>
                     <button
                       aria-label="Guardar asignacion"
-                      className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-emerald-700 text-white transition hover:bg-emerald-800 disabled:cursor-not-allowed disabled:opacity-60"
+                      className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-emerald-700 text-white transition hover:bg-emerald-800 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-emerald-600 dark:hover:bg-emerald-700"
                       disabled={saving === 'assignment'}
                       onClick={saveAssignment}
                       title="Guardar asignacion"
@@ -395,16 +382,16 @@ function TicketDetailPage() {
             </Panel>
 
             <Panel>
-              <div className="flex items-center gap-2 border-b border-slate-200 px-5 py-4">
+              <div className="flex items-center gap-2 border-b border-slate-200 px-5 py-4 dark:border-zinc-700">
                 <Icon name="paperclip" />
-                <h2 className="text-base font-semibold text-zinc-950">
+                <h2 className="text-base font-semibold text-zinc-950 dark:text-zinc-100">
                   Adjuntos
                 </h2>
               </div>
 
               <div className="space-y-4 p-5">
                 {attachments.length === 0 ? (
-                  <div className="rounded-lg border border-dashed border-slate-300 px-4 py-8 text-center text-sm text-slate-500">
+                  <div className="rounded-lg border border-dashed border-slate-300 px-4 py-8 text-center text-sm text-slate-500 dark:border-zinc-600 dark:text-zinc-400">
                     Sin adjuntos.
                   </div>
                 ) : (
@@ -420,7 +407,7 @@ function TicketDetailPage() {
 
                       return (
                         <a
-                          className="flex items-center justify-between gap-3 rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700 transition hover:bg-slate-50"
+                          className="flex items-center justify-between gap-3 rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700 transition hover:bg-slate-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
                           href={url || '#'}
                           key={file.id ?? index}
                           rel="noreferrer"
@@ -448,7 +435,7 @@ function TicketDetailPage() {
                     type="file"
                   />
                   <button
-                    className="flex w-full items-center justify-center gap-2 rounded-lg border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
+                    className="flex w-full items-center justify-center gap-2 rounded-lg border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60 dark:border-zinc-600 dark:text-zinc-300 dark:hover:bg-zinc-700"
                     disabled={!attachment || saving === 'attachment'}
                     type="submit"
                   >

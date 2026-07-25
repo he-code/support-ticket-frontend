@@ -53,18 +53,18 @@ const iconPaths = {
 }
 
 const toneClasses = {
-  slate: 'bg-zinc-100 text-zinc-700 ring-zinc-200',
-  sky: 'bg-sky-50 text-sky-700 ring-sky-200',
-  amber: 'bg-amber-50 text-amber-800 ring-amber-200',
-  emerald: 'bg-emerald-50 text-emerald-700 ring-emerald-200',
-  rose: 'bg-rose-50 text-rose-700 ring-rose-200',
-  violet: 'bg-violet-50 text-violet-700 ring-violet-200',
+  slate: 'bg-zinc-100 text-zinc-700 ring-zinc-200 dark:bg-zinc-800 dark:text-zinc-300 dark:ring-zinc-600',
+  sky: 'bg-sky-50 text-sky-700 ring-sky-200 dark:bg-sky-900/50 dark:text-sky-300 dark:ring-sky-700',
+  amber: 'bg-amber-50 text-amber-800 ring-amber-200 dark:bg-amber-900/50 dark:text-amber-300 dark:ring-amber-700',
+  emerald: 'bg-emerald-50 text-emerald-700 ring-emerald-200 dark:bg-emerald-900/50 dark:text-emerald-300 dark:ring-emerald-700',
+  rose: 'bg-rose-50 text-rose-700 ring-rose-200 dark:bg-rose-900/50 dark:text-rose-300 dark:ring-rose-700',
+  violet: 'bg-violet-50 text-violet-700 ring-violet-200 dark:bg-violet-900/50 dark:text-violet-300 dark:ring-violet-700',
 }
 
 export const inputClass =
-  'w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-950 outline-none transition placeholder:text-zinc-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 disabled:cursor-not-allowed disabled:bg-zinc-100'
+  'w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-950 outline-none transition placeholder:text-zinc-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 disabled:cursor-not-allowed disabled:bg-zinc-100 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100 dark:placeholder:text-zinc-500 dark:focus:ring-emerald-900/50 dark:disabled:bg-zinc-900'
 
-export const labelClass = 'text-sm font-medium text-zinc-700'
+export const labelClass = 'text-sm font-medium text-zinc-700 dark:text-zinc-300'
 
 export function Icon({ name, className = 'h-4 w-4' }) {
   const paths = iconPaths[name] ?? iconPaths.tickets
@@ -101,11 +101,11 @@ export function PageHeader({ title, description, actions }) {
   return (
     <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
       <div>
-        <h1 className="text-2xl font-bold tracking-normal text-zinc-950">
+        <h1 className="text-2xl font-bold tracking-normal text-zinc-950 dark:text-zinc-100">
           {title}
         </h1>
         {description && (
-          <p className="mt-1 max-w-2xl text-sm text-zinc-500">
+          <p className="mt-1 max-w-2xl text-sm text-zinc-500 dark:text-zinc-400">
             {description}
           </p>
         )}
@@ -118,10 +118,10 @@ export function PageHeader({ title, description, actions }) {
 
 export function EmptyState({ title, description, action }) {
   return (
-    <div className="rounded-lg border border-dashed border-zinc-300 bg-white px-6 py-10 text-center">
-      <h2 className="text-base font-semibold text-zinc-950">{title}</h2>
+    <div className="rounded-lg border border-dashed border-zinc-300 bg-white px-6 py-10 text-center dark:border-zinc-700 dark:bg-zinc-800/50">
+      <h2 className="text-base font-semibold text-zinc-950 dark:text-zinc-100">{title}</h2>
       {description && (
-        <p className="mx-auto mt-2 max-w-md text-sm text-zinc-500">
+        <p className="mx-auto mt-2 max-w-md text-sm text-zinc-500 dark:text-zinc-400">
           {description}
         </p>
       )}
@@ -133,10 +133,20 @@ export function EmptyState({ title, description, action }) {
 export function Panel({ children, className = '' }) {
   return (
     <section
-      className={`rounded-lg border border-zinc-200 bg-white shadow-sm ${className}`}
+      className={`rounded-lg border border-zinc-200 bg-white shadow-sm dark:border-zinc-700 dark:bg-zinc-800/50 ${className}`}
     >
       {children}
     </section>
+  )
+}
+
+export function FieldError({ message }) {
+  if (!message) return null
+
+  return (
+    <p className="mt-1 text-xs font-medium text-rose-600" role="alert">
+      {message}
+    </p>
   )
 }
 
@@ -145,7 +155,7 @@ export function SkeletonRows({ rows = 4 }) {
     <div className="space-y-3">
       {Array.from({ length: rows }).map((_, index) => (
         <div
-          className="h-12 animate-pulse rounded-md bg-zinc-100"
+          className="h-12 animate-pulse rounded-md bg-zinc-100 dark:bg-zinc-800"
           key={index}
         />
       ))}

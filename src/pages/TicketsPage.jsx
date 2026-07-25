@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router'
 import { listCategories, listTickets } from '../api/support'
 import {
@@ -77,7 +77,7 @@ function TicketsPage() {
       <PageHeader
         actions={
           <Link
-            className="flex items-center gap-2 rounded-lg bg-emerald-700 px-3 py-2 text-sm font-semibold text-white transition hover:bg-emerald-800"
+            className="flex items-center gap-2 rounded-lg bg-emerald-700 px-3 py-2 text-sm font-semibold text-white transition hover:bg-emerald-800 dark:bg-emerald-600 dark:hover:bg-emerald-700"
             to="/tickets/create"
           >
             <Icon name="plus" />
@@ -148,7 +148,7 @@ function TicketsPage() {
           </select>
 
           <button
-            className="flex items-center justify-center gap-2 rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+            className="flex items-center justify-center gap-2 rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
             onClick={resetFilters}
             type="button"
           >
@@ -159,14 +159,14 @@ function TicketsPage() {
       </Panel>
 
       {error && (
-        <div className="rounded-lg bg-rose-50 px-4 py-3 text-sm text-rose-700">
+        <div className="rounded-lg bg-rose-50 px-4 py-3 text-sm text-rose-700 dark:bg-rose-900/50 dark:text-rose-200">
           {error}
         </div>
       )}
 
       <Panel>
-        <div className="border-b border-slate-200 px-5 py-4">
-          <h2 className="text-base font-semibold text-zinc-950">
+        <div className="border-b border-slate-200 px-5 py-4 dark:border-zinc-700">
+          <h2 className="text-base font-semibold text-zinc-950 dark:text-zinc-100">
             {total} tickets
           </h2>
         </div>
@@ -198,20 +198,20 @@ function TicketsPage() {
 
                 return (
                   <Link
-                    className="block rounded-lg border border-zinc-200 bg-white p-4 shadow-sm transition hover:border-emerald-200 hover:bg-emerald-50/30"
+                    className="block rounded-lg border border-zinc-200 bg-white p-4 shadow-sm transition hover:border-emerald-200 hover:bg-emerald-50/30 dark:border-zinc-700 dark:bg-zinc-800 dark:hover:border-emerald-600 dark:hover:bg-emerald-900/20"
                     key={ticketId}
                     to={`/tickets/${ticketId}`}
                   >
                     <div className="flex items-start justify-between gap-3">
                       <div className="min-w-0">
-                        <p className="text-xs font-semibold uppercase text-zinc-400">
+                        <p className="text-xs font-semibold uppercase text-zinc-400 dark:text-zinc-500">
                           {getTicketCode(ticket)}
                         </p>
-                        <p className="mt-1 line-clamp-2 font-semibold text-zinc-950">
+                        <p className="mt-1 line-clamp-2 font-semibold text-zinc-950 dark:text-zinc-100">
                           {getTicketTitle(ticket)}
                         </p>
                       </div>
-                      <Icon className="h-4 w-4 shrink-0 text-emerald-700" name="arrow" />
+                      <Icon className="h-4 w-4 shrink-0 text-emerald-700 dark:text-emerald-400" name="arrow" />
                     </div>
 
                     <div className="mt-3 flex flex-wrap gap-2">
@@ -220,16 +220,16 @@ function TicketsPage() {
                       <Badge tone="slate">{getTicketCategory(ticket)}</Badge>
                     </div>
 
-                    <div className="mt-4 grid gap-3 text-xs text-zinc-500">
+                    <div className="mt-4 grid gap-3 text-xs text-zinc-500 dark:text-zinc-400">
                       <p>
                         Solicitante:{' '}
-                        <span className="font-semibold text-zinc-700">
+                        <span className="font-semibold text-zinc-700 dark:text-zinc-300">
                           {personName(getTicketRequester(ticket), 'Sin solicitante')}
                         </span>
                       </p>
                       <p>
                         Agente:{' '}
-                        <span className="font-semibold text-zinc-700">
+                        <span className="font-semibold text-zinc-700 dark:text-zinc-300">
                           {personName(getTicketAgent(ticket))}
                         </span>
                       </p>
@@ -241,9 +241,9 @@ function TicketsPage() {
             </div>
 
             <div className="hidden overflow-x-auto md:block">
-              <table className="min-w-full divide-y divide-slate-200 text-sm">
+              <table className="min-w-full divide-y divide-slate-200 text-sm dark:divide-zinc-700">
                 <thead>
-                  <tr className="text-left text-xs font-semibold uppercase text-slate-500">
+                  <tr className="text-left text-xs font-semibold uppercase text-slate-500 dark:text-zinc-400">
                     <th className="px-3 py-3">Ticket</th>
                     <th className="px-3 py-3">Estado</th>
                     <th className="px-3 py-3">Prioridad</th>
@@ -253,22 +253,22 @@ function TicketsPage() {
                     <th className="px-3 py-3 text-right">Detalle</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100">
+                <tbody className="divide-y divide-slate-100 dark:divide-zinc-700/50">
                   {tickets.map((ticket) => {
                     const status = getStatusMeta(ticket.status)
                     const priority = getPriorityMeta(ticket.priority)
                     const ticketId = getTicketId(ticket)
 
                     return (
-                      <tr className="align-top hover:bg-slate-50" key={ticketId}>
+                      <tr className="align-top hover:bg-slate-50 dark:hover:bg-zinc-800/50" key={ticketId}>
                         <td className="max-w-sm px-3 py-4">
-                          <p className="text-xs font-semibold uppercase text-slate-400">
+                          <p className="text-xs font-semibold uppercase text-slate-400 dark:text-zinc-500">
                             {getTicketCode(ticket)}
                           </p>
-                          <p className="mt-1 font-semibold text-zinc-950">
+                          <p className="mt-1 font-semibold text-zinc-950 dark:text-zinc-100">
                             {getTicketTitle(ticket)}
                           </p>
-                          <p className="mt-1 text-xs text-slate-500">
+                          <p className="mt-1 text-xs text-slate-500 dark:text-zinc-400">
                             {getTicketCategory(ticket)}
                           </p>
                         </td>
@@ -278,18 +278,18 @@ function TicketsPage() {
                         <td className="px-3 py-4">
                           <Badge tone={priority.tone}>{priority.label}</Badge>
                         </td>
-                        <td className="px-3 py-4 text-slate-600">
+                        <td className="px-3 py-4 text-slate-600 dark:text-zinc-300">
                           {personName(getTicketRequester(ticket), 'Sin solicitante')}
                         </td>
-                        <td className="px-3 py-4 text-slate-600">
+                        <td className="px-3 py-4 text-slate-600 dark:text-zinc-300">
                           {personName(getTicketAgent(ticket))}
                         </td>
-                        <td className="px-3 py-4 text-slate-500">
+                        <td className="px-3 py-4 text-slate-500 dark:text-zinc-400">
                           {formatDate(getTicketCreatedAt(ticket))}
                         </td>
                         <td className="px-3 py-4 text-right">
                           <Link
-                            className="inline-flex items-center gap-2 rounded-lg border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+                            className="inline-flex items-center gap-2 rounded-lg border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 dark:border-zinc-600 dark:text-zinc-300 dark:hover:bg-zinc-700"
                             to={`/tickets/${ticketId}`}
                           >
                             Abrir

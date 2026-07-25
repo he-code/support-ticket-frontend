@@ -9,6 +9,7 @@ import {
 } from '../components/SupportUi'
 import { useAuth } from '../context/AuthContext'
 import { useMutation } from '../hooks/useMutation'
+import { useToast } from '../context/ToastContext'
 import { getRoleLabel } from '../lib/ticket'
 import { getInitials } from '../lib/formatters'
 
@@ -21,7 +22,8 @@ function ProfilePage() {
     password: '',
     password_confirmation: '',
   }))
-  const { saving, error, notice, execute, setError, setNotice } = useMutation()
+  const { saving, error, execute, setError } = useMutation()
+  const { showToast } = useToast()
 
   const handleChange = (event) => {
     setForm((current) => ({
@@ -61,7 +63,7 @@ function ProfilePage() {
         password: '',
         password_confirmation: '',
       }))
-      setNotice('Perfil actualizado.')
+      showToast('Perfil actualizado.')
     } catch {
       // error handled by useMutation
     }
@@ -71,14 +73,8 @@ function ProfilePage() {
     <div className="space-y-6">
       <PageHeader description="Datos de cuenta y acceso." title="Perfil" />
 
-      {notice && (
-        <div className="rounded-lg bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
-          {notice}
-        </div>
-      )}
-
       {error && (
-        <div className="rounded-lg bg-rose-50 px-4 py-3 text-sm text-rose-700">
+        <div className="rounded-lg bg-rose-50 px-4 py-3 text-sm text-rose-700 dark:bg-rose-900/50 dark:text-rose-200">
           {error}
         </div>
       )}
@@ -90,11 +86,11 @@ function ProfilePage() {
               {getInitials(user?.name ?? user?.email)}
             </div>
             <div className="min-w-0">
-              <p className="truncate font-semibold text-zinc-950">
+              <p className="truncate font-semibold text-zinc-950 dark:text-zinc-100">
                 {user?.name}
               </p>
-              <p className="truncate text-sm text-slate-500">{user?.email}</p>
-              <p className="mt-1 text-xs font-semibold uppercase text-slate-400">
+              <p className="truncate text-sm text-slate-500 dark:text-zinc-400">{user?.email}</p>
+              <p className="mt-1 text-xs font-semibold uppercase text-slate-400 dark:text-zinc-500">
                 {getRoleLabel(user?.role)}
               </p>
             </div>
@@ -102,8 +98,8 @@ function ProfilePage() {
         </Panel>
 
         <Panel>
-          <div className="border-b border-slate-200 px-5 py-4">
-            <h2 className="text-base font-semibold text-zinc-950">
+          <div className="border-b border-slate-200 px-5 py-4 dark:border-zinc-700">
+            <h2 className="text-base font-semibold text-zinc-950 dark:text-zinc-100">
               Datos personales
             </h2>
           </div>

@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import {
   listNotifications,
   markAllNotificationsRead,
@@ -14,6 +13,7 @@ import {
 } from '../components/SupportUi'
 import { useAsync } from '../hooks/useAsync'
 import { useMutation } from '../hooks/useMutation'
+import { useToast } from '../context/ToastContext'
 import { collectionFromPayload } from '../lib/normalizers'
 import { formatDate } from '../lib/formatters'
 
@@ -22,7 +22,8 @@ function NotificationsPage() {
     return collectionFromPayload(await listNotifications())
   }, [])
   const notifications = data ?? []
-  const { saving, execute, setError, setNotice } = useMutation()
+  const { saving, execute } = useMutation()
+  const { showToast } = useToast()
 
   const markRead = async (notification) => {
     try {
@@ -34,7 +35,7 @@ function NotificationsPage() {
             : item,
         ),
       )
-      setNotice('Notificacion marcada.')
+      showToast('Notificacion marcada.')
     } catch {
       // error handled by useMutation
     }
@@ -49,7 +50,7 @@ function NotificationsPage() {
           read_at: item.read_at ?? new Date().toISOString(),
         })),
       )
-      setNotice('Notificaciones actualizadas.')
+      showToast('Notificaciones actualizadas.')
     } catch {
       // error handled by useMutation
     }
@@ -75,14 +76,8 @@ function NotificationsPage() {
         title="Notificaciones"
       />
 
-      {notice && (
-        <div className="rounded-lg bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
-          {notice}
-        </div>
-      )}
-
       {error && (
-        <div className="rounded-lg bg-rose-50 px-4 py-3 text-sm text-rose-700">
+        <div className="rounded-lg bg-rose-50 px-4 py-3 text-sm text-rose-700 dark:bg-rose-900/50 dark:text-rose-200">
           {error}
         </div>
       )}

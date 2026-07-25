@@ -14,25 +14,25 @@ import {
 
 function StatCard({ icon, title, value, loading, tone = 'slate' }) {
   const toneClass = {
-    slate: 'bg-slate-100 text-slate-700',
-    sky: 'bg-sky-50 text-sky-700',
-    amber: 'bg-amber-50 text-amber-700',
-    emerald: 'bg-emerald-50 text-emerald-700',
+    slate: 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300',
+    sky: 'bg-sky-50 text-sky-700 dark:bg-sky-900/50 dark:text-sky-300',
+    amber: 'bg-amber-50 text-amber-700 dark:bg-amber-900/50 dark:text-amber-300',
+    emerald: 'bg-emerald-50 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300',
   }[tone]
 
   return (
     <Panel className="p-5">
       <div className="flex items-center justify-between gap-3">
-        <p className="text-sm font-medium text-slate-500">{title}</p>
+        <p className="text-sm font-medium text-slate-500 dark:text-zinc-400">{title}</p>
         <span className={`rounded-lg p-2 ${toneClass}`}>
           <Icon className="h-4 w-4" name={icon} />
         </span>
       </div>
 
       {loading ? (
-        <div className="mt-4 h-8 w-20 animate-pulse rounded-md bg-slate-100" />
+        <div className="mt-4 h-8 w-20 animate-pulse rounded-md bg-slate-100 dark:bg-zinc-700" />
       ) : (
-        <p className="mt-3 text-3xl font-bold text-zinc-950">{value}</p>
+        <p className="mt-3 text-3xl font-bold text-zinc-950 dark:text-zinc-100">{value}</p>
       )}
     </Panel>
   )
@@ -60,8 +60,6 @@ function DashboardPage() {
 
   const stats = data?.stats ?? null
   const recentTickets = data?.tickets ?? []
-  const displayError = error || data?.error
-
   const openTickets =
     stats?.by_status?.open ?? stats?.open_tickets ?? stats?.open ?? 0
   const inProgressTickets =
@@ -78,14 +76,14 @@ function DashboardPage() {
         actions={
           <>
             <Link
-              className="flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+              className="flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
               to="/tickets"
             >
               <Icon name="tickets" />
               Tickets
             </Link>
             <Link
-              className="flex items-center gap-2 rounded-lg bg-emerald-700 px-3 py-2 text-sm font-semibold text-white transition hover:bg-emerald-800"
+              className="flex items-center gap-2 rounded-lg bg-emerald-700 px-3 py-2 text-sm font-semibold text-white transition hover:bg-emerald-800 dark:bg-emerald-600 dark:hover:bg-emerald-700"
               to="/tickets/create"
             >
               <Icon name="plus" />
@@ -98,7 +96,7 @@ function DashboardPage() {
       />
 
       {error && (
-        <div className="rounded-lg bg-rose-50 px-4 py-3 text-sm text-rose-700">
+        <div className="rounded-lg bg-rose-50 px-4 py-3 text-sm text-rose-700 dark:bg-rose-900/50 dark:text-rose-200">
           {error}
         </div>
       )}
@@ -134,15 +132,15 @@ function DashboardPage() {
       </div>
 
       <Panel>
-        <div className="flex items-center justify-between border-b border-slate-200 px-5 py-4">
+        <div className="flex items-center justify-between border-b border-slate-200 px-5 py-4 dark:border-zinc-700">
           <div>
-            <h2 className="text-base font-semibold text-zinc-950">
+            <h2 className="text-base font-semibold text-zinc-950 dark:text-zinc-100">
               Tickets recientes
             </h2>
-            <p className="text-sm text-slate-500">Ultimos movimientos</p>
+            <p className="text-sm text-slate-500 dark:text-zinc-400">Ultimos movimientos</p>
           </div>
           <Link
-            className="flex items-center gap-2 rounded-lg border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+            className="flex items-center gap-2 rounded-lg border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 dark:border-zinc-600 dark:text-zinc-300 dark:hover:bg-zinc-800"
             to="/tickets"
           >
             Ver todos

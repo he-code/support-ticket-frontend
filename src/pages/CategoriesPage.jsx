@@ -8,6 +8,7 @@ import {
 import {
   Badge,
   EmptyState,
+  FieldError,
   Icon,
   inputClass,
   labelClass,
@@ -15,8 +16,10 @@ import {
   Panel,
   SkeletonRows,
 } from '../components/SupportUi'
+import ConfirmModal from '../components/ConfirmModal'
 import { useAsync } from '../hooks/useAsync'
 import { useMutation } from '../hooks/useMutation'
+import { useToast } from '../context/ToastContext'
 import { collectionFromPayload } from '../lib/normalizers'
 
 function CategoriesPage() {
@@ -28,7 +31,9 @@ function CategoriesPage() {
     name: '',
     description: '',
   })
-  const { saving, error: mutationError, notice, execute, setError, setNotice } = useMutation()
+  const [confirmDelete, setConfirmDelete] = useState(null)
+  const { saving, error: mutationError, execute } = useMutation()
+  const { showToast } = useToast()
 
   const displayError = mutationError || error
   const loadCategories = () => listCategories().then(d => setCategories(collectionFromPayload(d)))
@@ -46,7 +51,7 @@ function CategoriesPage() {
     try {
       await execute(createCategory, form)
       setForm({ name: '', description: '' })
-      setNotice('Categoria creada.')
+      showToast('Categoria creada.')
       await loadCategories()
     } catch {
       // error handled by useMutation
@@ -56,7 +61,7 @@ function CategoriesPage() {
   const toggleCategory = async (category) => {
     try {
       await execute(updateCategory, category.id, { is_active: !category.is_active })
-      setNotice('Categoria actualizada.')
+      showToast('Categoria actualizada.')
       await loadCategories()
     } catch {
       // error handled by useMutation
@@ -64,12 +69,10 @@ function CategoriesPage() {
   }
 
   const removeCategory = async (category) => {
-    const confirmed = window.confirm(`Eliminar ${category.name}?`)
-    if (!confirmed) return
-
     try {
       await execute(deleteCategory, category.id)
-      setNotice('Categoria eliminada.')
+      setConfirmDelete(null)
+      showToast('Categoria eliminada.')
       await loadCategories()
     } catch {
       // error handled by useMutation
@@ -83,22 +86,16 @@ function CategoriesPage() {
         title="Categorias"
       />
 
-      {notice && (
-        <div className="rounded-lg bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
-          {notice}
-        </div>
-      )}
-
       {displayError && (
-        <div className="rounded-lg bg-rose-50 px-4 py-3 text-sm text-rose-700">
+        <div className="rounded-lg bg-rose-50 px-4 py-3 text-sm text-rose-700 dark:bg-rose-900/50 dark:text-rose-200">
           {displayError}
         </div>
       )}
 
       <div className="grid gap-6 xl:grid-cols-[1fr_360px]">
         <Panel>
-          <div className="border-b border-slate-200 px-5 py-4">
-            <h2 className="text-base font-semibold text-zinc-950">
+          <div className="border-b border-slate-200 px-5 py-4 dark:border-zinc-700">
+            <h2 className="text-base font-semibold text-zinc-950 dark:text-zinc-100">
               Listado
             </h2>
           </div>
@@ -118,15 +115,15 @@ function CategoriesPage() {
 
                   return (
                     <article
-                      className="rounded-lg border border-zinc-200 bg-white p-4 shadow-sm"
+                      className="rounded-lg border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-700 dark:bg-zinc-800"
                       key={category.id}
                     >
                       <div className="flex items-start justify-between gap-3">
                         <div className="min-w-0">
-                          <p className="font-semibold text-zinc-950">
+                          <p className="font-semibold text-zinc-950 dark:text-zinc-100">
                             {category.name}
                           </p>
-                          <p className="mt-1 text-sm text-slate-500">
+                          <p className="mt-1 text-sm text-slate-500 dark:text-zinc-400">
                             {category.description}
                           </p>
                         </div>
@@ -137,7 +134,7 @@ function CategoriesPage() {
 
                       <div className="mt-4 flex flex-wrap justify-end gap-2">
                         <button
-                          className="rounded-lg border border-zinc-300 px-3 py-2 text-sm font-semibold text-zinc-700 transition hover:bg-zinc-50"
+                          className="rounded-lg border border-zinc-300 px-3 py-2 text-sm font-semibold text-zinc-700 transition hover:bg-zinc-50 dark:border-zinc-600 dark:text-zinc-300 dark:hover:bg-zinc-700"
                           onClick={() => toggleCategory(category)}
                           type="button"
                         >
@@ -145,8 +142,8 @@ function CategoriesPage() {
                         </button>
                         <button
                           aria-label="Eliminar categoria"
-                          className="grid h-10 w-10 place-items-center rounded-lg border border-rose-200 text-rose-700 transition hover:bg-rose-50"
-                          onClick={() => removeCategory(category)}
+                          className="grid h-10 w-10 place-items-center rounded-lg border border-rose-200 text-rose-700 transition hover:bg-rose-50 dark:border-rose-800 dark:text-rose-300 dark:hover:bg-rose-900/30"
+                          onClick={() => setConfirmDelete(category)}
                           title="Eliminar categoria"
                           type="button"
                         >
@@ -159,25 +156,25 @@ function CategoriesPage() {
               </div>
 
               <div className="hidden overflow-x-auto md:block">
-                <table className="min-w-full divide-y divide-slate-200 text-sm">
+                <table className="min-w-full divide-y divide-slate-200 text-sm dark:divide-zinc-700">
                   <thead>
-                    <tr className="text-left text-xs font-semibold uppercase text-slate-500">
+                    <tr className="text-left text-xs font-semibold uppercase text-slate-500 dark:text-zinc-400">
                       <th className="px-3 py-3">Nombre</th>
                       <th className="px-3 py-3">Estado</th>
                       <th className="px-3 py-3 text-right">Acciones</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-100">
+                  <tbody className="divide-y divide-slate-100 dark:divide-zinc-700/50">
                     {categories.map((category) => {
                       const active = category.is_active !== false
 
                       return (
-                        <tr className="align-top hover:bg-slate-50" key={category.id}>
+                        <tr className="align-top hover:bg-slate-50 dark:hover:bg-zinc-800/50" key={category.id}>
                           <td className="px-3 py-4">
-                            <p className="font-semibold text-zinc-950">
+                            <p className="font-semibold text-zinc-950 dark:text-zinc-100">
                               {category.name}
                             </p>
-                            <p className="mt-1 text-xs text-slate-500">
+                            <p className="mt-1 text-xs text-slate-500 dark:text-zinc-400">
                               {category.description}
                             </p>
                           </td>
@@ -189,7 +186,7 @@ function CategoriesPage() {
                           <td className="px-3 py-4">
                             <div className="flex justify-end gap-2">
                               <button
-                                className="rounded-lg border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+                                className="rounded-lg border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 dark:border-zinc-600 dark:text-zinc-300 dark:hover:bg-zinc-700"
                                 onClick={() => toggleCategory(category)}
                                 type="button"
                               >
@@ -197,8 +194,8 @@ function CategoriesPage() {
                               </button>
                               <button
                                 aria-label="Eliminar categoria"
-                                className="grid h-10 w-10 place-items-center rounded-lg border border-rose-200 text-rose-700 transition hover:bg-rose-50"
-                                onClick={() => removeCategory(category)}
+                                className="grid h-10 w-10 place-items-center rounded-lg border border-rose-200 text-rose-700 transition hover:bg-rose-50 dark:border-rose-800 dark:text-rose-300 dark:hover:bg-rose-900/30"
+                                onClick={() => setConfirmDelete(category)}
                                 title="Eliminar categoria"
                                 type="button"
                               >
@@ -218,8 +215,8 @@ function CategoriesPage() {
         </Panel>
 
         <Panel>
-          <div className="border-b border-slate-200 px-5 py-4">
-            <h2 className="text-base font-semibold text-zinc-950">
+          <div className="border-b border-slate-200 px-5 py-4 dark:border-zinc-700">
+            <h2 className="text-base font-semibold text-zinc-950 dark:text-zinc-100">
               Nueva categoria
             </h2>
           </div>
@@ -236,6 +233,7 @@ function CategoriesPage() {
                 required
                 value={form.name}
               />
+              <FieldError message={displayError} />
             </div>
             <div>
               <label className={labelClass} htmlFor="description">
@@ -260,6 +258,18 @@ function CategoriesPage() {
           </form>
         </Panel>
       </div>
+
+      {confirmDelete && (
+        <ConfirmModal
+          confirmLabel="Eliminar"
+          description={`Esta accion no se puede deshacer.`}
+          loading={saving}
+          onCancel={() => setConfirmDelete(null)}
+          onConfirm={() => removeCategory(confirmDelete)}
+          title={`Eliminar ${confirmDelete.name}?`}
+          tone="rose"
+        />
+      )}
     </div>
   )
 }

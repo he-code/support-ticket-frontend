@@ -19,6 +19,7 @@ import {
 import { useAuth } from '../context/AuthContext'
 import { useAsync } from '../hooks/useAsync'
 import { useMutation } from '../hooks/useMutation'
+import { useToast } from '../context/ToastContext'
 import { collectionFromPayload } from '../lib/normalizers'
 import { formatDate, getInitials } from '../lib/formatters'
 import { roleOptions } from '../lib/constants'
@@ -61,7 +62,8 @@ function UsersPage() {
     [isAdmin],
   )
 
-  const { execute, error: mutationError, notice, setError, setNotice } = useMutation()
+  const { execute, error: mutationError, setError } = useMutation()
+  const { showToast } = useToast()
   const displayError = mutationError || usersError || importsError
 
   if (!isAdmin) {
@@ -87,7 +89,7 @@ function UsersPage() {
     try {
       await execute(createUser, form)
       setForm({ name: '', email: '', role: 'user', password: '' })
-      setNotice('Usuario creado.')
+      showToast('Usuario creado.')
       reloadUsers()
     } catch (error) {
       setError(apiErrorMessage(error, 'No se pudo crear el usuario.'))
@@ -116,8 +118,9 @@ function UsersPage() {
         defaultPassword: '',
       })
       setImportFileKey((current) => current + 1)
-      setNotice(
+      showToast(
         `Importacion completada: ${result.created_count ?? 0} creados, ${result.updated_count ?? 0} actualizados, ${result.skipped_count ?? 0} omitidos.`,
+        'notice',
       )
       reloadUsers()
       reloadImports()
@@ -152,7 +155,7 @@ function UsersPage() {
           item.id === targetUser.id ? { ...item, role } : item,
         ),
       )
-      setNotice('Rol actualizado.')
+      showToast('Rol actualizado.')
     } catch {
       // error handled by useMutation
     }
@@ -165,22 +168,16 @@ function UsersPage() {
         title="Usuarios admin"
       />
 
-      {notice && (
-        <div className="rounded-lg bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
-          {notice}
-        </div>
-      )}
-
       {displayError && (
-        <div className="rounded-lg bg-rose-50 px-4 py-3 text-sm text-rose-700">
+        <div className="rounded-lg bg-rose-50 px-4 py-3 text-sm text-rose-700 dark:bg-rose-900/50 dark:text-rose-200">
           {displayError}
         </div>
       )}
 
       <div className="grid gap-6 xl:grid-cols-[1fr_380px]">
         <Panel>
-          <div className="border-b border-slate-200 px-5 py-4">
-            <h2 className="text-base font-semibold text-zinc-950">
+          <div className="border-b border-slate-200 px-5 py-4 dark:border-zinc-700">
+            <h2 className="text-base font-semibold text-zinc-950 dark:text-zinc-100">
               Usuarios
             </h2>
           </div>
@@ -199,7 +196,7 @@ function UsersPage() {
                 {users.map((item) => {
                   return (
                     <article
-                      className="rounded-lg border border-zinc-200 bg-white p-4 shadow-sm"
+                      className="rounded-lg border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-700 dark:bg-zinc-800"
                       key={item.id}
                     >
                       <div className="flex items-start gap-3">
@@ -207,8 +204,8 @@ function UsersPage() {
                           {getInitials(item.name ?? item.email)}
                         </div>
                         <div className="min-w-0 flex-1">
-                          <p className="font-semibold text-zinc-950">{item.name}</p>
-                          <p className="truncate text-xs text-slate-500">
+                          <p className="font-semibold text-zinc-950 dark:text-zinc-100">{item.name}</p>
+                          <p className="truncate text-xs text-slate-500 dark:text-zinc-400">
                             {item.email}
                           </p>
                           <div className="mt-3">
@@ -236,28 +233,28 @@ function UsersPage() {
               </div>
 
               <div className="hidden overflow-x-auto md:block">
-                <table className="min-w-full divide-y divide-slate-200 text-sm">
+                <table className="min-w-full divide-y divide-slate-200 text-sm dark:divide-zinc-700">
                   <thead>
-                    <tr className="text-left text-xs font-semibold uppercase text-slate-500">
+                    <tr className="text-left text-xs font-semibold uppercase text-slate-500 dark:text-zinc-400">
                       <th className="px-3 py-3">Usuario</th>
                       <th className="px-3 py-3">Rol</th>
                       <th className="px-3 py-3">Creado</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-100">
+                  <tbody className="divide-y divide-slate-100 dark:divide-zinc-700/50">
                     {users.map((item) => {
                       return (
-                        <tr className="align-middle hover:bg-slate-50" key={item.id}>
+                        <tr className="align-middle hover:bg-slate-50 dark:hover:bg-zinc-800/50" key={item.id}>
                           <td className="px-3 py-4">
                             <div className="flex items-center gap-3">
                               <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-emerald-700 text-xs font-bold text-white">
                                 {getInitials(item.name ?? item.email)}
                               </div>
                               <div className="min-w-0">
-                                <p className="font-semibold text-zinc-950">
+                                <p className="font-semibold text-zinc-950 dark:text-zinc-100">
                                   {item.name}
                                 </p>
-                                <p className="truncate text-xs text-slate-500">
+                                <p className="truncate text-xs text-slate-500 dark:text-zinc-400">
                                   {item.email}
                                 </p>
                               </div>
@@ -278,7 +275,7 @@ function UsersPage() {
                               ))}
                             </select>
                           </td>
-                          <td className="px-3 py-4 text-slate-500">
+                          <td className="px-3 py-4 text-slate-500 dark:text-zinc-400">
                             {item.created_at}
                           </td>
                         </tr>
@@ -293,8 +290,8 @@ function UsersPage() {
         </Panel>
 
         <Panel>
-          <div className="border-b border-slate-200 px-5 py-4">
-            <h2 className="text-base font-semibold text-zinc-950">
+          <div className="border-b border-slate-200 px-5 py-4 dark:border-zinc-700">
+            <h2 className="text-base font-semibold text-zinc-950 dark:text-zinc-100">
               Nuevo usuario
             </h2>
           </div>
@@ -371,18 +368,18 @@ function UsersPage() {
       </div>
 
       <Panel>
-        <div className="grid gap-6 border-b border-slate-200 px-5 py-4 lg:grid-cols-[1fr_auto] lg:items-center">
+        <div className="grid gap-6 border-b border-slate-200 px-5 py-4 dark:border-zinc-700 lg:grid-cols-[1fr_auto] lg:items-center">
           <div>
-            <h2 className="text-base font-semibold text-zinc-950">
+            <h2 className="text-base font-semibold text-zinc-950 dark:text-zinc-100">
               Importar usuarios
             </h2>
-            <p className="mt-1 text-sm text-zinc-500">
+            <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
               Carga archivos CSV, TXT o XLSX con columnas name, email, role y
               password.
             </p>
           </div>
           <button
-            className="flex items-center justify-center gap-2 rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm font-semibold text-zinc-700 transition hover:bg-zinc-50"
+            className="flex items-center justify-center gap-2 rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm font-semibold text-zinc-700 transition hover:bg-zinc-50 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
             onClick={downloadTemplate}
             type="button"
           >
@@ -413,7 +410,7 @@ function UsersPage() {
               />
             </div>
 
-            <label className="flex items-start gap-3 rounded-lg border border-zinc-200 p-3 text-sm text-zinc-700">
+            <label className="flex items-start gap-3 rounded-lg border border-zinc-200 p-3 text-sm text-zinc-700 dark:border-zinc-700 dark:text-zinc-300">
               <input
                 checked={importForm.updateExisting}
                 className="mt-1 h-4 w-4 rounded border-zinc-300 text-emerald-700"
@@ -461,7 +458,7 @@ function UsersPage() {
           </form>
 
           <div>
-            <h3 className="text-sm font-semibold uppercase text-zinc-500">
+            <h3 className="text-sm font-semibold uppercase text-zinc-500 dark:text-zinc-400">
               Historial
             </h3>
 
@@ -477,15 +474,15 @@ function UsersPage() {
                 <div className="space-y-3">
                   {imports.map((item) => (
                     <article
-                      className="rounded-lg border border-zinc-200 bg-white p-4"
+                      className="rounded-lg border border-zinc-200 bg-white p-4 dark:border-zinc-700 dark:bg-zinc-800"
                       key={item.id}
                     >
                       <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
                         <div className="min-w-0">
-                          <p className="truncate font-semibold text-zinc-950">
+                          <p className="truncate font-semibold text-zinc-950 dark:text-zinc-100">
                             {item.original_name}
                           </p>
-                          <p className="mt-1 text-xs text-zinc-500">
+                          <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
                             {formatDate(item.created_at)}
                           </p>
                         </div>
