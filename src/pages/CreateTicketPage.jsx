@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router'
 import { createTicket, listCategories } from '../api/support'
 import {
+  FieldError,
   Icon,
   inputClass,
   labelClass,
@@ -64,7 +65,7 @@ function CreateTicketPage() {
       />
 
       {error && (
-        <div className="rounded-lg bg-rose-50 px-4 py-3 text-sm text-rose-700">
+        <div className="rounded-lg bg-rose-50 px-4 py-3 text-sm text-rose-700 dark:bg-rose-900/50 dark:text-rose-200">
           {error}
         </div>
       )}
@@ -85,6 +86,7 @@ function CreateTicketPage() {
                 required
                 value={form.title}
               />
+              <FieldError message={error} />
             </div>
 
             <div>
