@@ -19,13 +19,6 @@ const features = [
   },
 ]
 
-const stats = [
-  { value: '10K+', label: 'Tickets gestionados' },
-  { value: '99%', label: 'SLA cumplido' },
-  { value: '50+', label: 'Agentes activos' },
-  { value: '4.9★', label: 'Satisfacción' },
-]
-
 function FeaturePaths({ paths }) {
   return (
     <svg aria-hidden="true" className="h-6 w-6" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" viewBox="0 0 24 24">
@@ -89,20 +82,6 @@ export default function LandingPage() {
             </div>
           ))}
         </div>
-        </div>
-      </section>
-
-      <section className="relative bg-gradient-to-b from-slate-900 to-emerald-950 py-16">
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[var(--color-app)] to-transparent" />
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-8 text-center sm:grid-cols-2 lg:grid-cols-4">
-            {stats.map(({ value, label }) => (
-              <div key={value}>
-                <p className="text-4xl font-bold text-emerald-400">{value}</p>
-                <p className="mt-2 text-sm text-emerald-100/70">{label}</p>
-              </div>
-            ))}
-          </div>
         </div>
       </section>
 

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router'
 
 export default function PublicLayout({ children }) {
-  const [scrolled, setScrolled] = useState(false)
+  const [scrollRatio, setScrollRatio] = useState(0)
   const [dark, setDark] = useState(() => localStorage.getItem('theme') === 'dark')
 
   useEffect(() => {
@@ -11,31 +11,42 @@ export default function PublicLayout({ children }) {
   }, [dark])
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20)
+    const onScroll = () => {
+      setScrollRatio(Math.min(window.scrollY / 150, 1))
+    }
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  const bgColor = dark
+    ? `rgba(24, 24, 27, ${0.8 * scrollRatio})`
+    : `rgba(15, 23, 42, ${0.8 * scrollRatio})`
+
+  const blurPx = 12 * scrollRatio
+  const shadowOpacity = 0.12 * scrollRatio
+
   return (
     <div className="min-h-screen bg-[var(--color-app)]">
       <nav
-        className={`fixed inset-x-0 top-0 z-50 transition-all ${
-          scrolled
-            ? 'bg-white/80 shadow-sm backdrop-blur-lg dark:bg-zinc-900/80'
-            : 'bg-transparent'
-        }`}
+        className="fixed inset-x-0 top-0 z-50"
+        style={{
+          backgroundColor: bgColor,
+          backdropFilter: scrollRatio > 0 ? `blur(${blurPx}px)` : 'none',
+          WebkitBackdropFilter: scrollRatio > 0 ? `blur(${blurPx}px)` : 'none',
+          boxShadow: `0 1px 3px rgba(0,0,0,${shadowOpacity})`,
+        }}
       >
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
           <Link className="flex items-center gap-3" to="/">
             <div className="grid h-10 w-10 place-items-center rounded-lg bg-emerald-400 text-sm font-bold text-emerald-950 shadow-lg shadow-emerald-400/20">
               ST
             </div>
-            <span className="font-bold text-zinc-950 dark:text-white">Support Tickets</span>
+            <span className="font-bold text-white">Support Tickets</span>
           </Link>
 
           <div className="flex items-center gap-3">
             <button
-              className="rounded-lg border border-zinc-300 p-2 text-zinc-600 transition hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800"
+              className="rounded-lg border border-zinc-500 p-2 text-zinc-300 transition hover:bg-white/10"
               onClick={() => setDark((d) => !d)}
               title={dark ? 'Modo claro' : 'Modo oscuro'}
               type="button"
@@ -52,7 +63,7 @@ export default function PublicLayout({ children }) {
             </button>
 
             <Link
-              className="rounded-lg border border-emerald-700 px-4 py-2 text-sm font-semibold text-emerald-700 transition hover:bg-emerald-50 dark:border-emerald-500 dark:text-emerald-400 dark:hover:bg-emerald-950/30"
+              className="rounded-lg border border-emerald-400/60 px-4 py-2 text-sm font-semibold text-emerald-300 transition hover:bg-emerald-400/10"
               to="/login"
             >
               Iniciar sesión
