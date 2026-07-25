@@ -63,7 +63,7 @@ export default function PublicLayout({ children }) {
 
       <main className="pt-16">{children}</main>
 
-      <footer className="border-t border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
+      <footer className="border-t border-zinc-200 bg-[var(--color-app)] dark:border-zinc-800">
         <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
           <div className="grid gap-8 sm:grid-cols-3">
             <div>
@@ -107,15 +107,8 @@ export default function PublicLayout({ children }) {
             </div>
           </div>
 
-          <div className="mt-10 flex items-center justify-between border-t border-zinc-200 pt-8 dark:border-zinc-800">
+          <div className="mt-10 flex items-center justify-center border-t border-zinc-200 pt-8 dark:border-zinc-800">
             <p className="text-xs text-zinc-400 dark:text-zinc-500">&copy; 2026 Support Tickets. Todos los derechos reservados.</p>
-            <button
-              className="text-xs text-zinc-400 transition hover:text-zinc-600 dark:text-zinc-500 dark:hover:text-zinc-300"
-              onClick={() => setDark((d) => !d)}
-              type="button"
-            >
-              {dark ? 'Modo claro' : 'Modo oscuro'}
-            </button>
           </div>
         </div>
       </footer>

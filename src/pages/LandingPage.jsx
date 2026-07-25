@@ -37,8 +37,9 @@ function FeaturePaths({ paths }) {
 export default function LandingPage() {
   return (
     <PublicLayout>
-      <section className="relative flex min-h-[calc(100vh-4rem)] items-center justify-center overflow-hidden bg-gradient-to-br from-emerald-950 via-[var(--color-sidebar)] to-emerald-900 px-4">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(52,211,153,0.08)_0%,_transparent_60%)]" />
+      <section className="relative flex min-h-[calc(100vh-4rem)] items-center justify-center overflow-hidden bg-gradient-to-br from-emerald-950 via-slate-900 to-slate-800 px-4">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(52,211,153,0.12)_0%,_transparent_60%)]" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[var(--color-app)] to-transparent" />
         <div className="relative z-10 mx-auto max-w-3xl text-center">
           <span className="inline-block rounded-full bg-lime-200/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-lime-200">
             Plataforma de gestión
@@ -63,20 +64,21 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
-        <div className="text-center">
-          <h2 className="text-3xl font-bold tracking-tight text-zinc-950 dark:text-zinc-100">
-            Todo lo que necesitas para gestionar soporte
-          </h2>
-          <p className="mx-auto mt-4 max-w-2xl text-zinc-500 dark:text-zinc-400">
-            Herramientas diseñadas para equipos de soporte que necesitan eficiencia y control.
-          </p>
-        </div>
+      <section className="bg-[var(--color-app)] px-4 py-24 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl">
+          <div className="text-center">
+            <h2 className="text-3xl font-bold tracking-tight text-zinc-950 dark:text-zinc-100">
+              Todo lo que necesitas para gestionar soporte
+            </h2>
+            <p className="mx-auto mt-4 max-w-2xl text-zinc-500 dark:text-zinc-400">
+              Herramientas diseñadas para equipos de soporte que necesitan eficiencia y control.
+            </p>
+          </div>
 
-        <div className="mt-16 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {features.map(({ title, desc, paths }) => (
-            <div
-              className="group rounded-xl border border-zinc-200 bg-white p-8 shadow-sm transition hover:-translate-y-1 hover:shadow-md dark:border-zinc-700 dark:bg-zinc-800/50"
+          <div className="mt-16 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+            {features.map(({ title, desc, paths }) => (
+              <div
+                className="group rounded-xl border border-zinc-200 bg-white p-8 shadow-sm transition hover:-translate-y-1 hover:shadow-md dark:border-zinc-700 dark:bg-zinc-800/50"
               key={title}
             >
               <div className="grid h-12 w-12 place-items-center rounded-lg bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300">
@@ -87,9 +89,11 @@ export default function LandingPage() {
             </div>
           ))}
         </div>
+        </div>
       </section>
 
-      <section className="bg-emerald-950 py-16">
+      <section className="relative bg-gradient-to-b from-slate-900 to-emerald-950 py-16">
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[var(--color-app)] to-transparent" />
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-8 text-center sm:grid-cols-2 lg:grid-cols-4">
             {stats.map(({ value, label }) => (
@@ -102,23 +106,25 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4 py-24 text-center sm:px-6 lg:px-8">
-        <h2 className="text-3xl font-bold tracking-tight text-zinc-950 dark:text-zinc-100">
-          ¿Listo para empezar?
-        </h2>
-        <p className="mx-auto mt-4 max-w-xl text-zinc-500 dark:text-zinc-400">
-          Accede al panel y comienza a gestionar tus tickets de soporte.
-        </p>
-        <div className="mt-8">
-          <Link
-            className="inline-flex items-center gap-2 rounded-lg bg-emerald-700 px-6 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-emerald-600"
-            to="/login"
-          >
-            Acceder al panel
-            <svg aria-hidden="true" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-              <path d="M5 12h14M13 5l7 7-7 7" />
-            </svg>
-          </Link>
+      <section className="bg-[var(--color-app)] px-4 py-24 text-center sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl">
+          <h2 className="text-3xl font-bold tracking-tight text-zinc-950 dark:text-zinc-100">
+            ¿Listo para empezar?
+          </h2>
+          <p className="mx-auto mt-4 max-w-xl text-zinc-500 dark:text-zinc-400">
+            Accede al panel y comienza a gestionar tus tickets de soporte.
+          </p>
+          <div className="mt-8">
+            <Link
+              className="inline-flex items-center gap-2 rounded-lg bg-emerald-700 px-6 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-emerald-600"
+              to="/login"
+            >
+              Acceder al panel
+              <svg aria-hidden="true" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <path d="M5 12h14M13 5l7 7-7 7" />
+              </svg>
+            </Link>
+          </div>
         </div>
       </section>
     </PublicLayout>
