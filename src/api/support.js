@@ -1,6 +1,7 @@
 import api from './client'
 import { apiRoutes, routeWithId } from '../config/apiRoutes'
-import { getTicketId, payloadFromResponse } from '../lib/support'
+import { getTicketId } from '../lib/ticket'
+import { payloadFromResponse } from '../lib/normalizers'
 
 const fallbackStatuses = [404, 405]
 

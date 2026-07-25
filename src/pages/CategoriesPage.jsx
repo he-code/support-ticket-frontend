@@ -15,7 +15,7 @@ import {
   Panel,
   SkeletonRows,
 } from '../components/SupportUi'
-import { collectionFromPayload } from '../lib/support'
+import { collectionFromPayload } from '../lib/normalizers'
 
 function CategoriesPage() {
   const [categories, setCategories] = useState([])

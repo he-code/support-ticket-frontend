@@ -12,7 +12,8 @@ import {
   Panel,
   SkeletonRows,
 } from '../components/SupportUi'
-import { collectionFromPayload, formatDate } from '../lib/support'
+import { collectionFromPayload } from '../lib/normalizers'
+import { formatDate } from '../lib/formatters'
 
 function NotificationsPage() {
   const [notifications, setNotifications] = useState([])

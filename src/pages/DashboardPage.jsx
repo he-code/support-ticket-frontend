@@ -2,15 +2,15 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router'
 import { getDashboardStats, listTickets } from '../api/support'
 import { Badge, Icon, PageHeader, Panel, SkeletonRows } from '../components/SupportUi'
+import { collectionFromPayload } from '../lib/normalizers'
+import { formatDate } from '../lib/formatters'
 import {
-  collectionFromPayload,
-  formatDate,
   getPriorityMeta,
   getStatusMeta,
   getTicketCode,
   getTicketCreatedAt,
   getTicketTitle,
-} from '../lib/support'
+} from '../lib/ticket'
 
 function StatCard({ icon, title, value, loading, tone = 'slate' }) {
   const toneClass = {

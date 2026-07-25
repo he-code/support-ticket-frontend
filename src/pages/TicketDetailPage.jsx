@@ -20,10 +20,9 @@ import {
   Panel,
   SkeletonRows,
 } from '../components/SupportUi'
+import { collectionFromPayload } from '../lib/normalizers'
+import { formatDate, getInitials } from '../lib/formatters'
 import {
-  collectionFromPayload,
-  formatDate,
-  getInitials,
   getPriorityMeta,
   getStatusMeta,
   getTicketAgent,
@@ -35,8 +34,8 @@ import {
   getTicketRequester,
   getTicketTitle,
   personName,
-  statusOptions,
-} from '../lib/support'
+} from '../lib/ticket'
+import { statusOptions } from '../lib/constants'
 
 function TicketDetailPage() {
   const { ticketId } = useParams()

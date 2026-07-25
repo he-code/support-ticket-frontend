@@ -8,11 +8,9 @@ import {
   PageHeader,
   Panel,
 } from '../components/SupportUi'
-import {
-  collectionFromPayload,
-  getTicketId,
-  priorityOptions,
-} from '../lib/support'
+import { collectionFromPayload } from '../lib/normalizers'
+import { getTicketId } from '../lib/ticket'
+import { priorityOptions } from '../lib/constants'
 
 function CreateTicketPage() {
   const navigate = useNavigate()

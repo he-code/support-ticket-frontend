@@ -17,12 +17,9 @@ import {
   SkeletonRows,
 } from '../components/SupportUi'
 import { useAuth } from '../context/AuthContext'
-import {
-  collectionFromPayload,
-  formatDate,
-  getInitials,
-  roleOptions,
-} from '../lib/support'
+import { collectionFromPayload } from '../lib/normalizers'
+import { formatDate, getInitials } from '../lib/formatters'
+import { roleOptions } from '../lib/constants'
 
 function apiErrorMessage(error, fallback) {
   const errors = error.response?.data?.errors

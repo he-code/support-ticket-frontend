@@ -10,10 +10,9 @@ import {
   Panel,
   SkeletonRows,
 } from '../components/SupportUi'
+import { cleanParams, collectionFromPayload } from '../lib/normalizers'
+import { formatDate } from '../lib/formatters'
 import {
-  cleanParams,
-  collectionFromPayload,
-  formatDate,
   getPriorityMeta,
   getStatusMeta,
   getTicketAgent,
@@ -24,9 +23,8 @@ import {
   getTicketRequester,
   getTicketTitle,
   personName,
-  priorityOptions,
-  statusOptions,
-} from '../lib/support'
+} from '../lib/ticket'
+import { priorityOptions, statusOptions } from '../lib/constants'
 
 function TicketsPage() {
   const [tickets, setTickets] = useState([])

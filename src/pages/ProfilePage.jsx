@@ -8,7 +8,8 @@ import {
   Panel,
 } from '../components/SupportUi'
 import { useAuth } from '../context/AuthContext'
-import { getInitials, getRoleLabel } from '../lib/support'
+import { getInitials } from '../lib/formatters'
+import { getRoleLabel } from '../lib/ticket'
 
 function ProfilePage() {
   const { user, updateUser } = useAuth()

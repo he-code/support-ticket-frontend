@@ -1,7 +1,8 @@
 import { NavLink, Outlet, useNavigate } from 'react-router'
 import { Icon } from '../components/SupportUi'
 import { useAuth } from '../context/AuthContext'
-import { getInitials, getRoleLabel } from '../lib/support'
+import { getInitials } from '../lib/formatters'
+import { getRoleLabel } from '../lib/ticket'
 
 const navigation = [
   {
