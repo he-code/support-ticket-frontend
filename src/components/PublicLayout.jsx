@@ -41,12 +41,12 @@ export default function PublicLayout({ children }) {
             <div className="grid h-10 w-10 place-items-center rounded-lg bg-emerald-400 text-sm font-bold text-emerald-950 shadow-lg shadow-emerald-400/20">
               ST
             </div>
-            <span className="font-bold text-white">Support Tickets</span>
+            <span className="font-bold text-emerald-50">Support Tickets</span>
           </Link>
 
           <div className="flex items-center gap-3">
             <button
-              className="rounded-lg border border-zinc-500 p-2 text-zinc-300 transition hover:bg-white/10"
+              className="rounded-lg border border-emerald-700/50 p-2 text-emerald-200/70 transition hover:bg-emerald-900/30"
               onClick={() => setDark((d) => !d)}
               title={dark ? 'Modo claro' : 'Modo oscuro'}
               type="button"
@@ -63,7 +63,7 @@ export default function PublicLayout({ children }) {
             </button>
 
             <Link
-              className="rounded-lg border border-emerald-400/60 px-4 py-2 text-sm font-semibold text-emerald-300 transition hover:bg-emerald-400/10"
+              className="rounded-lg border border-emerald-500 px-4 py-2 text-sm font-semibold text-emerald-300 transition hover:bg-emerald-900/30"
               to="/login"
             >
               Iniciar sesión
