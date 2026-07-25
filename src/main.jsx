@@ -1,11 +1,13 @@
 import { createRoot } from 'react-dom/client'
-import { createBrowserRouter, createRoutesFromElements, Navigate, Route, RouterProvider } from 'react-router'
+import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router'
 import ProtectedRoute from './components/ProtectedRoute'
 import DashboardLayout from './layouts/DashboardLayout'
 import CategoriesPage from './pages/CategoriesPage'
 import CreateTicketPage from './pages/CreateTicketPage'
 import DashboardPage from './pages/DashboardPage'
+import LandingPage from './pages/LandingPage'
 import LoginPage from './pages/LoginPage'
+import NotFoundPage from './pages/NotFoundPage'
 import NotificationsPage from './pages/NotificationsPage'
 import ProfilePage from './pages/ProfilePage'
 import TicketDetailPage from './pages/TicketDetailPage'
@@ -18,7 +20,7 @@ import './index.css'
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route>
-      <Route index element={<Navigate to="/dashboard" replace />} />
+      <Route index element={<LandingPage />} />
       <Route path="login" element={<LoginPage />} />
       <Route element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
         <Route path="dashboard" element={<DashboardPage />} />
@@ -30,7 +32,7 @@ const router = createBrowserRouter(
         <Route path="notifications" element={<NotificationsPage />} />
         <Route path="profile" element={<ProfilePage />} />
       </Route>
-      <Route path="*" element={<Navigate to="/dashboard" replace />} />
+      <Route path="*" element={<NotFoundPage />} />
     </Route>,
   ),
 )
