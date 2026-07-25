@@ -6,17 +6,18 @@ export function useAsync(fn, deps = []) {
   const [error, setError] = useState(null)
   const [reloadCount, setReloadCount] = useState(0)
   const fnRef = useRef(fn)
-  fnRef.current = fn
+
+  useEffect(() => {
+    fnRef.current = fn
+  })
 
   const reload = useCallback(() => {
+    setLoading(true)
     setReloadCount((c) => c + 1)
   }, [])
 
   useEffect(() => {
     let cancelled = false
-
-    setLoading(true)
-    setError(null)
 
     fnRef.current()
       .then((result) => {
@@ -32,7 +33,7 @@ export function useAsync(fn, deps = []) {
     return () => {
       cancelled = true
     }
-  }, [...deps, reloadCount])
+  }, [...deps, reloadCount]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return { data, loading, error, setData, reload }
 }
