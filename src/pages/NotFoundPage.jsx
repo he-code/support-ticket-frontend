@@ -5,7 +5,7 @@ export default function NotFoundPage() {
   return (
     <PublicLayout>
       <div className="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center px-4 text-center">
-        <svg aria-hidden="true" className="h-32 w-32 text-emerald-200 dark:text-emerald-800" fill="none" stroke="currentColor" strokeWidth="0.8" viewBox="0 0 24 24">
+        <svg aria-hidden="true" className="h-32 w-32 text-indigo-200 dark:text-indigo-800" fill="none" stroke="currentColor" strokeWidth="0.8" viewBox="0 0 24 24">
           <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
           <path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3" strokeWidth="1.2" />
           <circle cx="12" cy="16" r="0.5" fill="currentColor" stroke="none" />
@@ -21,7 +21,7 @@ export default function NotFoundPage() {
           La página que buscas no existe o fue movida.
         </p>
         <Link
-          className="mt-8 inline-flex items-center gap-2 rounded-lg bg-emerald-700 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-600"
+          className="mt-8 inline-flex items-center gap-2 rounded-lg bg-indigo-700 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-600"
           to="/"
         >
           <svg aria-hidden="true" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -34,3 +34,6 @@ export default function NotFoundPage() {
     </PublicLayout>
   )
 }
+
+
+

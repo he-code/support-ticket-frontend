@@ -30,22 +30,22 @@ function FeaturePaths({ paths }) {
 export default function LandingPage() {
   return (
     <PublicLayout>
-      <section className="relative flex min-h-[calc(100vh-4rem)] items-center justify-center overflow-hidden bg-gradient-to-br from-emerald-950 via-slate-900 to-slate-800 px-4">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(52,211,153,0.12)_0%,_transparent_60%)]" />
+      <section className="relative flex min-h-[calc(100vh-4rem)] items-center justify-center overflow-hidden bg-gradient-to-br from-indigo-950 via-slate-900 to-slate-800 px-4">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(99,102,241,0.15)_0%,_transparent_60%)]" />
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[var(--color-app)] to-transparent" />
         <div className="relative z-10 mx-auto max-w-3xl text-center">
-          <span className="inline-block rounded-full bg-lime-200/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-lime-200">
+          <span className="inline-block rounded-full bg-amber-200/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-amber-200">
             Plataforma de gestión
           </span>
           <h1 className="mt-6 text-4xl font-bold leading-tight tracking-tight text-white sm:text-5xl lg:text-6xl">
             Soporte ordenado para clientes, agentes y administradores.
           </h1>
-          <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-emerald-50/70">
+          <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-indigo-50/70">
             Tickets, comentarios, adjuntos, estados, asignaciones y usuarios en una sola consola operativa.
           </p>
           <div className="mt-10 flex items-center justify-center gap-4">
             <Link
-              className="inline-flex items-center gap-2 rounded-lg bg-emerald-400 px-6 py-3 text-sm font-bold text-emerald-950 shadow-lg shadow-emerald-400/20 transition hover:bg-emerald-300"
+              className="inline-flex items-center gap-2 rounded-lg bg-indigo-400 px-6 py-3 text-sm font-bold text-indigo-950 shadow-lg shadow-indigo-400/20 transition hover:bg-indigo-300"
               to="/login"
             >
               Acceder al panel
@@ -74,7 +74,7 @@ export default function LandingPage() {
                 className="group rounded-xl border border-zinc-200 bg-white p-8 shadow-sm transition hover:-translate-y-1 hover:shadow-md dark:border-zinc-700 dark:bg-zinc-800/50"
               key={title}
             >
-              <div className="grid h-12 w-12 place-items-center rounded-lg bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300">
+              <div className="grid h-12 w-12 place-items-center rounded-lg bg-indigo-100 text-indigo-700 dark:bg-indigo-900/50 dark:text-indigo-300">
                 <FeaturePaths paths={paths} />
               </div>
               <h3 className="mt-6 text-lg font-semibold text-zinc-950 dark:text-zinc-100">{title}</h3>
@@ -95,7 +95,7 @@ export default function LandingPage() {
           </p>
           <div className="mt-8">
             <Link
-              className="inline-flex items-center gap-2 rounded-lg bg-emerald-700 px-6 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-emerald-600"
+              className="inline-flex items-center gap-2 rounded-lg bg-indigo-700 px-6 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-indigo-600"
               to="/login"
             >
               Acceder al panel
@@ -109,3 +109,6 @@ export default function LandingPage() {
     </PublicLayout>
   )
 }
+
+
+

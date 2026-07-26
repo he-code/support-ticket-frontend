@@ -3,7 +3,7 @@ import { Icon } from './SupportUi'
 function PageButton({ page, active, onClick }) {
   if (active) {
     return (
-      <span className="grid h-9 w-9 place-items-center rounded-md bg-emerald-700 text-xs font-bold text-white dark:bg-emerald-600">
+      <span className="grid h-9 w-9 place-items-center rounded-md bg-indigo-700 text-xs font-bold text-white dark:bg-indigo-600">
         {page}
       </span>
     )
@@ -77,3 +77,6 @@ function PaginationBar({ page, totalPages, total, onPageChange }) {
 }
 
 export default PaginationBar
+
+
+

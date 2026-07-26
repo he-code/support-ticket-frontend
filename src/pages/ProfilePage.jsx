@@ -82,7 +82,7 @@ function ProfilePage() {
       <div className="grid gap-6 xl:grid-cols-[320px_1fr]">
         <Panel className="p-5">
           <div className="flex items-center gap-4">
-            <div className="grid h-16 w-16 place-items-center rounded-lg bg-emerald-700 text-lg font-bold text-white">
+            <div className="grid h-16 w-16 place-items-center rounded-lg bg-indigo-700 text-lg font-bold text-white">
               {getInitials(user?.name ?? user?.email)}
             </div>
             <div className="min-w-0">
@@ -178,7 +178,7 @@ function ProfilePage() {
 
             <div className="md:col-span-2">
               <button
-                className="flex items-center gap-2 rounded-lg bg-emerald-700 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-800 disabled:cursor-not-allowed disabled:opacity-60"
+                className="flex items-center gap-2 rounded-lg bg-indigo-700 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-800 disabled:cursor-not-allowed disabled:opacity-60"
                 disabled={saving}
                 type="submit"
               >
@@ -194,3 +194,6 @@ function ProfilePage() {
 }
 
 export default ProfilePage
+
+
+

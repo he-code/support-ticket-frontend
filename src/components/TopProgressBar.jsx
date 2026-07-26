@@ -31,9 +31,12 @@ function TopProgressBar() {
 
   return (
     <div ref={containerRef} className="fixed left-0 right-0 top-0 z-[100] h-1 opacity-0 transition-opacity duration-200">
-      <div ref={barRef} className="h-full bg-emerald-500" />
+      <div ref={barRef} className="h-full bg-indigo-500" />
     </div>
   )
 }
 
 export default TopProgressBar
+
+
+

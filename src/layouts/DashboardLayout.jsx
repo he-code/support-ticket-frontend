@@ -79,16 +79,16 @@ function DashboardLayout() {
   return (
     <div className="min-h-screen bg-[var(--color-app)]">
       <TopProgressBar />
-      <aside className="fixed inset-y-0 left-0 hidden w-72 border-r border-emerald-950/20 bg-[var(--color-sidebar)] text-white lg:block">
+      <aside className="fixed inset-y-0 left-0 hidden w-72 border-r border-indigo-950/20 bg-[var(--color-sidebar)] text-white lg:block">
         <div className="flex h-full flex-col">
           <div className="border-b border-white/10 px-6 py-5">
             <div className="flex items-center gap-3">
-              <div className="grid h-10 w-10 place-items-center rounded-lg bg-emerald-400 text-sm font-bold text-emerald-950">
+              <div className="grid h-10 w-10 place-items-center rounded-lg bg-indigo-400 text-sm font-bold text-indigo-950">
                 ST
               </div>
               <div>
                 <h1 className="text-base font-bold">Support Tickets</h1>
-                <p className="text-xs text-emerald-100/80">Mesa de soporte</p>
+                <p className="text-xs text-indigo-100/80">Mesa de soporte</p>
               </div>
             </div>
           </div>
@@ -100,8 +100,8 @@ function DashboardLayout() {
                   [
                     'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition',
                     isActive
-                      ? 'bg-lime-100 text-emerald-950'
-                      : 'text-emerald-50/75 hover:bg-white/10 hover:text-white',
+                      ? 'bg-amber-100 text-indigo-950'
+                      : 'text-indigo-50/75 hover:bg-white/10 hover:text-white',
                   ].join(' ')
                 }
                 end={item.path === '/tickets'}
@@ -116,22 +116,22 @@ function DashboardLayout() {
 
           <div className="border-t border-white/10 p-4">
             <div className="flex items-center gap-3 rounded-lg bg-white/5 p-3">
-              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-lime-100 text-sm font-bold text-emerald-950">
+              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-amber-100 text-sm font-bold text-indigo-950">
                 {getInitials(user?.name ?? user?.email)}
               </div>
               <div className="min-w-0">
                 <p className="truncate text-sm font-semibold">
                   {user?.name ?? 'Usuario'}
                 </p>
-                <p className="truncate text-xs text-emerald-100/80">{user?.email}</p>
-                <p className="mt-1 text-xs uppercase text-emerald-100/60">
+                <p className="truncate text-xs text-indigo-100/80">{user?.email}</p>
+                <p className="mt-1 text-xs uppercase text-indigo-100/60">
                   {getRoleLabel(role)}
                 </p>
               </div>
             </div>
 
             <button
-              className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg border border-white/10 px-4 py-2 text-sm font-semibold text-emerald-50 transition hover:bg-white/10"
+              className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg border border-white/10 px-4 py-2 text-sm font-semibold text-indigo-50 transition hover:bg-white/10"
               onClick={() => setDark((d) => !d)}
               type="button"
             >
@@ -148,7 +148,7 @@ function DashboardLayout() {
             </button>
 
             <button
-              className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg border border-white/10 px-4 py-2 text-sm font-semibold text-emerald-50 transition hover:bg-white/10"
+              className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg border border-white/10 px-4 py-2 text-sm font-semibold text-indigo-50 transition hover:bg-white/10"
               onClick={handleLogout}
               type="button"
             >
@@ -163,7 +163,7 @@ function DashboardLayout() {
         <header className="sticky top-0 z-10 border-b border-zinc-200 bg-white/95 backdrop-blur dark:border-zinc-700 dark:bg-zinc-900/95">
           <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
             <div className="min-w-0">
-              <p className="text-xs font-semibold uppercase tracking-wide text-emerald-700 dark:text-emerald-400">
+              <p className="text-xs font-semibold uppercase tracking-wide text-indigo-700 dark:text-indigo-400">
                 Mesa de soporte
               </p>
               <h2 className="truncate text-lg font-semibold text-zinc-950 dark:text-zinc-100">
@@ -206,7 +206,7 @@ function DashboardLayout() {
                   [
                     'flex shrink-0 items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold',
                     isActive
-                      ? 'bg-emerald-700 text-white'
+                      ? 'bg-indigo-700 text-white'
                       : 'bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300',
                   ].join(' ')
                 }
@@ -230,3 +230,6 @@ function DashboardLayout() {
 }
 
 export default DashboardLayout
+
+
+

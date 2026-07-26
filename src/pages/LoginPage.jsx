@@ -112,23 +112,23 @@ function LoginPage() {
     <div className="grid min-h-screen bg-[var(--color-app)] lg:grid-cols-[1fr_480px]">
       <section className="relative hidden flex-col justify-between overflow-hidden bg-[var(--color-sidebar)] px-12 py-12 text-white lg:flex">
         <div className="relative z-10 flex items-center gap-3">
-          <div className="grid h-11 w-11 place-items-center rounded-xl bg-emerald-400 text-sm font-bold text-emerald-950 shadow-lg shadow-emerald-400/20">
+          <div className="grid h-11 w-11 place-items-center rounded-xl bg-indigo-400 text-sm font-bold text-indigo-950 shadow-lg shadow-indigo-400/20">
             ST
           </div>
           <div>
             <p className="font-bold text-white">Support Tickets</p>
-            <p className="text-sm text-emerald-100/70">Mesa de soporte</p>
+            <p className="text-sm text-indigo-100/70">Mesa de soporte</p>
           </div>
         </div>
 
         <div className="relative z-10 max-w-lg">
-          <span className="inline-block rounded-full bg-lime-200/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-lime-200">
+          <span className="inline-block rounded-full bg-amber-200/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-amber-200">
             Plataforma de gestion
           </span>
           <h1 className="mt-6 text-4xl font-bold leading-tight tracking-tight text-white">
             Soporte ordenado para clientes, agentes y administradores.
           </h1>
-          <p className="mt-4 text-base leading-7 text-emerald-50/70">
+          <p className="mt-4 text-base leading-7 text-indigo-50/70">
             Tickets, comentarios, adjuntos, estados, asignaciones y usuarios en una sola consola operativa.
           </p>
         </div>
@@ -141,19 +141,19 @@ function LoginPage() {
           ].map(({ value, label }) => (
             <div className="rounded-xl border border-white/10 bg-white/5 p-5 backdrop-blur-sm" key={value}>
               <p className="text-2xl font-bold text-white">{value}</p>
-              <p className="mt-1 text-sm text-emerald-50/70">{label}</p>
+              <p className="mt-1 text-sm text-indigo-50/70">{label}</p>
             </div>
           ))}
         </div>
 
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-emerald-400/5 via-transparent to-lime-200/5" />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-indigo-400/5 via-transparent to-amber-200/5" />
       </section>
 
       <main className="flex items-center justify-center px-6 py-10">
         <div className="w-full max-w-sm animate-[fade-in_0.4s_ease-out]">
           <div className="mb-8 lg:hidden">
             <div className="flex items-center gap-3">
-              <div className="grid h-11 w-11 place-items-center rounded-xl bg-emerald-700 text-sm font-bold text-white dark:bg-emerald-500 dark:text-emerald-950">
+              <div className="grid h-11 w-11 place-items-center rounded-xl bg-indigo-700 text-sm font-bold text-white dark:bg-indigo-500 dark:text-indigo-950">
                 ST
               </div>
               <div>
@@ -236,7 +236,7 @@ function LoginPage() {
               <div className="flex items-center gap-2">
                 <input
                   checked={remember}
-                  className="h-4 w-4 rounded border-zinc-300 text-emerald-700 focus:ring-emerald-500 dark:border-zinc-600 dark:bg-zinc-800"
+                  className="h-4 w-4 rounded border-zinc-300 text-indigo-700 focus:ring-indigo-500 dark:border-zinc-600 dark:bg-zinc-800"
                   id="remember"
                   onChange={(e) => setRemember(e.target.checked)}
                   type="checkbox"
@@ -247,7 +247,7 @@ function LoginPage() {
               </div>
 
               <button
-                className="flex w-full items-center justify-center gap-2 rounded-lg bg-emerald-700 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-800 disabled:cursor-not-allowed disabled:opacity-60"
+                className="flex w-full items-center justify-center gap-2 rounded-lg bg-indigo-700 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-800 disabled:cursor-not-allowed disabled:opacity-60"
                 disabled={loading}
                 type="submit"
               >
@@ -277,3 +277,6 @@ function LoginPage() {
 }
 
 export default LoginPage
+
+
+

@@ -167,7 +167,7 @@ function CreateTicketPage() {
             </div>
 
             <button
-              className="flex w-full items-center justify-center gap-2 rounded-lg bg-emerald-700 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-800 disabled:cursor-not-allowed disabled:opacity-60"
+              className="flex w-full items-center justify-center gap-2 rounded-lg bg-indigo-700 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-800 disabled:cursor-not-allowed disabled:opacity-60"
               disabled={loading}
               type="submit"
             >
@@ -182,3 +182,6 @@ function CreateTicketPage() {
 }
 
 export default CreateTicketPage
+
+
+

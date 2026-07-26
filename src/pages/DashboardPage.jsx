@@ -15,9 +15,9 @@ import {
 function StatCard({ icon, title, value, loading, tone = 'slate' }) {
   const toneClass = {
     slate: 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300',
-    sky: 'bg-sky-50 text-sky-700 dark:bg-sky-900/50 dark:text-sky-300',
+    violet: 'bg-violet-50 text-violet-700 dark:bg-violet-900/50 dark:text-violet-300',
     amber: 'bg-amber-50 text-amber-700 dark:bg-amber-900/50 dark:text-amber-300',
-    emerald: 'bg-emerald-50 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300',
+    indigo: 'bg-indigo-50 text-indigo-700 dark:bg-indigo-900/50 dark:text-indigo-300',
   }[tone]
 
   return (
@@ -83,7 +83,7 @@ function DashboardPage() {
               Tickets
             </Link>
             <Link
-              className="flex items-center gap-2 rounded-lg bg-emerald-700 px-3 py-2 text-sm font-semibold text-white transition hover:bg-emerald-800 dark:bg-emerald-600 dark:hover:bg-emerald-700"
+              className="flex items-center gap-2 rounded-lg bg-indigo-700 px-3 py-2 text-sm font-semibold text-white transition hover:bg-indigo-800 dark:bg-indigo-600 dark:hover:bg-indigo-700"
               to="/tickets/create"
             >
               <Icon name="plus" />
@@ -112,7 +112,7 @@ function DashboardPage() {
           icon="clock"
           loading={loading}
           title="Abiertos"
-          tone="sky"
+          tone="violet"
           value={openTickets}
         />
         <StatCard
@@ -126,7 +126,7 @@ function DashboardPage() {
           icon="check"
           loading={loading}
           title="Cerrados"
-          tone="emerald"
+          tone="indigo"
           value={closedTickets}
         />
       </div>
@@ -194,3 +194,6 @@ function DashboardPage() {
 }
 
 export default DashboardPage
+
+
+

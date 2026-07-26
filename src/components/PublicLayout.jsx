@@ -38,15 +38,15 @@ export default function PublicLayout({ children }) {
       >
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
           <Link className="flex items-center gap-3" to="/">
-            <div className="grid h-10 w-10 place-items-center rounded-lg bg-emerald-400 text-sm font-bold text-emerald-950 shadow-lg shadow-emerald-400/20">
+            <div className="grid h-10 w-10 place-items-center rounded-lg bg-indigo-400 text-sm font-bold text-indigo-950 shadow-lg shadow-indigo-400/20">
               ST
             </div>
-            <span className="font-bold text-emerald-50">Support Tickets</span>
+            <span className="font-bold text-indigo-50">Support Tickets</span>
           </Link>
 
           <div className="flex items-center gap-3">
             <button
-              className="rounded-lg border border-emerald-700/50 p-2 text-emerald-200/70 transition hover:bg-emerald-900/30"
+              className="rounded-lg border border-indigo-700/50 p-2 text-indigo-200/70 transition hover:bg-indigo-900/30"
               onClick={() => setDark((d) => !d)}
               title={dark ? 'Modo claro' : 'Modo oscuro'}
               type="button"
@@ -63,7 +63,7 @@ export default function PublicLayout({ children }) {
             </button>
 
             <Link
-              className="rounded-lg border border-emerald-500 px-4 py-2 text-sm font-semibold text-emerald-300 transition hover:bg-emerald-900/30"
+              className="rounded-lg border border-indigo-500 px-4 py-2 text-sm font-semibold text-indigo-300 transition hover:bg-indigo-900/30"
               to="/login"
             >
               Iniciar sesión
@@ -79,7 +79,7 @@ export default function PublicLayout({ children }) {
           <div className="grid gap-8 sm:grid-cols-3">
             <div>
               <div className="flex items-center gap-3">
-                <div className="grid h-10 w-10 place-items-center rounded-lg bg-emerald-400 text-sm font-bold text-emerald-950">
+                <div className="grid h-10 w-10 place-items-center rounded-lg bg-indigo-400 text-sm font-bold text-indigo-950">
                   ST
                 </div>
                 <span className="font-bold text-zinc-950 dark:text-white">Support Tickets</span>
@@ -126,3 +126,6 @@ export default function PublicLayout({ children }) {
     </div>
   )
 }
+
+
+

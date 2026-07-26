@@ -127,7 +127,7 @@ function CategoriesPage() {
                             {category.description}
                           </p>
                         </div>
-                        <Badge tone={active ? 'emerald' : 'slate'}>
+                        <Badge tone={active ? 'indigo' : 'slate'}>
                           {active ? 'Activa' : 'Inactiva'}
                         </Badge>
                       </div>
@@ -179,7 +179,7 @@ function CategoriesPage() {
                             </p>
                           </td>
                           <td className="px-3 py-4">
-                            <Badge tone={active ? 'emerald' : 'slate'}>
+                            <Badge tone={active ? 'indigo' : 'slate'}>
                               {active ? 'Activa' : 'Inactiva'}
                             </Badge>
                           </td>
@@ -248,7 +248,7 @@ function CategoriesPage() {
               />
             </div>
             <button
-              className="flex w-full items-center justify-center gap-2 rounded-lg bg-emerald-700 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-800 disabled:cursor-not-allowed disabled:opacity-60"
+              className="flex w-full items-center justify-center gap-2 rounded-lg bg-indigo-700 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-800 disabled:cursor-not-allowed disabled:opacity-60"
               disabled={saving}
               type="submit"
             >
@@ -275,3 +275,6 @@ function CategoriesPage() {
 }
 
 export default CategoriesPage
+
+
+

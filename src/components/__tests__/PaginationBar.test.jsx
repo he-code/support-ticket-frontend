@@ -108,3 +108,5 @@ describe('PaginationBar', () => {
     expect(activeButton).toBe('3')
   })
 })
+
+

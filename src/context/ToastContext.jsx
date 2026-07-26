@@ -37,8 +37,8 @@ export function ToastProvider({ children }) {
               toast.type === 'error'
                 ? 'bg-rose-600 text-white ring-rose-400'
                 : toast.type === 'notice'
-                  ? 'bg-sky-600 text-white ring-sky-400'
-                  : 'bg-emerald-600 text-white ring-emerald-400'
+                  ? 'bg-violet-600 text-white ring-violet-400'
+                  : 'bg-indigo-600 text-white ring-indigo-400'
             }`}
             key={toast.id}
           >
@@ -62,3 +62,6 @@ export function ToastProvider({ children }) {
 export function useToast() {
   return useContext(ToastContext)
 }
+
+
+

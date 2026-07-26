@@ -112,13 +112,13 @@ function NotificationsPage() {
                     key={notification.id}
                   >
                     <div className="flex gap-3">
-                      <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-emerald-700 text-white">
+                      <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-indigo-700 text-white">
                         <Icon name="bell" />
                       </div>
                       <div className="min-w-0">
                         <div className="flex flex-wrap items-center gap-2">
                           <p className="font-semibold text-zinc-950">{title}</p>
-                          <Badge tone={read ? 'slate' : 'sky'}>
+                          <Badge tone={read ? 'slate' : 'violet'}>
                             {read ? 'Leida' : 'Nueva'}
                           </Badge>
                         </div>
@@ -155,3 +155,6 @@ function NotificationsPage() {
 }
 
 export default NotificationsPage
+
+
+

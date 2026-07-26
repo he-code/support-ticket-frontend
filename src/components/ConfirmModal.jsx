@@ -67,3 +67,6 @@ function ConfirmModal({ title, description, confirmLabel = 'Confirmar', cancelLa
 }
 
 export default ConfirmModal
+
+
+

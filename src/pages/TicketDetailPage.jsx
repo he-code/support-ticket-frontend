@@ -175,7 +175,7 @@ function TicketDetailPage() {
         <EmptyState
           action={
             <Link
-              className="rounded-lg bg-emerald-700 px-3 py-2 text-sm font-semibold text-white"
+              className="rounded-lg bg-indigo-700 px-3 py-2 text-sm font-semibold text-white"
               to="/tickets"
             >
               Ir a tickets
@@ -264,7 +264,7 @@ function TicketDetailPage() {
                           className="flex gap-3 rounded-lg border border-slate-200 p-4 dark:border-zinc-700"
                           key={item.id ?? index}
                         >
-                          <div className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-emerald-700 text-xs font-bold text-white">
+                          <div className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-indigo-700 text-xs font-bold text-white">
                             {getInitials(personName(author, 'ST'))}
                           </div>
                           <div className="min-w-0 flex-1">
@@ -298,7 +298,7 @@ function TicketDetailPage() {
                     value={comment}
                   />
                   <button
-                    className="flex items-center gap-2 rounded-lg bg-emerald-700 px-3 py-2 text-sm font-semibold text-white transition hover:bg-emerald-800 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-emerald-600 dark:hover:bg-emerald-700"
+                    className="flex items-center gap-2 rounded-lg bg-indigo-700 px-3 py-2 text-sm font-semibold text-white transition hover:bg-indigo-800 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-indigo-600 dark:hover:bg-indigo-700"
                     disabled={saving === 'comment'}
                     type="submit"
                   >
@@ -337,7 +337,7 @@ function TicketDetailPage() {
                     </select>
                     <button
                       aria-label="Guardar estado"
-                      className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-emerald-700 text-white transition hover:bg-emerald-800 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-emerald-600 dark:hover:bg-emerald-700"
+                      className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-indigo-700 text-white transition hover:bg-indigo-800 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-indigo-600 dark:hover:bg-indigo-700"
                       disabled={saving === 'status'}
                       onClick={saveStatus}
                       title="Guardar estado"
@@ -368,7 +368,7 @@ function TicketDetailPage() {
                     </select>
                     <button
                       aria-label="Guardar asignacion"
-                      className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-emerald-700 text-white transition hover:bg-emerald-800 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-emerald-600 dark:hover:bg-emerald-700"
+                      className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-indigo-700 text-white transition hover:bg-indigo-800 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-indigo-600 dark:hover:bg-indigo-700"
                       disabled={saving === 'assignment'}
                       onClick={saveAssignment}
                       title="Guardar asignacion"
@@ -453,3 +453,6 @@ function TicketDetailPage() {
 }
 
 export default TicketDetailPage
+
+
+

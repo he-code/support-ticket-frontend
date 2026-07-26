@@ -54,15 +54,14 @@ const iconPaths = {
 
 const toneClasses = {
   slate: 'bg-zinc-100 text-zinc-700 ring-zinc-200 dark:bg-zinc-800 dark:text-zinc-300 dark:ring-zinc-600',
-  sky: 'bg-sky-50 text-sky-700 ring-sky-200 dark:bg-sky-900/50 dark:text-sky-300 dark:ring-sky-700',
-  amber: 'bg-amber-50 text-amber-800 ring-amber-200 dark:bg-amber-900/50 dark:text-amber-300 dark:ring-amber-700',
-  emerald: 'bg-emerald-50 text-emerald-700 ring-emerald-200 dark:bg-emerald-900/50 dark:text-emerald-300 dark:ring-emerald-700',
-  rose: 'bg-rose-50 text-rose-700 ring-rose-200 dark:bg-rose-900/50 dark:text-rose-300 dark:ring-rose-700',
   violet: 'bg-violet-50 text-violet-700 ring-violet-200 dark:bg-violet-900/50 dark:text-violet-300 dark:ring-violet-700',
+  amber: 'bg-amber-50 text-amber-800 ring-amber-200 dark:bg-amber-900/50 dark:text-amber-300 dark:ring-amber-700',
+  indigo: 'bg-indigo-50 text-indigo-700 ring-indigo-200 dark:bg-indigo-900/50 dark:text-indigo-300 dark:ring-indigo-700',
+  rose: 'bg-rose-50 text-rose-700 ring-rose-200 dark:bg-rose-900/50 dark:text-rose-300 dark:ring-rose-700',
 }
 
 export const inputClass =
-  'w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-950 outline-none transition placeholder:text-zinc-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 disabled:cursor-not-allowed disabled:bg-zinc-100 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100 dark:placeholder:text-zinc-500 dark:focus:ring-emerald-900/50 dark:disabled:bg-zinc-900'
+  'w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-950 outline-none transition placeholder:text-zinc-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 disabled:cursor-not-allowed disabled:bg-zinc-100 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100 dark:placeholder:text-zinc-500 dark:focus:ring-indigo-900/50 dark:disabled:bg-zinc-900'
 
 export const labelClass = 'text-sm font-medium text-zinc-700 dark:text-zinc-300'
 
@@ -162,3 +161,6 @@ export function SkeletonRows({ rows = 4 }) {
     </div>
   )
 }
+
+
+
