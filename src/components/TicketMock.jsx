@@ -12,6 +12,7 @@ export default function TicketMock({
   code = '#TKT-2481',
   sla = '04:12',
   notFound = false,
+  className = '',
 }) {
   const statusMeta = notFound
     ? { label: 'No encontrado', tone: 'rose' }
@@ -20,7 +21,7 @@ export default function TicketMock({
   const priorityMeta = getPriorityMeta(priority)
 
   return (
-    <div className="relative rounded-xl border border-border bg-surface p-5 shadow-2xl">
+    <div className={`relative rounded-xl border border-border bg-surface p-5 shadow-2xl ${className}`}>
       {/* Muescas de perforacion */}
       <span className="absolute -left-2 top-1/2 h-4 w-4 -translate-y-1/2 rounded-full bg-bg" />
       <span className="absolute -right-2 top-1/2 h-4 w-4 -translate-y-1/2 rounded-full bg-bg" />
