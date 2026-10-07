@@ -36,7 +36,16 @@ function CategoriesPage() {
   const { showToast } = useToast()
 
   const displayError = mutationError || error
-  const loadCategories = () => listCategories().then(d => setCategories(collectionFromPayload(d)))
+  const loadCategories = () =>
+    listCategories({ per_page: 100 }).then((d) => setCategories(collectionFromPayload(d)))
+
+  const refreshCategories = async () => {
+    try {
+      await loadCategories()
+    } catch {
+      showToast('Cambio guardado, pero no se pudo refrescar la lista.', 'notice')
+    }
+  }
 
   const handleChange = (event) => {
     setForm((current) => ({
@@ -52,7 +61,7 @@ function CategoriesPage() {
       await execute(createCategory, form)
       setForm({ name: '', description: '' })
       showToast('Categoria creada.')
-      await loadCategories()
+      await refreshCategories()
     } catch {
       // error handled by useMutation
     }
@@ -62,7 +71,7 @@ function CategoriesPage() {
     try {
       await execute(updateCategory, category.id, { is_active: !category.is_active })
       showToast('Categoria actualizada.')
-      await loadCategories()
+      await refreshCategories()
     } catch {
       // error handled by useMutation
     }
@@ -73,7 +82,7 @@ function CategoriesPage() {
       await execute(deleteCategory, category.id)
       setConfirmDelete(null)
       showToast('Categoria eliminada.')
-      await loadCategories()
+      await refreshCategories()
     } catch {
       // error handled by useMutation
     }
