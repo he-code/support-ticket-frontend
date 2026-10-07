@@ -45,18 +45,24 @@ function ProfilePage() {
       return
     }
 
+    if (form.password && form.password !== form.password_confirmation) {
+      setError('Las contrasenas no coinciden.')
+      return
+    }
+
     try {
       const updated = await execute(updateProfile, payload)
 
+      updateUser(updated.user ?? updated.profile ?? updated)
+
       if (form.password) {
-        await changePassword({
+        await execute(changePassword, {
           current_password: form.current_password,
           password: form.password,
           password_confirmation: form.password_confirmation,
         })
       }
 
-      updateUser(updated.user ?? updated.profile ?? updated)
       setForm((current) => ({
         ...current,
         current_password: '',
