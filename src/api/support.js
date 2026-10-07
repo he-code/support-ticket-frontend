@@ -94,16 +94,14 @@ export function createCategory(payload) {
   )
 }
 
+// PATCH/DELETE por id NUNCA reintenta contra otra familia de recursos:
+// un 404 legitimo podria tocar el recurso equivocado con el mismo id.
 export function updateCategory(categoryId, payload) {
-  return req.withEndpointFallback(apiRoutes.categories, (endpoint) =>
-    req.patch(routeWithId(endpoint, categoryId), payload),
-  )
+  return req.patch(routeWithId(apiRoutes.categories[0], categoryId), payload)
 }
 
 export function deleteCategory(categoryId) {
-  return req.withEndpointFallback(apiRoutes.categories, (endpoint) =>
-    req.del(routeWithId(endpoint, categoryId)),
-  )
+  return req.del(routeWithId(apiRoutes.categories[0], categoryId))
 }
 
 export function listUsers(params = {}) {
