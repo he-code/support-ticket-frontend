@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router'
+import { buttonPrimaryClass, LogoMark } from './SupportUi'
 
 export default function PublicLayout({ children }) {
   const [scrollRatio, setScrollRatio] = useState(0)
@@ -9,10 +10,11 @@ export default function PublicLayout({ children }) {
       setScrollRatio(Math.min(window.scrollY / 150, 1))
     }
     window.addEventListener('scroll', onScroll, { passive: true })
+    onScroll()
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  const bgColor = `rgba(10, 10, 11, ${0.85 * scrollRatio})`
+  const bgColor = `rgba(8, 8, 12, ${0.85 * scrollRatio})`
 
   return (
     <div className="min-h-screen bg-bg">
@@ -26,73 +28,34 @@ export default function PublicLayout({ children }) {
         }}
       >
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
-          <Link className="flex items-center gap-3" to="/">
-            <div className="grid h-10 w-10 place-items-center rounded-lg bg-accent text-sm font-bold text-white shadow-lg shadow-accent/20">
-              ST
-            </div>
-            <span className="hidden font-semibold text-text sm:inline">Support Tickets</span>
+          <Link aria-label="Support Tickets — inicio" className="flex items-center" to="/">
+            <LogoMark size={36} withWordmark />
           </Link>
 
-          <div className="flex items-center gap-3">
-            <Link
-              className="rounded-lg border border-accent/40 px-4 py-2 text-sm font-semibold text-accent transition hover:bg-accent-soft"
-              to="/login"
-            >
-              Acceder al panel
-            </Link>
-          </div>
+          <Link className={buttonPrimaryClass} to="/login">
+            Acceder al panel
+          </Link>
         </div>
       </nav>
 
       <main className="pt-14">{children}</main>
 
       <footer className="border-t border-border bg-bg">
-        <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-          <div className="grid gap-8 sm:grid-cols-3">
-            <div>
-              <div className="flex items-center gap-3">
-                <div className="grid h-10 w-10 place-items-center rounded-lg bg-accent text-sm font-bold text-white">
-                  ST
-                </div>
-                <span className="font-semibold text-text">Support Tickets</span>
-              </div>
-              <p className="mt-3 text-sm leading-6 text-muted">
-                Plataforma de gestion de tickets para clientes, agentes y administradores.
-              </p>
-            </div>
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-5 px-4 py-8 sm:flex-row sm:px-6 lg:px-8">
+          <LogoMark size={28} withWordmark />
 
-            <div>
-              <h3 className="text-sm font-semibold text-text">Navegacion</h3>
-              <ul className="mt-4 space-y-3">
-                <li>
-                  <Link className="text-sm text-muted transition hover:text-text" to="/">
-                    Inicio
-                  </Link>
-                </li>
-                <li>
-                  <Link className="text-sm text-muted transition hover:text-text" to="/login">
-                    Acceder
-                  </Link>
-                </li>
-              </ul>
-            </div>
+          <nav aria-label="Pie de página" className="flex items-center gap-6 text-sm text-muted">
+            <Link className="transition hover:text-text" to="/">
+              Inicio
+            </Link>
+            <Link className="transition hover:text-text" to="/login">
+              Acceder
+            </Link>
+          </nav>
 
-            <div>
-              <h3 className="text-sm font-semibold text-text">Recursos</h3>
-              <ul className="mt-4 space-y-3">
-                <li>
-                  <span className="text-sm text-muted">Documentacion</span>
-                </li>
-                <li>
-                  <span className="text-sm text-muted">Estado del sistema</span>
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="mt-10 flex items-center justify-center border-t border-border pt-8">
-            <p className="text-xs text-muted">&copy; 2026 Support Tickets. Todos los derechos reservados.</p>
-          </div>
+          <p className="text-xs text-muted">
+            &copy; 2026 Support Tickets. Todos los derechos reservados.
+          </p>
         </div>
       </footer>
     </div>
