@@ -5,6 +5,7 @@ function TopProgressBar() {
   const navigation = useNavigation()
   const barRef = useRef(null)
   const containerRef = useRef(null)
+  const timersRef = useRef([])
 
   useEffect(() => {
     const bar = barRef.current
@@ -22,10 +23,25 @@ function TopProgressBar() {
     } else if (navigation.state === 'idle') {
       bar.style.transition = 'width 300ms ease-out'
       bar.style.width = '100%'
-      setTimeout(() => {
+
+      const hideTimer = setTimeout(() => {
         container.style.opacity = '0'
-        setTimeout(() => { bar.style.width = '0%' }, 300)
+
+        const resetTimer = setTimeout(() => {
+          bar.style.width = '0%'
+        }, 300)
+
+        timersRef.current.push(resetTimer)
       }, 250)
+
+      timersRef.current.push(hideTimer)
+    }
+
+    return () => {
+      // Evita que timers de un estado anterior apaguen la barra
+      // durante una carga nueva (navegaciones rapidas).
+      timersRef.current.forEach((timer) => clearTimeout(timer))
+      timersRef.current = []
     }
   }, [navigation.state])
 
