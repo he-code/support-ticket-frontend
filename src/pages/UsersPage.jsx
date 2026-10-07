@@ -16,6 +16,7 @@ import {
   Panel,
   SkeletonRows,
 } from '../components/SupportUi'
+import ConfirmModal from '../components/ConfirmModal'
 import { useAuth } from '../context/AuthContext'
 import { useAsync } from '../hooks/useAsync'
 import { useMutation } from '../hooks/useMutation'
@@ -23,6 +24,7 @@ import { useToast } from '../context/ToastContext'
 import { collectionFromPayload } from '../lib/normalizers'
 import { formatDate, getInitials } from '../lib/formatters'
 import { roleOptions } from '../lib/constants'
+import { getRoleLabel } from '../lib/ticket'
 
 function apiErrorMessage(error, fallback) {
   const errors = error.response?.data?.errors
@@ -51,6 +53,7 @@ function UsersPage() {
   const [importFileKey, setImportFileKey] = useState(0)
   const [saving, setSaving] = useState(false)
   const [importing, setImporting] = useState(false)
+  const [pendingRole, setPendingRole] = useState(null)
 
   const { data: users = [], loading, error: usersError, setData: setUsers, reload: reloadUsers } = useAsync(
     async () => (isAdmin ? collectionFromPayload(await listUsers({ per_page: 100 })) : []),
@@ -144,20 +147,39 @@ function UsersPage() {
     link.href = url
     link.download = 'plantilla-importacion-usuarios.csv'
     link.click()
-    URL.revokeObjectURL(url)
+
+    // Revocar en un tick: hacerlo inmediatamente aborta la descarga
+    // en algunos navegadores.
+    setTimeout(() => URL.revokeObjectURL(url), 0)
   }
 
-  const updateRole = async (targetUser, role) => {
+  const requestRoleChange = (targetUser, role) => {
+    if (targetUser.id === user?.id) {
+      showToast('No puedes cambiar tu propio rol.', 'error')
+      return
+    }
+
+    setPendingRole({ user: targetUser, role })
+  }
+
+  const confirmRoleChange = async () => {
+    if (!pendingRole || saving) return
+
+    setSaving(true)
+
     try {
-      await execute(saveUser, targetUser.id, { role })
+      await execute(saveUser, pendingRole.user.id, { role: pendingRole.role })
       setUsers((current) =>
         current.map((item) =>
-          item.id === targetUser.id ? { ...item, role } : item,
+          item.id === pendingRole.user.id ? { ...item, role: pendingRole.role } : item,
         ),
       )
       showToast('Rol actualizado.')
     } catch {
       // error handled by useMutation
+    } finally {
+      setSaving(false)
+      setPendingRole(null)
     }
   }
 
@@ -205,15 +227,16 @@ function UsersPage() {
                           <p className="font-semibold text-text">{item.name}</p>
                           <p className="truncate text-xs text-muted">{item.email}</p>
                           <div className="mt-3">
-                            <Badge tone="violet">{item.role ?? 'user'}</Badge>
+                            <Badge tone="violet">{getRoleLabel(item.role ?? 'user')}</Badge>
                           </div>
                         </div>
                       </div>
 
                       <div className="mt-4 grid gap-2">
                         <select
+                          aria-label={`Cambiar rol de ${item.name ?? item.email}`}
                           className={inputClass}
-                          onChange={(event) => updateRole(item, event.target.value)}
+                          onChange={(event) => requestRoleChange(item, event.target.value)}
                           value={item.role ?? 'user'}
                         >
                           {roleOptions.map((role) => (
@@ -258,9 +281,10 @@ function UsersPage() {
                           </td>
                           <td className="px-3 py-4">
                             <select
+                              aria-label={`Cambiar rol de ${item.name ?? item.email}`}
                               className={inputClass}
                               onChange={(event) =>
-                                updateRole(item, event.target.value)
+                                requestRoleChange(item, event.target.value)
                               }
                               value={item.role ?? 'user'}
                             >
@@ -272,7 +296,7 @@ function UsersPage() {
                             </select>
                           </td>
                           <td className="px-3 py-4 text-muted">
-                            {item.created_at}
+                            {formatDate(item.created_at)}
                           </td>
                         </tr>
                       )
@@ -342,6 +366,7 @@ function UsersPage() {
               <input
                 className={`${inputClass} mt-1.5`}
                 id="password"
+                minLength={6}
                 name="password"
                 onChange={handleChange}
                 required
@@ -390,12 +415,13 @@ function UsersPage() {
                 className={`${inputClass} mt-1.5`}
                 id="import_file"
                 key={importFileKey}
-                onChange={(event) =>
+                onChange={(event) => {
+                  setError(null)
                   setImportForm((current) => ({
                     ...current,
                     file: event.target.files?.[0] ?? null,
                   }))
-                }
+                }}
                 required
                 type="file"
               />
@@ -496,7 +522,7 @@ function UsersPage() {
                           <ul className="mt-2 space-y-1">
                             {item.errors.slice(0, 5).map((entry, index) => (
                               <li key={`${entry.row ?? index}-${entry.email ?? 'row'}`}>
-                                Fila {entry.row}: {(entry.errors ?? []).join(', ')}
+                                Fila {entry.row ?? '?'}: {(entry.errors ?? []).join(', ')}
                               </li>
                             ))}
                           </ul>
@@ -515,6 +541,20 @@ function UsersPage() {
           </div>
         </div>
       </Panel>
+
+      {pendingRole && (
+        <ConfirmModal
+          cancelLabel="Cancelar"
+          confirmLabel="Cambiar rol"
+          description={`Se cambiará el rol de ${pendingRole.user.name ?? pendingRole.user.email} a ${getRoleLabel(pendingRole.role)}.`}
+          icon="shield"
+          loading={saving}
+          onCancel={() => setPendingRole(null)}
+          onConfirm={confirmRoleChange}
+          title="Cambiar rol de usuario"
+          tone="amber"
+        />
+      )}
     </div>
   )
 }

@@ -1,7 +1,7 @@
 import { useEffect, useId, useRef } from 'react'
 import { Icon } from './SupportUi'
 
-export default function ConfirmModal({ title, description, confirmLabel = 'Confirmar', cancelLabel = 'Cancelar', tone = 'rose', loading = false, onConfirm, onCancel }) {
+export default function ConfirmModal({ title, description, confirmLabel = 'Confirmar', cancelLabel = 'Cancelar', tone = 'rose', loading = false, icon = 'trash', onConfirm, onCancel }) {
   const cancelRef = useRef(null)
   const confirmRef = useRef(null)
   const previouslyFocusedRef = useRef(null)
@@ -61,7 +61,7 @@ export default function ConfirmModal({ title, description, confirmLabel = 'Confi
       >
         <div className="flex items-start gap-4">
           <span className={`grid h-10 w-10 shrink-0 place-items-center rounded-full ${iconBg}`}>
-            <Icon className="h-5 w-5" name="trash" />
+            <Icon className="h-5 w-5" name={icon} />
           </span>
           <div className="min-w-0 flex-1">
             <h3 className="text-base font-semibold text-text" id={titleId}>{title}</h3>
