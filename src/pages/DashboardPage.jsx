@@ -63,7 +63,7 @@ function DashboardPage() {
 
     const notice =
       statsResult.status === 'rejected' && ticketsResult.status === 'fulfilled'
-        ? 'Estadisticas no disponibles.'
+        ? 'Estadísticas no disponibles.'
         : null
 
     return { stats, tickets, error: errorMessage, notice }
@@ -152,7 +152,7 @@ function DashboardPage() {
         <div className="flex items-center justify-between border-b border-border px-5 py-4">
           <div>
             <h2 className="text-base font-semibold text-text">Tickets recientes</h2>
-            <p className="text-sm text-muted">Ultimos movimientos</p>
+            <p className="text-sm text-muted">Últimos movimientos</p>
           </div>
           <Link
             className="flex items-center gap-2 rounded-lg border border-border px-3 py-2 text-sm font-semibold text-muted transition hover:bg-surface-hover hover:text-text"

@@ -1,6 +1,6 @@
 # Support Ticket Frontend
 
-**Sistema de gestión de tickets de soporte** — SPA moderna con autenticación por roles, dashboard de estadísticas y experiencia oscura/clara.
+**Sistema de gestión de tickets de soporte** — SPA moderna con autenticación por roles, dashboard de estadísticas y experiencia oscura profesional (identidad: azul `#0598fb`, violeta `#a855f7` en degradados, base casi negra `#08080c`).
 
 [![Vercel](https://img.shields.io/badge/deploy-vercel-000?style=flat-square&logo=vercel)](https://support-ticket-frontend-chi.vercel.app)
 [![React](https://img.shields.io/badge/react-19-61DAFB?style=flat-square&logo=react)](https://react.dev)
@@ -34,9 +34,9 @@
 - Dashboard con estadísticas y tickets recientes.
 
 ### Experiencia de Usuario
-- Dark mode con persistencia en `localStorage` y detección de preferencia del sistema.
+- Tema oscuro permanente (dark-only: acento `#0598fb`, degradados azul→violeta `#a855f7`, base `#08080c`). No hay modo claro ni toggle.
 - Sistema de notificaciones toast con auto-dismiss y severidad (éxito, error, aviso).
-- Modal de confirmación para acciones destructivas.
+- Modal de confirmación para acciones destructivas (con focus trap y restauración de foco).
 - Barra de progreso superior durante navegación.
 - Atajos de teclado globales.
 
@@ -44,9 +44,9 @@
 
 - **API Layer por capas** — Cliente Axios con interceptores, helpers genéricos de request y funciones de dominio separadas. Normalización automática de respuestas del backend.
 - **Custom Hooks** — `useAsync` para data fetching con cancelación, `useMutation` para operaciones de escritura con manejo de estados, `useKeyboardShortcuts` para atajos globales.
-- **Dark Mode** — Implementado con clases CSS y `localStorage`. Detecta la preferencia del sistema operativo como valor inicial.
+- **Dark Only** — No hay modo claro ni persistencia de tema: el tema oscuro (`#08080c`) es permanente y la clase `.dark` y los toggles fueron eliminados.
 - **Toast System** — Sistema de notificaciones propio construido con Context API, auto-dismiss configurable y animaciones CSS.
-- **UI Componentes** — Biblioteca de componentes puros (Badge, EmptyState, SkeletonRows, PaginationBar, FieldError, ConfirmModal, TopProgressBar) sin dependencias externas de UI.
+- **UI Componentes** — Biblioteca de componentes puros (Badge, EmptyState, SkeletonRows, PaginationBar, FieldError, ConfirmModal, TopProgressBar, LogoMark, TicketMock) sin dependencias externas de UI.
 - **Normalización de Datos** — Helpers que unifican respuestas del backend soportando múltiples formatos (snake_case, camelCase, distintos nombres de colección).
 
 ## Testing
@@ -122,11 +122,11 @@ Disponible en [http://127.0.0.1:5173](http://127.0.0.1:5173).
 ```
 src/
 ├── api/           # Cliente Axios, helpers y funciones de dominio
-├── components/    # Componentes reutilizables (UI体系)
+├── components/    # Componentes reutilizables (LogoMark, TicketMock, badges, modales, paginacion…)
 ├── config/        # Rutas centralizadas de API
 ├── context/       # AuthContext y ToastContext
-├── hooks/         # useAsync, useMutation, useKeyboardShortcuts
-├── layouts/       # DashboardLayout (sidebar, header, dark mode)
+├── hooks/         # useAsync, useMutation
+├── layouts/       # DashboardLayout (sidebar, header)
 ├── lib/           # Helpers puros (normalización, formateo, constantes)
 └── pages/         # Landing, Login, Dashboard, Tickets, etc.
 ```

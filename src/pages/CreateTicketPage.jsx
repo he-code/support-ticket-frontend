@@ -97,7 +97,7 @@ function CreateTicketPage() {
 
             <div>
               <label className={labelClass} htmlFor="description">
-                Descripcion
+                Descripción
               </label>
               <textarea
                 className={`${inputClass} mt-1.5 min-h-44 resize-y`}
@@ -113,7 +113,7 @@ function CreateTicketPage() {
             <div className="grid gap-5 sm:grid-cols-2">
               <div>
                 <label className={labelClass} htmlFor="category_id">
-                  Categoria
+                  Categoría
                 </label>
                 <select
                   className={`${inputClass} mt-1.5`}
@@ -122,7 +122,7 @@ function CreateTicketPage() {
                   onChange={handleChange}
                   value={form.category_id}
                 >
-                  <option value="">Sin categoria</option>
+                  <option value="">Sin categoría</option>
                   {categories.map((category) => (
                     <option key={category.id} value={category.id}>
                       {category.name}

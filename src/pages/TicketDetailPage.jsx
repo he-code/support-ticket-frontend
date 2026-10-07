@@ -122,7 +122,7 @@ function TicketDetailPage() {
     setSaving('assignment')
     try {
       await execute(assignTicket, ticketId, agentId || null)
-      showToast('Asignacion actualizada.')
+      showToast('Asignación actualizada.')
       reloadTicket()
     } catch {
       // error handled by useMutation
@@ -202,7 +202,7 @@ function TicketDetailPage() {
               Ir a tickets
             </Link>
           }
-          description="La API no devolvio informacion para este ticket."
+          description="La API no devolvió información para este ticket."
           title="Ticket no encontrado"
         />
       ) : (
@@ -219,9 +219,9 @@ function TicketDetailPage() {
 
               <div className="space-y-5 p-5">
                 <div>
-                  <p className="text-sm font-semibold text-muted">Descripcion</p>
+                  <p className="text-sm font-semibold text-muted">Descripción</p>
                   <p className="mt-2 whitespace-pre-wrap text-sm leading-6 text-text/85">
-                    {getTicketDescription(ticket) || 'Sin descripcion.'}
+                    {getTicketDescription(ticket) || 'Sin descripción.'}
                   </p>
                 </div>
 
@@ -332,7 +332,7 @@ function TicketDetailPage() {
           <aside className="space-y-6">
             <Panel>
               <div className="border-b border-border px-5 py-4">
-                <h2 className="text-base font-semibold text-text">Gestion</h2>
+                <h2 className="text-base font-semibold text-text">Gestión</h2>
               </div>
               <div className="space-y-5 p-5">
                 <div>
@@ -367,7 +367,7 @@ function TicketDetailPage() {
 
                 <div>
                   <label className={labelClass} htmlFor="agent">
-                    Asignacion
+                    Asignación
                   </label>
                   <div className="mt-1.5 flex gap-2">
                     <select
@@ -384,11 +384,11 @@ function TicketDetailPage() {
                       ))}
                     </select>
                     <button
-                      aria-label="Guardar asignacion"
+                      aria-label="Guardar asignación"
                       className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-accent text-white transition hover:bg-accent/90 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
                       disabled={saving === 'assignment'}
                       onClick={saveAssignment}
-                      title="Guardar asignacion"
+                      title="Guardar asignación"
                       type="button"
                     >
                       <Icon name="save" className="h-4 w-4" />

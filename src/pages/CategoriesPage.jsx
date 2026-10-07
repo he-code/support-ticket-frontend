@@ -60,7 +60,7 @@ function CategoriesPage() {
     try {
       await execute(createCategory, form)
       setForm({ name: '', description: '' })
-      showToast('Categoria creada.')
+      showToast('Categoría creada.')
       await refreshCategories()
     } catch {
       // error handled by useMutation
@@ -70,7 +70,7 @@ function CategoriesPage() {
   const toggleCategory = async (category) => {
     try {
       await execute(updateCategory, category.id, { is_active: !category.is_active })
-      showToast('Categoria actualizada.')
+      showToast('Categoría actualizada.')
       await refreshCategories()
     } catch {
       // error handled by useMutation
@@ -81,7 +81,7 @@ function CategoriesPage() {
     try {
       await execute(deleteCategory, category.id)
       setConfirmDelete(null)
-      showToast('Categoria eliminada.')
+      showToast('Categoría eliminada.')
       await refreshCategories()
     } catch {
       // error handled by useMutation
@@ -91,8 +91,8 @@ function CategoriesPage() {
   return (
     <div className="space-y-6">
       <PageHeader
-        description="Clasificacion de tickets para filtros y reportes."
-        title="Categorias"
+        description="Clasificación de tickets para filtros y reportes."
+        title="Categorías"
       />
 
       {displayError && (
@@ -111,8 +111,8 @@ function CategoriesPage() {
               <SkeletonRows rows={5} />
             ) : categories.length === 0 ? (
               <EmptyState
-                description="Las categorias creadas desde la API apareceran aqui."
-                title="Sin categorias"
+                description="Las categorías creadas desde la API aparecerán aquí."
+                title="Sin categorías"
               />
             ) : (
               <>
@@ -146,10 +146,10 @@ function CategoriesPage() {
                           {active ? 'Desactivar' : 'Activar'}
                         </button>
                         <button
-                          aria-label="Eliminar categoria"
+                          aria-label="Eliminar categoría"
                           className="grid h-10 w-10 place-items-center rounded-lg border border-danger/30 text-danger transition hover:bg-danger/10"
                           onClick={() => setConfirmDelete(category)}
-                          title="Eliminar categoria"
+                          title="Eliminar categoría"
                           type="button"
                         >
                           <Icon name="trash" className="h-4 w-4" />
@@ -198,10 +198,10 @@ function CategoriesPage() {
                                 {active ? 'Desactivar' : 'Activar'}
                               </button>
                               <button
-                                aria-label="Eliminar categoria"
+                                aria-label="Eliminar categoría"
                                 className="grid h-10 w-10 place-items-center rounded-lg border border-danger/30 text-danger transition hover:bg-danger/10"
                                 onClick={() => setConfirmDelete(category)}
-                                title="Eliminar categoria"
+                                title="Eliminar categoría"
                                 type="button"
                               >
                                 <Icon name="trash" className="h-4 w-4" />
@@ -221,7 +221,7 @@ function CategoriesPage() {
 
         <Panel>
           <div className="border-b border-border px-5 py-4">
-            <h2 className="text-base font-semibold text-text">Nueva categoria</h2>
+            <h2 className="text-base font-semibold text-text">Nueva categoría</h2>
           </div>
           <form className="space-y-5 p-5" onSubmit={handleSubmit}>
             <div>
@@ -240,7 +240,7 @@ function CategoriesPage() {
             </div>
             <div>
               <label className={labelClass} htmlFor="description">
-                Descripcion
+                Descripción
               </label>
               <textarea
                 className={`${inputClass} mt-1.5 min-h-28 resize-y`}
@@ -256,7 +256,7 @@ function CategoriesPage() {
               type="submit"
             >
               <Icon name="save" className="h-4 w-4" />
-              {saving ? 'Guardando...' : 'Guardar categoria'}
+              {saving ? 'Guardando...' : 'Guardar categoría'}
             </button>
           </form>
         </Panel>
@@ -265,7 +265,7 @@ function CategoriesPage() {
       {confirmDelete && (
         <ConfirmModal
           confirmLabel="Eliminar"
-          description="Esta accion no se puede deshacer."
+          description="Esta acción no se puede deshacer."
           loading={saving}
           onCancel={() => setConfirmDelete(null)}
           onConfirm={() => removeCategory(confirmDelete)}

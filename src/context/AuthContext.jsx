@@ -20,11 +20,11 @@ function readAuthPayload(response) {
     null
 
   if (!token) {
-    throw new Error('La API no devolvio un token de acceso.')
+    throw new Error('La API no devolvió un token de acceso.')
   }
 
   if (!user) {
-    throw new Error('La API no devolvio datos de usuario.')
+    throw new Error('La API no devolvió datos de usuario.')
   }
 
   return { token, user }
@@ -74,7 +74,7 @@ export function AuthProvider({ children }) {
     try {
       await api.post('/logout')
     } catch {
-      // La sesion local siempre se limpia aunque la API ya no acepte el token.
+      // La sesión local siempre se limpia aunque la API ya no acepte el token.
     } finally {
       localStorage.removeItem('token')
       localStorage.removeItem('user')

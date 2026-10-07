@@ -40,7 +40,7 @@ export function getTicketCode(ticket) {
 }
 
 export function getTicketTitle(ticket) {
-  return ticket?.title ?? ticket?.subject ?? ticket?.name ?? 'Sin titulo'
+  return ticket?.title ?? ticket?.subject ?? ticket?.name ?? 'Sin título'
 }
 
 export function getTicketDescription(ticket) {
@@ -48,7 +48,7 @@ export function getTicketDescription(ticket) {
 }
 
 export function getTicketCategory(ticket) {
-  return ticket?.category?.name ?? ticket?.category_name ?? 'Sin categoria'
+  return ticket?.category?.name ?? ticket?.category_name ?? 'Sin categoría'
 }
 
 export function getTicketRequester(ticket) {

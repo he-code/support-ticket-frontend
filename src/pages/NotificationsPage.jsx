@@ -35,7 +35,7 @@ function NotificationsPage() {
             : item,
         ),
       )
-      showToast('Notificacion marcada.')
+      showToast('Notificación marcada.')
     } catch {
       // error handled by useMutation
     }
@@ -50,7 +50,7 @@ function NotificationsPage() {
           read_at: item.read_at ?? new Date().toISOString(),
         })),
       )
-      showToast('Notificaciones actualizadas.')
+      showToast('Notificaciónes actualizadas.')
     } catch {
       // error handled by useMutation
     }
@@ -70,12 +70,12 @@ function NotificationsPage() {
               type="button"
             >
               <Icon name="check" className="h-4 w-4" />
-              Marcar todas como leidas
+              Marcar todas como leídas
             </button>
           )
         }
         description={`${unreadCount} pendientes`}
-        title="Notificaciones"
+        title="Notificaciónes"
       />
 
       {error && (
@@ -91,7 +91,7 @@ function NotificationsPage() {
           ) : notifications.length === 0 ? (
             <EmptyState
               description="Sin avisos recientes."
-              title="Sin notificaciones"
+              title="Sin notificaciónes"
             />
           ) : (
             <div className="divide-y divide-border">
@@ -101,7 +101,7 @@ function NotificationsPage() {
                   notification.title ??
                   notification.data?.title ??
                   notification.type ??
-                  'Notificacion'
+                  'Notificación'
                 const message =
                   notification.message ??
                   notification.data?.message ??
@@ -121,7 +121,7 @@ function NotificationsPage() {
                         <div className="flex flex-wrap items-center gap-2">
                           <p className="font-semibold text-text">{title}</p>
                           <Badge tone={read ? 'slate' : 'violet'}>
-                            {read ? 'Leida' : 'Nueva'}
+                            {read ? 'Leída' : 'Nueva'}
                           </Badge>
                         </div>
                         {message && (
@@ -142,7 +142,7 @@ function NotificationsPage() {
                         onClick={() => markRead(notification)}
                         type="button"
                       >
-                        Marcar leida
+                        Marcar leída
                       </button>
                     )}
                   </article>

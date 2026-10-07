@@ -41,12 +41,12 @@ function ProfilePage() {
     }
 
     if (form.password && !form.current_password) {
-      setError('Ingresa la contrasena actual para cambiarla.')
+      setError('Ingresa la contraseña actual para cambiarla.')
       return
     }
 
     if (form.password && form.password !== form.password_confirmation) {
-      setError('Las contrasenas no coinciden.')
+      setError('Las contraseñas no coinciden.')
       return
     }
 
@@ -138,7 +138,7 @@ function ProfilePage() {
 
             <div>
               <label className={labelClass} htmlFor="current_password">
-                Contrasena actual
+                Contraseña actual
               </label>
               <input
                 className={`${inputClass} mt-1.5`}
@@ -152,7 +152,7 @@ function ProfilePage() {
 
             <div>
               <label className={labelClass} htmlFor="password">
-                Nueva contrasena
+                Nueva contraseña
               </label>
               <input
                 className={`${inputClass} mt-1.5`}
@@ -166,7 +166,7 @@ function ProfilePage() {
 
             <div>
               <label className={labelClass} htmlFor="password_confirmation">
-                Confirmar contrasena
+                Confirmar contraseña
               </label>
               <input
                 className={`${inputClass} mt-1.5`}

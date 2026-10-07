@@ -61,7 +61,7 @@ describe('AuthProvider', () => {
 
     await expect(
       result.current.login({ email: 'admin@example.com', password: 'secret' }),
-    ).rejects.toThrow('La API no devolvio datos de usuario.')
+    ).rejects.toThrow('La API no devolvió datos de usuario.')
 
     expect(localStorage.getItem('token')).toBeNull()
     expect(localStorage.getItem('user')).toBeNull()

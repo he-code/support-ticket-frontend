@@ -72,7 +72,7 @@ function UsersPage() {
   if (!isAdmin) {
     return (
       <EmptyState
-        description="Esta seccion esta reservada para administradores."
+        description="Esta sección está reservada para administradores."
         title="Acceso restringido"
       />
     )
@@ -122,7 +122,7 @@ function UsersPage() {
       })
       setImportFileKey((current) => current + 1)
       showToast(
-        `Importacion completada: ${result.created_count ?? 0} creados, ${result.updated_count ?? 0} actualizados, ${result.skipped_count ?? 0} omitidos.`,
+        `Importación completada: ${result.created_count ?? 0} creados, ${result.updated_count ?? 0} actualizados, ${result.skipped_count ?? 0} omitidos.`,
         'notice',
       )
       reloadUsers()
@@ -137,7 +137,7 @@ function UsersPage() {
   const downloadTemplate = () => {
     const csv = [
       'name,email,role,password',
-      'Maria Soporte,maria@example.com,support_agent,password123',
+      'María Soporte,maria@example.com,support_agent,password123',
       'Cliente Demo,cliente@example.com,user,password123',
     ].join('\n')
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' })
@@ -186,7 +186,7 @@ function UsersPage() {
   return (
     <div className="space-y-6">
       <PageHeader
-        description="Administracion de usuarios y roles."
+        description="Administración de usuarios y roles."
         title="Usuarios"
       />
 
@@ -207,7 +207,7 @@ function UsersPage() {
               <SkeletonRows rows={6} />
             ) : users.length === 0 ? (
               <EmptyState
-                description="Los usuarios registrados apareceran aqui."
+                description="Los usuarios registrados aparecerán aquí."
                 title="Sin usuarios"
               />
             ) : (
@@ -361,7 +361,7 @@ function UsersPage() {
             </div>
             <div>
               <label className={labelClass} htmlFor="password">
-                Contrasena
+                Contraseña
               </label>
               <input
                 className={`${inputClass} mt-1.5`}
@@ -446,7 +446,7 @@ function UsersPage() {
 
             <div>
               <label className={labelClass} htmlFor="default_password">
-                Contrasena por defecto
+                Contraseña por defecto
               </label>
               <input
                 className={`${inputClass} mt-1.5`}
@@ -484,7 +484,7 @@ function UsersPage() {
                 <SkeletonRows rows={4} />
               ) : imports.length === 0 ? (
                 <EmptyState
-                  description="Las importaciones realizadas por administradores apareceran aqui."
+                  description="Las importaciones realizadas por administradores aparecerán aquí."
                   title="Sin importaciones"
                 />
               ) : (

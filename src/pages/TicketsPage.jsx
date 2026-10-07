@@ -94,7 +94,7 @@ function TicketsPage() {
             Nuevo ticket
           </Link>
         }
-        description="Listado general con filtros por estado, prioridad y categoria."
+        description="Listado general con filtros por estado, prioridad y categoría."
         title="Tickets"
       />
 
@@ -180,7 +180,7 @@ function TicketsPage() {
             onClick={() => setPillFilter('category_id', '')}
             type="button"
           >
-            Todas las categorias
+            Todas las categorías
           </button>
           {categories.map((category) => (
             <button
