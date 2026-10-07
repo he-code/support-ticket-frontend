@@ -53,7 +53,7 @@ function UsersPage() {
   const [importing, setImporting] = useState(false)
 
   const { data: users = [], loading, error: usersError, setData: setUsers, reload: reloadUsers } = useAsync(
-    async () => (isAdmin ? collectionFromPayload(await listUsers()) : []),
+    async () => (isAdmin ? collectionFromPayload(await listUsers({ per_page: 100 })) : []),
     [isAdmin],
   )
 

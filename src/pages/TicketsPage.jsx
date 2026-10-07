@@ -50,7 +50,7 @@ function TicketsPage() {
   const totalPages = Math.ceil(total / (paged?.meta?.per_page ?? 15))
 
   const { data: categories = [] } = useAsync(
-    async () => paginationFromPayload(await listCategories()).items,
+    async () => paginationFromPayload(await listCategories({ per_page: 100 })).items,
     [],
   )
 

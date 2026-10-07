@@ -18,7 +18,7 @@ import { priorityOptions } from '../lib/constants'
 function CreateTicketPage() {
   const navigate = useNavigate()
   const { data: categories = [] } = useAsync(
-    async () => collectionFromPayload(await listCategories()),
+    async () => collectionFromPayload(await listCategories({ per_page: 100 })),
     [],
   )
   const [form, setForm] = useState({

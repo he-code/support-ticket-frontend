@@ -24,7 +24,7 @@ import { collectionFromPayload } from '../lib/normalizers'
 
 function CategoriesPage() {
   const { data: categories = [], loading, error, setData: setCategories } = useAsync(
-    async () => collectionFromPayload(await listCategories()),
+    async () => collectionFromPayload(await listCategories({ per_page: 100 })),
     [],
   )
   const [form, setForm] = useState({

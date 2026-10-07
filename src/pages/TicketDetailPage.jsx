@@ -91,7 +91,7 @@ function TicketDetailPage() {
   const comments = mainData?.comments ?? []
   const attachments = mainData?.attachments ?? []
   const { data: agents = [] } = useAsync(
-    async () => collectionFromPayload(await listSupportAgents()),
+    async () => collectionFromPayload(await listSupportAgents({ per_page: 100 })),
     [],
   )
 

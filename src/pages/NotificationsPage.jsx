@@ -19,7 +19,7 @@ import { formatDate } from '../lib/formatters'
 
 function NotificationsPage() {
   const { data, loading, error, setData } = useAsync(async () => {
-    return collectionFromPayload(await listNotifications())
+    return collectionFromPayload(await listNotifications({ per_page: 100 }))
   }, [])
   const notifications = data ?? []
   const { saving, execute } = useMutation()
