@@ -1,16 +1,15 @@
 @import "tailwindcss";
 
-@custom-variant dark (&:where(.dark, .dark *));
-
 @theme {
-  --color-bg: #0a0a0b;
-  --color-surface: #18181b;
-  --color-surface-hover: #27272a;
-  --color-border: #27272a;
-  --color-muted: #a1a1aa;
-  --color-text: #fafafa;
-  --color-accent: #3b82f6;
-  --color-accent-soft: #3b82f615;
+  --color-bg: #08080c;
+  --color-surface: #101018;
+  --color-surface-hover: #1a1a26;
+  --color-border: #20202c;
+  --color-muted: #8f94a8;
+  --color-text: #f4f6fb;
+  --color-accent: #0598fb;
+  --color-accent-2: #a855f7;
+  --color-accent-soft: #0598fb14;
   --color-success: #10b981;
   --color-warning: #f59e0b;
   --color-danger: #ef4444;
@@ -19,17 +18,11 @@
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
 }
 
+/* Tema oscuro permanente: no existe modo claro. */
 :root {
   font-family: var(--font-sans);
-  --color-app: #f8fafc;
-  color: #18181b;
-  background: var(--color-app);
-}
-
-:root.dark {
-  --color-app: #0a0a0b;
-  color: #fafafa;
-  background: var(--color-app);
+  color: var(--color-text);
+  background: var(--color-bg);
 }
 
 * {
@@ -51,6 +44,29 @@ textarea {
 
 .font-mono {
   font-family: var(--font-mono);
+}
+
+/* Identidad de marca: azul #0598fb -> violeta #a855f7 (solo en degradados). */
+.bg-brand-gradient {
+  background-image: linear-gradient(135deg, #0598fb 0%, #a855f7 100%);
+}
+
+.text-brand-gradient {
+  background-image: linear-gradient(135deg, #0598fb 0%, #a855f7 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.hairline-gradient {
+  height: 1px;
+  background-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    #0598fb 35%,
+    #a855f7 65%,
+    transparent 100%
+  );
 }
 
 @keyframes slide-in-from-right {
