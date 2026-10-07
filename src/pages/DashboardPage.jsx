@@ -45,7 +45,7 @@ function StatCard({ icon, title, value, loading, tone = 'slate' }) {
 }
 
 function DashboardPage() {
-  const { data, loading, error } = useAsync(async () => {
+  const { data, loading } = useAsync(async () => {
     const [statsResult, ticketsResult] = await Promise.allSettled([
       getDashboardStats(),
       listTickets({ sort_by: 'created_at', sort_direction: 'desc' }),
@@ -61,7 +61,12 @@ function DashboardPage() {
         ? 'No se pudo cargar el dashboard.'
         : null
 
-    return { stats, tickets, error: errorMessage }
+    const notice =
+      statsResult.status === 'rejected' && ticketsResult.status === 'fulfilled'
+        ? 'Estadisticas no disponibles.'
+        : null
+
+    return { stats, tickets, error: errorMessage, notice }
   }, [])
 
   const stats = data?.stats ?? null
@@ -101,9 +106,15 @@ function DashboardPage() {
         title="Dashboard"
       />
 
-      {error && (
+      {data?.error && (
         <div className="rounded-lg bg-danger/15 px-4 py-3 text-sm text-danger">
-          {error}
+          {data.error}
+        </div>
+      )}
+
+      {data?.notice && (
+        <div className="rounded-lg bg-warning/15 px-4 py-3 text-sm text-warning">
+          {data.notice}
         </div>
       )}
 
@@ -112,7 +123,7 @@ function DashboardPage() {
           icon="tickets"
           loading={loading}
           title="Total tickets"
-          value={stats?.total_tickets ?? stats?.total ?? recentTickets.length}
+          value={stats?.total_tickets ?? stats?.total ?? '—'}
         />
         <StatCard
           icon="clock"
