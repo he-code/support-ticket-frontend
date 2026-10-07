@@ -62,6 +62,14 @@ function TicketsPage() {
     }))
   }
 
+  const setPillFilter = (name, value) => {
+    setPage(1)
+    setFilters((current) => ({
+      ...current,
+      [name]: current[name] === value ? '' : value,
+    }))
+  }
+
   const resetFilters = () => {
     setPage(1)
     setFilters({
@@ -72,15 +80,17 @@ function TicketsPage() {
     })
   }
 
+  const activeFilters = Object.values(filters).filter(Boolean).length > 0
+
   return (
     <div className="space-y-6">
       <PageHeader
         actions={
           <Link
-            className="flex items-center gap-2 rounded-lg bg-indigo-700 px-3 py-2 text-sm font-semibold text-white transition hover:bg-indigo-800 dark:bg-indigo-600 dark:hover:bg-indigo-700"
+            className="flex items-center gap-2 rounded-lg bg-accent px-3 py-2 text-sm font-semibold text-white transition hover:bg-accent/90 active:scale-[0.98]"
             to="/tickets/create"
           >
-            <Icon name="plus" />
+            <Icon name="plus" className="h-4 w-4" />
             Nuevo ticket
           </Link>
         }
@@ -88,87 +98,127 @@ function TicketsPage() {
         title="Tickets"
       />
 
-      <Panel className="p-4">
-        <div className="grid gap-3 md:grid-cols-[1.4fr_1fr_1fr_1fr_auto]">
-          <div className="relative">
-            <Icon
-              className="pointer-events-none absolute left-3 top-2.5 h-4 w-4 text-slate-400"
-              name="search"
-            />
-            <input
-              className={`${inputClass} pl-9`}
-              name="search"
-              onChange={handleFilterChange}
-              placeholder="Buscar ticket"
-              type="search"
-              value={filters.search}
-            />
-          </div>
-
-          <select
-            className={inputClass}
-            name="status"
+      <Panel className="p-4 space-y-4">
+        <div className="relative">
+          <Icon
+            className="pointer-events-none absolute left-3 top-2.5 h-4 w-4 text-muted"
+            name="search"
+          />
+          <input
+            className={`${inputClass} pl-9`}
+            name="search"
             onChange={handleFilterChange}
-            value={filters.status}
-          >
-            <option value="">Todos los estados</option>
-            {statusOptions.map((status) => (
-              <option key={status.value} value={status.value}>
-                {status.label}
-              </option>
-            ))}
-          </select>
+            placeholder="Buscar ticket..."
+            type="search"
+            value={filters.search}
+          />
+        </div>
 
-          <select
-            className={inputClass}
-            name="priority"
-            onChange={handleFilterChange}
-            value={filters.priority}
-          >
-            <option value="">Todas las prioridades</option>
-            {priorityOptions.map((priority) => (
-              <option key={priority.value} value={priority.value}>
-                {priority.label}
-              </option>
-            ))}
-          </select>
-
-          <select
-            className={inputClass}
-            name="category_id"
-            onChange={handleFilterChange}
-            value={filters.category_id}
-          >
-            <option value="">Todas las categorias</option>
-            {categories.map((category) => (
-              <option key={category.id} value={category.id}>
-                {category.name}
-              </option>
-            ))}
-          </select>
-
+        <div className="flex flex-wrap gap-2">
           <button
-            className="flex items-center justify-center gap-2 rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
+            className={`rounded-full px-3 py-1.5 text-xs font-medium transition ${
+              !filters.status
+                ? 'bg-accent/15 text-accent'
+                : 'bg-surface-hover text-muted hover:text-text'
+            }`}
+            onClick={() => setPillFilter('status', '')}
+            type="button"
+          >
+            Todos los estados
+          </button>
+          {statusOptions.map((status) => (
+            <button
+              className={`rounded-full px-3 py-1.5 text-xs font-medium transition ${
+                filters.status === status.value
+                  ? 'bg-accent/15 text-accent'
+                  : 'bg-surface-hover text-muted hover:text-text'
+              }`}
+              key={status.value}
+              onClick={() => setPillFilter('status', status.value)}
+              type="button"
+            >
+              {status.label}
+            </button>
+          ))}
+        </div>
+
+        <div className="flex flex-wrap gap-2">
+          <button
+            className={`rounded-full px-3 py-1.5 text-xs font-medium transition ${
+              !filters.priority
+                ? 'bg-accent/15 text-accent'
+                : 'bg-surface-hover text-muted hover:text-text'
+            }`}
+            onClick={() => setPillFilter('priority', '')}
+            type="button"
+          >
+            Todas las prioridades
+          </button>
+          {priorityOptions.map((priority) => (
+            <button
+              className={`rounded-full px-3 py-1.5 text-xs font-medium transition ${
+                filters.priority === priority.value
+                  ? 'bg-accent/15 text-accent'
+                  : 'bg-surface-hover text-muted hover:text-text'
+              }`}
+              key={priority.value}
+              onClick={() => setPillFilter('priority', priority.value)}
+              type="button"
+            >
+              {priority.label}
+            </button>
+          ))}
+        </div>
+
+        <div className="flex flex-wrap gap-2">
+          <button
+            className={`rounded-full px-3 py-1.5 text-xs font-medium transition ${
+              !filters.category_id
+                ? 'bg-accent/15 text-accent'
+                : 'bg-surface-hover text-muted hover:text-text'
+            }`}
+            onClick={() => setPillFilter('category_id', '')}
+            type="button"
+          >
+            Todas las categorias
+          </button>
+          {categories.map((category) => (
+            <button
+              className={`rounded-full px-3 py-1.5 text-xs font-medium transition ${
+                filters.category_id === String(category.id)
+                  ? 'bg-accent/15 text-accent'
+                  : 'bg-surface-hover text-muted hover:text-text'
+              }`}
+              key={category.id}
+              onClick={() => setPillFilter('category_id', String(category.id))}
+              type="button"
+            >
+              {category.name}
+            </button>
+          ))}
+        </div>
+
+        {activeFilters && (
+          <button
+            className="flex items-center gap-1.5 text-xs text-muted transition hover:text-text"
             onClick={resetFilters}
             type="button"
           >
-            <Icon name="filter" />
-            Limpiar
+            <Icon name="x" className="h-3 w-3" />
+            Limpiar filtros
           </button>
-        </div>
+        )}
       </Panel>
 
       {error && (
-        <div className="rounded-lg bg-rose-50 px-4 py-3 text-sm text-rose-700 dark:bg-rose-900/50 dark:text-rose-200">
+        <div className="rounded-lg bg-danger/15 px-4 py-3 text-sm text-danger">
           {error}
         </div>
       )}
 
       <Panel>
-        <div className="border-b border-slate-200 px-5 py-4 dark:border-zinc-700">
-          <h2 className="text-base font-semibold text-zinc-950 dark:text-zinc-100">
-            {total} tickets
-          </h2>
+        <div className="border-b border-border px-5 py-4">
+          <h2 className="text-base font-semibold text-text">{total} tickets</h2>
         </div>
 
         <div className="p-5">
@@ -178,14 +228,14 @@ function TicketsPage() {
             <EmptyState
               action={
                 <Link
-                  className="flex items-center gap-2 rounded-lg bg-indigo-700 px-3 py-2 text-sm font-semibold text-white transition hover:bg-indigo-800"
+                  className="flex items-center gap-2 rounded-lg bg-accent px-3 py-2 text-sm font-semibold text-white transition hover:bg-accent/90"
                   to="/tickets/create"
                 >
-                  <Icon name="plus" />
+                  <Icon name="plus" className="h-4 w-4" />
                   Crear ticket
                 </Link>
               }
-              description="Cuando la API devuelva tickets apareceran en esta tabla."
+              description="No se encontraron tickets con los filtros actuales."
               title="Sin tickets"
             />
           ) : (
@@ -198,20 +248,20 @@ function TicketsPage() {
 
                 return (
                   <Link
-                    className="block rounded-lg border border-zinc-200 bg-white p-4 shadow-sm transition hover:border-indigo-200 hover:bg-indigo-50/30 dark:border-zinc-700 dark:bg-zinc-800 dark:hover:border-indigo-600 dark:hover:bg-indigo-900/20"
+                    className="block rounded-xl border border-border bg-surface p-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-accent/30 hover:shadow-md"
                     key={ticketId}
                     to={`/tickets/${ticketId}`}
                   >
                     <div className="flex items-start justify-between gap-3">
                       <div className="min-w-0">
-                        <p className="text-xs font-semibold uppercase text-zinc-400 dark:text-zinc-500">
+                        <p className="font-mono text-xs font-semibold text-muted">
                           {getTicketCode(ticket)}
                         </p>
-                        <p className="mt-1 line-clamp-2 font-semibold text-zinc-950 dark:text-zinc-100">
+                        <p className="mt-1 line-clamp-2 font-semibold text-text">
                           {getTicketTitle(ticket)}
                         </p>
                       </div>
-                      <Icon className="h-4 w-4 shrink-0 text-indigo-700 dark:text-indigo-400" name="arrow" />
+                      <Icon className="h-4 w-4 shrink-0 text-accent" name="arrow" />
                     </div>
 
                     <div className="mt-3 flex flex-wrap gap-2">
@@ -220,16 +270,16 @@ function TicketsPage() {
                       <Badge tone="slate">{getTicketCategory(ticket)}</Badge>
                     </div>
 
-                    <div className="mt-4 grid gap-3 text-xs text-zinc-500 dark:text-zinc-400">
+                    <div className="mt-4 grid gap-3 text-xs text-muted">
                       <p>
                         Solicitante:{' '}
-                        <span className="font-semibold text-zinc-700 dark:text-zinc-300">
+                        <span className="font-semibold text-text">
                           {personName(getTicketRequester(ticket), 'Sin solicitante')}
                         </span>
                       </p>
                       <p>
                         Agente:{' '}
-                        <span className="font-semibold text-zinc-700 dark:text-zinc-300">
+                        <span className="font-semibold text-text">
                           {personName(getTicketAgent(ticket))}
                         </span>
                       </p>
@@ -241,9 +291,9 @@ function TicketsPage() {
             </div>
 
             <div className="hidden overflow-x-auto md:block">
-              <table className="min-w-full divide-y divide-slate-200 text-sm dark:divide-zinc-700">
+              <table className="min-w-full divide-y divide-border text-sm">
                 <thead>
-                  <tr className="text-left text-xs font-semibold uppercase text-slate-500 dark:text-zinc-400">
+                  <tr className="text-left text-xs font-semibold uppercase text-muted">
                     <th className="px-3 py-3">Ticket</th>
                     <th className="px-3 py-3">Estado</th>
                     <th className="px-3 py-3">Prioridad</th>
@@ -253,22 +303,22 @@ function TicketsPage() {
                     <th className="px-3 py-3 text-right">Detalle</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100 dark:divide-zinc-700/50">
+                <tbody className="divide-y divide-border">
                   {tickets.map((ticket) => {
                     const status = getStatusMeta(ticket.status)
                     const priority = getPriorityMeta(ticket.priority)
                     const ticketId = getTicketId(ticket)
 
                     return (
-                      <tr className="align-top hover:bg-slate-50 dark:hover:bg-zinc-800/50" key={ticketId}>
+                      <tr className="align-top hover:bg-surface-hover/50" key={ticketId}>
                         <td className="max-w-sm px-3 py-4">
-                          <p className="text-xs font-semibold uppercase text-slate-400 dark:text-zinc-500">
+                          <p className="font-mono text-xs font-semibold text-muted">
                             {getTicketCode(ticket)}
                           </p>
-                          <p className="mt-1 font-semibold text-zinc-950 dark:text-zinc-100">
+                          <p className="mt-1 font-semibold text-text">
                             {getTicketTitle(ticket)}
                           </p>
-                          <p className="mt-1 text-xs text-slate-500 dark:text-zinc-400">
+                          <p className="mt-1 text-xs text-muted">
                             {getTicketCategory(ticket)}
                           </p>
                         </td>
@@ -278,22 +328,22 @@ function TicketsPage() {
                         <td className="px-3 py-4">
                           <Badge tone={priority.tone}>{priority.label}</Badge>
                         </td>
-                        <td className="px-3 py-4 text-slate-600 dark:text-zinc-300">
+                        <td className="px-3 py-4 text-muted">
                           {personName(getTicketRequester(ticket), 'Sin solicitante')}
                         </td>
-                        <td className="px-3 py-4 text-slate-600 dark:text-zinc-300">
+                        <td className="px-3 py-4 text-muted">
                           {personName(getTicketAgent(ticket))}
                         </td>
-                        <td className="px-3 py-4 text-slate-500 dark:text-zinc-400">
+                        <td className="px-3 py-4 text-muted">
                           {formatDate(getTicketCreatedAt(ticket))}
                         </td>
                         <td className="px-3 py-4 text-right">
                           <Link
-                            className="inline-flex items-center gap-2 rounded-lg border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 dark:border-zinc-600 dark:text-zinc-300 dark:hover:bg-zinc-700"
+                            className="inline-flex items-center gap-2 rounded-lg border border-border px-3 py-2 text-sm font-semibold text-muted transition hover:bg-surface-hover hover:text-text"
                             to={`/tickets/${ticketId}`}
                           >
                             Abrir
-                            <Icon name="arrow" />
+                            <Icon name="arrow" className="h-4 w-4" />
                           </Link>
                         </td>
                       </tr>
@@ -318,6 +368,3 @@ function TicketsPage() {
 }
 
 export default TicketsPage
-
-
-

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { NavLink, Outlet, useNavigate } from 'react-router'
+import { NavLink, Outlet, useNavigate, useLocation } from 'react-router'
 import { Icon } from '../components/SupportUi'
 import TopProgressBar from '../components/TopProgressBar'
 import { useAuth } from '../context/AuthContext'
@@ -7,229 +7,297 @@ import { getInitials } from '../lib/formatters'
 import { getRoleLabel } from '../lib/ticket'
 
 const navigation = [
-  {
-    name: 'Dashboard',
-    path: '/dashboard',
-    icon: 'dashboard',
-    roles: ['admin', 'support_agent', 'user'],
-  },
-  {
-    name: 'Tickets',
-    path: '/tickets',
-    icon: 'tickets',
-    roles: ['admin', 'support_agent', 'user'],
-  },
-  {
-    name: 'Crear ticket',
-    path: '/tickets/create',
-    icon: 'plus',
-    roles: ['admin', 'support_agent', 'user'],
-  },
-  {
-    name: 'Categorias',
-    path: '/categories',
-    icon: 'categories',
-    roles: ['admin', 'support_agent'],
-  },
-  {
-    name: 'Usuarios',
-    path: '/users',
-    icon: 'users',
-    roles: ['admin'],
-  },
-  {
-    name: 'Notificaciones',
-    path: '/notifications',
-    icon: 'bell',
-    roles: ['admin', 'support_agent', 'user'],
-  },
-  {
-    name: 'Perfil',
-    path: '/profile',
-    icon: 'user',
-    roles: ['admin', 'support_agent', 'user'],
-  },
+  { name: 'Dashboard', path: '/dashboard', icon: 'dashboard', roles: ['admin', 'support_agent', 'user'] },
+  { name: 'Tickets', path: '/tickets', icon: 'tickets', roles: ['admin', 'support_agent', 'user'] },
+  { name: 'Nuevo ticket', path: '/tickets/create', icon: 'plus', roles: ['admin', 'support_agent', 'user'] },
+  { name: 'Categorias', path: '/categories', icon: 'categories', roles: ['admin', 'support_agent'] },
+  { name: 'Usuarios', path: '/users', icon: 'users', roles: ['admin'] },
+  { name: 'Notificaciones', path: '/notifications', icon: 'bell', roles: ['admin', 'support_agent', 'user'] },
+  { name: 'Perfil', path: '/profile', icon: 'user', roles: ['admin', 'support_agent', 'user'] },
+]
+
+const mobileNav = [
+  { name: 'Inicio', path: '/dashboard', icon: 'dashboard' },
+  { name: 'Tickets', path: '/tickets', icon: 'tickets' },
+  { name: 'Nuevo', path: '/tickets/create', icon: 'plus' },
+  { name: 'Perfil', path: '/profile', icon: 'user' },
 ]
 
 function DashboardLayout() {
   const navigate = useNavigate()
+  const location = useLocation()
   const { user, logout } = useAuth()
   const role = user?.role ?? 'user'
 
-  const [dark, setDark] = useState(() => {
-    const stored = localStorage.getItem('theme')
-    if (stored) return stored === 'dark'
-    return window.matchMedia('(prefers-color-scheme: dark)').matches
+  const [collapsed, setCollapsed] = useState(() => {
+    return localStorage.getItem('sidebar_collapsed') === 'true'
   })
+  const [sidebarOpen, setSidebarOpen] = useState(false)
 
   useEffect(() => {
-    document.documentElement.classList.toggle('dark', dark)
-    localStorage.setItem('theme', dark ? 'dark' : 'light')
-  }, [dark])
+    const onKeyDown = (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'b') {
+        e.preventDefault()
+        setCollapsed((c) => {
+          const next = !c
+          localStorage.setItem('sidebar_collapsed', String(next))
+          return next
+        })
+      }
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [])
+
+  useEffect(() => {
+    setSidebarOpen(false)
+  }, [location.pathname])
 
   const availableNavigation = navigation.filter((item) =>
     item.roles.includes(role),
   )
+
+  const toggleCollapsed = () => {
+    setCollapsed((c) => {
+      const next = !c
+      localStorage.setItem('sidebar_collapsed', String(next))
+      return next
+    })
+  }
 
   const handleLogout = async () => {
     await logout()
     navigate('/login')
   }
 
+  const sidebarWidth = collapsed ? 'w-16' : 'w-64'
+
   return (
-    <div className="min-h-screen bg-[var(--color-app)]">
+    <div className="min-h-screen bg-bg">
       <TopProgressBar />
-      <aside className="fixed inset-y-0 left-0 hidden w-72 border-r border-indigo-950/20 bg-[var(--color-sidebar)] text-white lg:block">
+      <aside
+        className={`fixed inset-y-0 left-0 z-40 hidden border-r border-border bg-surface transition-all duration-200 lg:block ${sidebarWidth}`}
+      >
         <div className="flex h-full flex-col">
-          <div className="border-b border-white/10 px-6 py-5">
-            <div className="flex items-center gap-3">
-              <div className="grid h-10 w-10 place-items-center rounded-lg bg-indigo-400 text-sm font-bold text-indigo-950">
-                ST
-              </div>
-              <div>
-                <h1 className="text-base font-bold">Support Tickets</h1>
-                <p className="text-xs text-indigo-100/80">Mesa de soporte</p>
-              </div>
+          <div className={`flex items-center gap-3 border-b border-border px-4 py-4 ${collapsed ? 'justify-center' : ''}`}>
+            <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-accent text-sm font-bold text-white shadow-lg shadow-accent/20">
+              ST
             </div>
+            {!collapsed && (
+              <div className="min-w-0">
+                <h1 className="text-base font-semibold text-text">Support Tickets</h1>
+                <p className="text-xs text-muted">v1.0</p>
+              </div>
+            )}
           </div>
 
-          <nav className="flex-1 space-y-1 px-4 py-5">
+          <nav className="flex-1 space-y-1 px-3 py-4">
             {availableNavigation.map((item) => (
               <NavLink
                 className={({ isActive }) =>
                   [
-                    'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition',
+                    'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors',
+                    collapsed ? 'justify-center' : '',
                     isActive
-                      ? 'bg-amber-100 text-indigo-950'
-                      : 'text-indigo-50/75 hover:bg-white/10 hover:text-white',
+                      ? 'bg-accent/15 text-accent border-l-[3px] border-accent -ml-[12px] pl-[9px]'
+                      : 'text-muted hover:bg-surface-hover hover:text-text',
                   ].join(' ')
                 }
                 end={item.path === '/tickets'}
                 key={item.path}
                 to={item.path}
+                title={collapsed ? item.name : undefined}
               >
                 <Icon className="h-4 w-4 shrink-0" name={item.icon} />
-                <span>{item.name}</span>
+                {!collapsed && <span>{item.name}</span>}
               </NavLink>
             ))}
           </nav>
 
-          <div className="border-t border-white/10 p-4">
-            <div className="flex items-center gap-3 rounded-lg bg-white/5 p-3">
-              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-amber-100 text-sm font-bold text-indigo-950">
-                {getInitials(user?.name ?? user?.email)}
-              </div>
-              <div className="min-w-0">
-                <p className="truncate text-sm font-semibold">
-                  {user?.name ?? 'Usuario'}
-                </p>
-                <p className="truncate text-xs text-indigo-100/80">{user?.email}</p>
-                <p className="mt-1 text-xs uppercase text-indigo-100/60">
-                  {getRoleLabel(role)}
-                </p>
-              </div>
-            </div>
+          <div className="border-t border-border p-3">
+            {!collapsed && (
+              <>
+                <div className="flex items-center gap-3 rounded-lg bg-surface-hover/50 p-3">
+                  <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-accent/20 text-sm font-bold text-accent">
+                    {getInitials(user?.name ?? user?.email)}
+                  </div>
+                  <div className="min-w-0">
+                    <p className="truncate text-sm font-semibold text-text">
+                      {user?.name ?? 'Usuario'}
+                    </p>
+                    <p className="truncate text-xs text-muted">{user?.email}</p>
+                    <p className="mt-0.5 text-xs uppercase text-muted">
+                      {getRoleLabel(role)}
+                    </p>
+                  </div>
+                </div>
+
+                <button
+                  className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg border border-border px-4 py-2 text-sm font-semibold text-muted transition hover:bg-surface-hover"
+                  onClick={handleLogout}
+                  type="button"
+                >
+                  <Icon name="logout" className="h-4 w-4" />
+                  Cerrar sesion
+                </button>
+              </>
+            )}
 
             <button
-              className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg border border-white/10 px-4 py-2 text-sm font-semibold text-indigo-50 transition hover:bg-white/10"
-              onClick={() => setDark((d) => !d)}
+              className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg border border-border px-2 py-2 text-sm text-muted transition hover:bg-surface-hover"
+              onClick={toggleCollapsed}
+              title={collapsed ? 'Expandir sidebar' : 'Colapsar sidebar'}
               type="button"
             >
-              {dark ? (
-                <svg aria-hidden="true" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
-                  <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-                </svg>
-              ) : (
-                <svg aria-hidden="true" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
-                  <circle cx="12" cy="12" r="5" /><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
-                </svg>
-              )}
-              {dark ? 'Modo claro' : 'Modo oscuro'}
-            </button>
-
-            <button
-              className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg border border-white/10 px-4 py-2 text-sm font-semibold text-indigo-50 transition hover:bg-white/10"
-              onClick={handleLogout}
-              type="button"
-            >
-              <Icon name="logout" />
-              Cerrar sesion
+              <Icon name={collapsed ? 'chevronRight' : 'chevronLeft'} className="h-4 w-4" />
             </button>
           </div>
         </div>
       </aside>
 
-      <div className="lg:pl-72">
-        <header className="sticky top-0 z-10 border-b border-zinc-200 bg-white/95 backdrop-blur dark:border-zinc-700 dark:bg-zinc-900/95">
-          <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
-            <div className="min-w-0">
-              <p className="text-xs font-semibold uppercase tracking-wide text-indigo-700 dark:text-indigo-400">
-                Mesa de soporte
-              </p>
-              <h2 className="truncate text-lg font-semibold text-zinc-950 dark:text-zinc-100">
-                {user?.name ?? user?.email ?? 'Usuario'}
-              </h2>
-            </div>
+      <div className={`transition-all duration-200 ${collapsed ? 'lg:pl-16' : 'lg:pl-64'}`}>
+        <header className="sticky top-0 z-30 border-b border-border bg-bg/95 backdrop-blur">
+          <div className="flex h-14 items-center justify-between px-4 sm:px-6 lg:px-8">
+            <button
+              className="inline-flex items-center gap-2 rounded-lg p-2 text-muted transition hover:text-text lg:hidden"
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              type="button"
+            >
+              <Icon name="menu" />
+            </button>
 
-            <div className="flex items-center gap-2">
+            <div className="flex flex-1 items-center justify-end gap-3">
               <button
-                className="hidden rounded-lg border border-zinc-300 p-2 text-zinc-700 transition hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800 lg:inline-flex"
-                onClick={() => setDark((d) => !d)}
-                title={dark ? 'Modo claro' : 'Modo oscuro'}
+                className="hidden rounded-lg p-2 text-muted transition hover:text-text lg:inline-flex items-center gap-2"
+                onClick={toggleCollapsed}
+                title={collapsed ? 'Expandir sidebar' : 'Colapsar sidebar (Ctrl+B)'}
                 type="button"
               >
-                {dark ? (
-                  <svg aria-hidden="true" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
-                    <circle cx="12" cy="12" r="5" /><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
-                  </svg>
-                ) : (
-                  <svg aria-hidden="true" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
-                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-                  </svg>
-                )}
+                <Icon name="menu" />
               </button>
+
+              <div className="relative hidden sm:block">
+                <Icon className="pointer-events-none absolute left-3 top-2.5 h-4 w-4 text-muted" name="search" />
+                <input
+                  className="w-48 rounded-lg border border-border bg-surface py-2 pl-9 pr-3 text-sm text-text outline-none transition placeholder:text-muted focus:border-accent focus:ring-2 focus:ring-accent/30"
+                  placeholder="Buscar..."
+                  type="search"
+                />
+              </div>
+
               <button
-                className="flex items-center gap-2 rounded-lg border border-zinc-300 px-3 py-2 text-sm font-semibold text-zinc-700 transition hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800 lg:hidden"
-                onClick={handleLogout}
+                className="rounded-lg p-2 text-muted transition hover:text-text"
+                title="Notificaciones"
+                type="button"
+                onClick={() => navigate('/notifications')}
+              >
+                <Icon name="bell" className="h-4 w-4" />
+              </button>
+
+              <button
+                className="flex items-center gap-2 rounded-lg p-2 text-muted transition hover:text-text"
+                onClick={() => navigate('/profile')}
+                title="Perfil"
                 type="button"
               >
-                <Icon name="logout" />
-                Salir
+                <div className="grid h-8 w-8 place-items-center rounded-full bg-accent/20 text-xs font-bold text-accent">
+                  {getInitials(user?.name ?? user?.email)}
+                </div>
               </button>
             </div>
           </div>
-
-          <nav className="flex gap-2 overflow-x-auto border-t border-zinc-100 px-4 py-3 dark:border-zinc-800">
-            {availableNavigation.map((item) => (
-              <NavLink
-                className={({ isActive }) =>
-                  [
-                    'flex shrink-0 items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold',
-                    isActive
-                      ? 'bg-indigo-700 text-white'
-                      : 'bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300',
-                  ].join(' ')
-                }
-                end={item.path === '/tickets'}
-                key={item.path}
-                to={item.path}
-              >
-                <Icon className="h-4 w-4" name={item.icon} />
-                {item.name}
-              </NavLink>
-            ))}
-          </nav>
         </header>
 
-        <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+        <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 animate-fade-in">
           <Outlet />
         </main>
       </div>
+
+      <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-surface lg:hidden">
+        <div className="flex items-center justify-around px-2 py-2">
+          {mobileNav.map((item) => (
+            <NavLink
+              className={({ isActive }) =>
+                [
+                  'flex flex-col items-center gap-0.5 rounded-lg px-3 py-1.5 text-xs font-medium transition',
+                  isActive ? 'text-accent' : 'text-muted',
+                ].join(' ')
+              }
+              end={item.path === '/tickets'}
+              key={item.path}
+              to={item.path}
+            >
+              <Icon className="h-5 w-5" name={item.icon} />
+              {item.name}
+            </NavLink>
+          ))}
+        </div>
+      </nav>
+
+      <div className="pb-16 lg:pb-0" />
+
+      {sidebarOpen && (
+        <div className="fixed inset-0 z-50 lg:hidden" onClick={() => setSidebarOpen(false)}>
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm" />
+          <aside
+            className="fixed inset-y-0 left-0 w-64 bg-surface border-r border-border animate-in"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex h-full flex-col">
+              <div className="flex items-center justify-between border-b border-border px-4 py-4">
+                <div className="flex items-center gap-3">
+                  <div className="grid h-10 w-10 place-items-center rounded-lg bg-accent text-sm font-bold text-white">
+                    ST
+                  </div>
+                  <span className="font-semibold text-text">Support Tickets</span>
+                </div>
+                <button
+                  className="rounded-lg p-2 text-muted hover:text-text"
+                  onClick={() => setSidebarOpen(false)}
+                  type="button"
+                >
+                  <Icon name="x" className="h-4 w-4" />
+                </button>
+              </div>
+
+              <nav className="flex-1 space-y-1 px-3 py-4">
+                {availableNavigation.map((item) => (
+                  <NavLink
+                    className={({ isActive }) =>
+                      [
+                        'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors',
+                        isActive
+                          ? 'bg-accent/15 text-accent'
+                          : 'text-muted hover:bg-surface-hover hover:text-text',
+                      ].join(' ')
+                    }
+                    end={item.path === '/tickets'}
+                    key={item.path}
+                    to={item.path}
+                    onClick={() => setSidebarOpen(false)}
+                  >
+                    <Icon className="h-4 w-4 shrink-0" name={item.icon} />
+                    {item.name}
+                  </NavLink>
+                ))}
+              </nav>
+
+              <div className="border-t border-border p-4">
+                <button
+                  className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg border border-border px-4 py-2 text-sm font-semibold text-muted transition hover:bg-surface-hover"
+                  onClick={() => { handleLogout(); setSidebarOpen(false) }}
+                  type="button"
+                >
+                  <Icon name="logout" className="h-4 w-4" />
+                  Cerrar sesion
+                </button>
+              </div>
+            </div>
+          </aside>
+        </div>
+      )}
     </div>
   )
 }
 
 export default DashboardLayout
-
-
-

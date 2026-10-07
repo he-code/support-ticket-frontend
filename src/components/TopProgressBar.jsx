@@ -16,27 +16,24 @@ function TopProgressBar() {
       bar.style.transition = 'none'
       bar.style.width = '0%'
       requestAnimationFrame(() => {
-        bar.style.transition = 'width 300ms ease-out'
+        bar.style.transition = 'width 400ms ease-out'
         bar.style.width = '70%'
       })
     } else if (navigation.state === 'idle') {
-      bar.style.transition = 'width 200ms ease-out'
+      bar.style.transition = 'width 300ms ease-out'
       bar.style.width = '100%'
       setTimeout(() => {
         container.style.opacity = '0'
         setTimeout(() => { bar.style.width = '0%' }, 300)
-      }, 200)
+      }, 250)
     }
   }, [navigation.state])
 
   return (
-    <div ref={containerRef} className="fixed left-0 right-0 top-0 z-[100] h-1 opacity-0 transition-opacity duration-200">
-      <div ref={barRef} className="h-full bg-indigo-500" />
+    <div ref={containerRef} className="fixed left-0 right-0 top-0 z-[100] h-0.5 opacity-0 transition-opacity duration-200">
+      <div ref={barRef} className="h-full bg-accent" />
     </div>
   )
 }
 
 export default TopProgressBar
-
-
-

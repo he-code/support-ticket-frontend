@@ -1,95 +1,98 @@
-const iconPaths = {
-  dashboard: [
-    'M3 13h8V3H3v10z',
-    'M13 21h8v-8h-8v8z',
-    'M13 3v8h8V3h-8z',
-    'M3 21h8v-6H3v6z',
-  ],
-  tickets: ['M5 4h14v16H5V4z', 'M8 8h8', 'M8 12h8', 'M8 16h5'],
-  plus: ['M12 5v14', 'M5 12h14'],
-  categories: [
-    'M4 5h7v7H4V5z',
-    'M13 5h7v7h-7V5z',
-    'M4 14h7v5H4v-5z',
-    'M13 14h7v5h-7v-5z',
-  ],
-  users: [
-    'M16 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2',
-    'M9.5 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z',
-    'M21 21v-2a4 4 0 0 0-3-3.87',
-    'M16 3.13a4 4 0 0 1 0 7.75',
-  ],
-  bell: [
-    'M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9',
-    'M13.73 21a2 2 0 0 1-3.46 0',
-  ],
-  user: ['M20 21a8 8 0 0 0-16 0', 'M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z'],
-  logout: ['M10 17l5-5-5-5', 'M15 12H3', 'M21 3v18h-7'],
-  search: ['M21 21l-4.35-4.35', 'M11 19a8 8 0 1 1 0-16 8 8 0 0 1 0 16z'],
-  filter: ['M4 5h16', 'M7 12h10', 'M10 19h4'],
-  upload: ['M12 16V4', 'M7 9l5-5 5 5', 'M5 20h14'],
-  message: [
-    'M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v8z',
-  ],
-  paperclip: [
-    'M21 12.5l-8.49 8.49a5 5 0 0 1-7.07-7.07l9.19-9.19a3 3 0 0 1 4.24 4.24l-9.19 9.19a1 1 0 0 1-1.41-1.41L16.76 8.25',
-  ],
-  save: [
-    'M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z',
-    'M17 21v-8H7v8',
-    'M7 3v5h8',
-  ],
-  trash: ['M3 6h18', 'M8 6V4h8v2', 'M19 6l-1 14H6L5 6'],
-  check: ['M20 6L9 17l-5-5'],
-  arrow: ['M5 12h14', 'M13 5l7 7-7 7'],
-  refresh: [
-    'M21 12a9 9 0 0 1-15.36 6.36',
-    'M3 12a9 9 0 0 1 15.36-6.36',
-    'M3 21v-6h6',
-    'M21 3v6h-6',
-  ],
-  shield: ['M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z'],
-  clock: ['M12 8v5l3 3', 'M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z'],
-}
+import {
+  LayoutDashboard,
+  Ticket,
+  Plus,
+  LayoutGrid,
+  Users,
+  Bell,
+  User,
+  LogOut,
+  Search,
+  Filter,
+  Upload,
+  MessageSquare,
+  Paperclip,
+  Save,
+  Trash2,
+  Check,
+  ArrowRight,
+  RefreshCw,
+  Shield,
+  Clock,
+  X,
+  Eye,
+  EyeOff,
+  Lock,
+  Mail,
+  Home,
+  Menu,
+  Moon,
+  Sun,
+  ChevronLeft,
+  ChevronRight,
+} from 'lucide-react'
 
-const toneClasses = {
-  slate: 'bg-zinc-100 text-zinc-700 ring-zinc-200 dark:bg-zinc-800 dark:text-zinc-300 dark:ring-zinc-600',
-  violet: 'bg-violet-50 text-violet-700 ring-violet-200 dark:bg-violet-900/50 dark:text-violet-300 dark:ring-violet-700',
-  amber: 'bg-amber-50 text-amber-800 ring-amber-200 dark:bg-amber-900/50 dark:text-amber-300 dark:ring-amber-700',
-  indigo: 'bg-indigo-50 text-indigo-700 ring-indigo-200 dark:bg-indigo-900/50 dark:text-indigo-300 dark:ring-indigo-700',
-  rose: 'bg-rose-50 text-rose-700 ring-rose-200 dark:bg-rose-900/50 dark:text-rose-300 dark:ring-rose-700',
+const iconMap = {
+  dashboard: LayoutDashboard,
+  tickets: Ticket,
+  plus: Plus,
+  categories: LayoutGrid,
+  users: Users,
+  bell: Bell,
+  user: User,
+  logout: LogOut,
+  search: Search,
+  filter: Filter,
+  upload: Upload,
+  message: MessageSquare,
+  paperclip: Paperclip,
+  save: Save,
+  trash: Trash2,
+  check: Check,
+  arrow: ArrowRight,
+  refresh: RefreshCw,
+  shield: Shield,
+  clock: Clock,
+  x: X,
+  eye: Eye,
+  eyeOff: EyeOff,
+  lock: Lock,
+  mail: Mail,
+  home: Home,
+  menu: Menu,
+  moon: Moon,
+  sun: Sun,
+  chevronLeft: ChevronLeft,
+  chevronRight: ChevronRight,
 }
 
 export const inputClass =
-  'w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-950 outline-none transition placeholder:text-zinc-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 disabled:cursor-not-allowed disabled:bg-zinc-100 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100 dark:placeholder:text-zinc-500 dark:focus:ring-indigo-900/50 dark:disabled:bg-zinc-900'
+  'w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-text outline-none transition placeholder:text-muted/50 focus:border-accent focus:ring-2 focus:ring-accent/30 disabled:cursor-not-allowed disabled:opacity-50'
 
-export const labelClass = 'text-sm font-medium text-zinc-700 dark:text-zinc-300'
+export const labelClass = 'text-sm font-medium text-text/80'
 
 export function Icon({ name, className = 'h-4 w-4' }) {
-  const paths = iconPaths[name] ?? iconPaths.tickets
+  const LucideIcon = iconMap[name] ?? iconMap.tickets
 
-  return (
-    <svg
-      aria-hidden="true"
-      className={className}
-      fill="none"
-      stroke="currentColor"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth="1.8"
-      viewBox="0 0 24 24"
-    >
-      {paths.map((path) => (
-        <path d={path} key={path} />
-      ))}
-    </svg>
-  )
+  return <LucideIcon aria-hidden="true" className={className} />
 }
 
-export function Badge({ children, tone = 'slate' }) {
+const tone = {
+  slate: 'bg-muted/10 text-muted',
+  violet: 'bg-accent/10 text-accent',
+  amber: 'bg-warning/10 text-warning',
+  indigo: 'bg-accent/10 text-accent',
+  rose: 'bg-danger/10 text-danger',
+  sky: 'bg-info/10 text-info',
+  emerald: 'bg-success/10 text-success',
+  blue: 'bg-accent/10 text-accent',
+  red: 'bg-danger/10 text-danger',
+}
+
+export function Badge({ children, tone: toneKey = 'slate' }) {
   return (
     <span
-      className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-semibold ring-1 ring-inset ${toneClasses[tone] ?? toneClasses.slate}`}
+      className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${tone[toneKey] ?? tone.slate}`}
     >
       {children}
     </span>
@@ -100,11 +103,11 @@ export function PageHeader({ title, description, actions }) {
   return (
     <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
       <div>
-        <h1 className="text-2xl font-bold tracking-normal text-zinc-950 dark:text-zinc-100">
+        <h1 className="text-2xl font-semibold tracking-tight text-text">
           {title}
         </h1>
         {description && (
-          <p className="mt-1 max-w-2xl text-sm text-zinc-500 dark:text-zinc-400">
+          <p className="mt-1 max-w-2xl text-sm text-muted">
             {description}
           </p>
         )}
@@ -117,10 +120,10 @@ export function PageHeader({ title, description, actions }) {
 
 export function EmptyState({ title, description, action }) {
   return (
-    <div className="rounded-lg border border-dashed border-zinc-300 bg-white px-6 py-10 text-center dark:border-zinc-700 dark:bg-zinc-800/50">
-      <h2 className="text-base font-semibold text-zinc-950 dark:text-zinc-100">{title}</h2>
+    <div className="rounded-xl border border-dashed border-border px-6 py-10 text-center">
+      <h2 className="text-base font-semibold text-text">{title}</h2>
       {description && (
-        <p className="mx-auto mt-2 max-w-md text-sm text-zinc-500 dark:text-zinc-400">
+        <p className="mx-auto mt-2 max-w-md text-sm text-muted">
           {description}
         </p>
       )}
@@ -132,7 +135,7 @@ export function EmptyState({ title, description, action }) {
 export function Panel({ children, className = '' }) {
   return (
     <section
-      className={`rounded-lg border border-zinc-200 bg-white shadow-sm dark:border-zinc-700 dark:bg-zinc-800/50 ${className}`}
+      className={`rounded-xl border border-border bg-surface ${className}`}
     >
       {children}
     </section>
@@ -143,7 +146,7 @@ export function FieldError({ message }) {
   if (!message) return null
 
   return (
-    <p className="mt-1 text-xs font-medium text-rose-600" role="alert">
+    <p className="mt-1 text-xs font-medium text-danger" role="alert">
       {message}
     </p>
   )
@@ -154,13 +157,10 @@ export function SkeletonRows({ rows = 4 }) {
     <div className="space-y-3">
       {Array.from({ length: rows }).map((_, index) => (
         <div
-          className="h-12 animate-pulse rounded-md bg-zinc-100 dark:bg-zinc-800"
+          className="h-12 rounded-lg skeleton-shimmer"
           key={index}
         />
       ))}
     </div>
   )
 }
-
-
-

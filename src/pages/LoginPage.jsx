@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { Navigate, useNavigate } from 'react-router'
-import { FieldError, inputClass, labelClass } from '../components/SupportUi'
+import { FieldError, Icon, inputClass, labelClass } from '../components/SupportUi'
 import { useAuth } from '../context/AuthContext'
 import { useMutation } from '../hooks/useMutation'
 
@@ -13,25 +13,6 @@ function Spinner() {
   )
 }
 
-function EyeIcon({ visible }) {
-  if (visible) {
-    return (
-      <svg aria-hidden="true" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
-        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94" />
-        <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19" />
-        <path d="M14.12 14.12a3 3 0 1 1-4.24-4.24" />
-        <path d="M1 1l22 22" />
-      </svg>
-    )
-  }
-  return (
-    <svg aria-hidden="true" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
-      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-      <circle cx="12" cy="12" r="3" />
-    </svg>
-  )
-}
-
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 function validate(form) {
@@ -39,10 +20,10 @@ function validate(form) {
   if (!form.email.trim()) {
     errors.email = 'El correo es obligatorio'
   } else if (!emailRegex.test(form.email.trim())) {
-    errors.email = 'Correo electrónico inválido'
+    errors.email = 'Correo electronico invalido'
   }
   if (!form.password) {
-    errors.password = 'La contraseña es obligatoria'
+    errors.password = 'La contrasena es obligatoria'
   }
   return errors
 }
@@ -50,14 +31,9 @@ function validate(form) {
 function LoginPage() {
   const navigate = useNavigate()
   const { login, isAuthenticated } = useAuth()
-  const [dark, setDark] = useState(() => localStorage.getItem('theme') === 'dark')
   const [showPassword, setShowPassword] = useState(false)
   const [fieldErrors, setFieldErrors] = useState({})
   const formRef = useRef(null)
-
-  useEffect(() => {
-    document.documentElement.classList.toggle('dark', dark)
-  }, [dark])
 
   const [form, setForm] = useState(() => ({
     email: localStorage.getItem('remembered_email') || '',
@@ -109,174 +85,111 @@ function LoginPage() {
   const apiError = error && !fieldErrors.email && !fieldErrors.password ? error : null
 
   return (
-    <div className="grid min-h-screen bg-[var(--color-app)] lg:grid-cols-[1fr_480px]">
-      <section className="relative hidden flex-col justify-between overflow-hidden bg-[var(--color-sidebar)] px-12 py-12 text-white lg:flex">
-        <div className="relative z-10 flex items-center gap-3">
-          <div className="grid h-11 w-11 place-items-center rounded-xl bg-indigo-400 text-sm font-bold text-indigo-950 shadow-lg shadow-indigo-400/20">
+    <div className="flex min-h-screen items-center justify-center bg-bg px-4 py-10">
+      <div className="w-full max-w-md animate-fade-in">
+        <div className="mb-8 text-center">
+          <div className="mx-auto grid h-12 w-12 place-items-center rounded-xl bg-accent text-sm font-bold text-white shadow-lg shadow-accent/20">
             ST
           </div>
-          <div>
-            <p className="font-bold text-white">Support Tickets</p>
-            <p className="text-sm text-indigo-100/70">Mesa de soporte</p>
-          </div>
+          <h1 className="mt-4 text-2xl font-bold text-text">Iniciar sesion</h1>
+          <p className="mt-1 text-sm text-muted">Acceso al panel de soporte</p>
         </div>
 
-        <div className="relative z-10 max-w-lg">
-          <span className="inline-block rounded-full bg-amber-200/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-amber-200">
-            Plataforma de gestion
-          </span>
-          <h1 className="mt-6 text-4xl font-bold leading-tight tracking-tight text-white">
-            Soporte ordenado para clientes, agentes y administradores.
-          </h1>
-          <p className="mt-4 text-base leading-7 text-indigo-50/70">
-            Tickets, comentarios, adjuntos, estados, asignaciones y usuarios en una sola consola operativa.
-          </p>
-        </div>
-
-        <div className="relative z-10 grid grid-cols-3 gap-4">
-          {[
-            { value: '24/7', label: 'Seguimiento' },
-            { value: 'SLA', label: 'Prioridades' },
-            { value: 'API', label: 'Integrada' },
-          ].map(({ value, label }) => (
-            <div className="rounded-xl border border-white/10 bg-white/5 p-5 backdrop-blur-sm" key={value}>
-              <p className="text-2xl font-bold text-white">{value}</p>
-              <p className="mt-1 text-sm text-indigo-50/70">{label}</p>
+        <div className="rounded-xl border border-border bg-surface p-6 shadow-sm">
+          {apiError && (
+            <div className="mb-6 animate-slide-down rounded-lg bg-danger/15 px-4 py-3 text-sm text-danger">
+              {apiError}
             </div>
-          ))}
-        </div>
+          )}
 
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-indigo-400/5 via-transparent to-amber-200/5" />
-      </section>
-
-      <main className="flex items-center justify-center px-6 py-10">
-        <div className="w-full max-w-sm animate-[fade-in_0.4s_ease-out]">
-          <div className="mb-8 lg:hidden">
-            <div className="flex items-center gap-3">
-              <div className="grid h-11 w-11 place-items-center rounded-xl bg-indigo-700 text-sm font-bold text-white dark:bg-indigo-500 dark:text-indigo-950">
-                ST
+          <form className="space-y-5" noValidate onSubmit={handleSubmit} ref={formRef}>
+            <div>
+              <label className={labelClass} htmlFor="email">
+                Correo electronico
+              </label>
+              <div className="relative mt-1.5">
+                <Icon className="pointer-events-none absolute left-3 top-2.5 h-4 w-4 text-muted" name="mail" />
+                <input
+                  autoComplete="email"
+                  className={`${inputClass} pl-10`}
+                  id="email"
+                  name="email"
+                  onChange={handleChange}
+                  placeholder="admin@example.com"
+                  required
+                  type="email"
+                  value={form.email}
+                />
               </div>
-              <div>
-                <p className="font-bold text-zinc-950 dark:text-zinc-100">Support Tickets</p>
-                <p className="text-sm text-zinc-500 dark:text-zinc-400">Mesa de soporte</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="rounded-xl border border-zinc-200 bg-white p-8 shadow-sm dark:border-zinc-700 dark:bg-zinc-800/50">
-            <div className="mb-8">
-              <h2 className="text-2xl font-bold text-zinc-950 dark:text-zinc-100">Iniciar sesion</h2>
-              <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
-                Acceso al panel de soporte.
-              </p>
+              <FieldError message={fieldErrors.email} />
             </div>
 
-            {apiError && (
-              <div className="mb-6 animate-[slide-down_0.25s_ease-out] rounded-lg bg-rose-50 px-4 py-3 text-sm text-rose-700 dark:bg-rose-900/50 dark:text-rose-200">
-                {apiError}
+            <div>
+              <label className={labelClass} htmlFor="password">
+                Contrasena
+              </label>
+              <div className="relative mt-1.5">
+                <Icon className="pointer-events-none absolute left-3 top-2.5 h-4 w-4 text-muted" name="lock" />
+                <input
+                  autoComplete="current-password"
+                  className={`${inputClass} pl-10 pr-10`}
+                  id="password"
+                  name="password"
+                  onChange={handleChange}
+                  placeholder="Contrasena"
+                  required
+                  type={showPassword ? 'text' : 'password'}
+                  value={form.password}
+                />
+                <button
+                  className="absolute right-2 top-2 rounded p-1 text-muted transition hover:text-text"
+                  onClick={() => setShowPassword((s) => !s)}
+                  tabIndex={-1}
+                  title={showPassword ? 'Ocultar contrasena' : 'Mostrar contrasena'}
+                  type="button"
+                >
+                  <Icon className="h-4 w-4" name={showPassword ? 'eyeOff' : 'eye'} />
+                </button>
               </div>
-            )}
+              <FieldError message={fieldErrors.password} />
+            </div>
 
-            <form className="space-y-5" noValidate onSubmit={handleSubmit} ref={formRef}>
-              <div>
-                <label className={labelClass} htmlFor="email">
-                  Correo electronico
-                </label>
-                <div className="relative mt-1">
-                  <svg aria-hidden="true" className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
-                    <path d="M4 5h16v14H4V5z" /><path d="M4 5l8 7 8-7" />
-                  </svg>
-                  <input
-                    autoComplete="email"
-                    className={`${inputClass} pl-10`}
-                    id="email"
-                    name="email"
-                    onChange={handleChange}
-                    placeholder="admin@example.com"
-                    required
-                    type="email"
-                    value={form.email}
-                  />
-                </div>
-                <FieldError message={fieldErrors.email} />
-              </div>
-
-              <div>
-                <label className={labelClass} htmlFor="password">
-                  Contrasena
-                </label>
-                <div className="relative mt-1">
-                  <svg aria-hidden="true" className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
-                    <rect height="11" rx="2" ry="2" width="18" x="3" y="11" /><path d="M7 11V7a5 5 0 0110 0v4" />
-                  </svg>
-                  <input
-                    autoComplete="current-password"
-                    className={`${inputClass} pl-10 pr-10`}
-                    id="password"
-                    name="password"
-                    onChange={handleChange}
-                    placeholder="Contrasena"
-                    required
-                    type={showPassword ? 'text' : 'password'}
-                    value={form.password}
-                  />
-                  <button
-                    className="absolute right-2 top-1/2 -translate-y-1/2 rounded p-1.5 text-zinc-400 transition hover:text-zinc-600 dark:hover:text-zinc-300"
-                    onClick={() => setShowPassword((s) => !s)}
-                    tabIndex={-1}
-                    title={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
-                    type="button"
-                  >
-                    <EyeIcon visible={showPassword} />
-                  </button>
-                </div>
-                <FieldError message={fieldErrors.password} />
-              </div>
-
+            <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <input
                   checked={remember}
-                  className="h-4 w-4 rounded border-zinc-300 text-indigo-700 focus:ring-indigo-500 dark:border-zinc-600 dark:bg-zinc-800"
+                  className="h-4 w-4 rounded border-border bg-surface text-accent focus:ring-accent"
                   id="remember"
                   onChange={(e) => setRemember(e.target.checked)}
                   type="checkbox"
                 />
-                <label className="text-sm text-zinc-600 dark:text-zinc-400" htmlFor="remember">
-                  Recordar sesión
+                <label className="text-sm text-muted" htmlFor="remember">
+                  Recordar sesion
                 </label>
               </div>
-
               <button
-                className="flex w-full items-center justify-center gap-2 rounded-lg bg-indigo-700 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-800 disabled:cursor-not-allowed disabled:opacity-60"
-                disabled={loading}
-                type="submit"
+                className="text-xs text-muted transition hover:text-text"
+                type="button"
               >
-                {loading ? <Spinner /> : (
-                  <svg aria-hidden="true" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
-                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                  </svg>
-                )}
-                {loading ? 'Validando...' : 'Entrar al panel'}
+                Olvidaste tu contrasena?
               </button>
-            </form>
-          </div>
+            </div>
 
-          <div className="mt-4 text-center">
             <button
-              className="text-xs text-zinc-400 transition hover:text-zinc-600 dark:text-zinc-500 dark:hover:text-zinc-300"
-              onClick={() => setDark((d) => !d)}
-              type="button"
+              className="flex w-full items-center justify-center gap-2 rounded-lg bg-accent px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-accent/90 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
+              disabled={loading}
+              type="submit"
             >
-              {dark ? 'Modo claro' : 'Modo oscuro'}
+              {loading ? <Spinner /> : (
+                <Icon className="h-4 w-4" name="shield" />
+              )}
+              {loading ? 'Validando...' : 'Entrar al panel'}
             </button>
-          </div>
+          </form>
         </div>
-      </main>
+      </div>
     </div>
   )
 }
 
 export default LoginPage
-
-
-

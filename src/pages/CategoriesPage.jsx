@@ -87,17 +87,15 @@ function CategoriesPage() {
       />
 
       {displayError && (
-        <div className="rounded-lg bg-rose-50 px-4 py-3 text-sm text-rose-700 dark:bg-rose-900/50 dark:text-rose-200">
+        <div className="rounded-lg bg-danger/15 px-4 py-3 text-sm text-danger">
           {displayError}
         </div>
       )}
 
       <div className="grid gap-6 xl:grid-cols-[1fr_360px]">
         <Panel>
-          <div className="border-b border-slate-200 px-5 py-4 dark:border-zinc-700">
-            <h2 className="text-base font-semibold text-zinc-950 dark:text-zinc-100">
-              Listado
-            </h2>
+          <div className="border-b border-border px-5 py-4">
+            <h2 className="text-base font-semibold text-text">Listado</h2>
           </div>
           <div className="p-5">
             {loading ? (
@@ -115,15 +113,13 @@ function CategoriesPage() {
 
                   return (
                     <article
-                      className="rounded-lg border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-700 dark:bg-zinc-800"
+                      className="rounded-xl border border-border bg-surface p-4"
                       key={category.id}
                     >
                       <div className="flex items-start justify-between gap-3">
                         <div className="min-w-0">
-                          <p className="font-semibold text-zinc-950 dark:text-zinc-100">
-                            {category.name}
-                          </p>
-                          <p className="mt-1 text-sm text-slate-500 dark:text-zinc-400">
+                          <p className="font-semibold text-text">{category.name}</p>
+                          <p className="mt-1 text-sm text-muted">
                             {category.description}
                           </p>
                         </div>
@@ -134,7 +130,7 @@ function CategoriesPage() {
 
                       <div className="mt-4 flex flex-wrap justify-end gap-2">
                         <button
-                          className="rounded-lg border border-zinc-300 px-3 py-2 text-sm font-semibold text-zinc-700 transition hover:bg-zinc-50 dark:border-zinc-600 dark:text-zinc-300 dark:hover:bg-zinc-700"
+                          className="rounded-lg border border-border px-3 py-2 text-sm font-semibold text-muted transition hover:bg-surface-hover"
                           onClick={() => toggleCategory(category)}
                           type="button"
                         >
@@ -142,12 +138,12 @@ function CategoriesPage() {
                         </button>
                         <button
                           aria-label="Eliminar categoria"
-                          className="grid h-10 w-10 place-items-center rounded-lg border border-rose-200 text-rose-700 transition hover:bg-rose-50 dark:border-rose-800 dark:text-rose-300 dark:hover:bg-rose-900/30"
+                          className="grid h-10 w-10 place-items-center rounded-lg border border-danger/30 text-danger transition hover:bg-danger/10"
                           onClick={() => setConfirmDelete(category)}
                           title="Eliminar categoria"
                           type="button"
                         >
-                          <Icon name="trash" />
+                          <Icon name="trash" className="h-4 w-4" />
                         </button>
                       </div>
                     </article>
@@ -156,25 +152,25 @@ function CategoriesPage() {
               </div>
 
               <div className="hidden overflow-x-auto md:block">
-                <table className="min-w-full divide-y divide-slate-200 text-sm dark:divide-zinc-700">
+                <table className="min-w-full divide-y divide-border text-sm">
                   <thead>
-                    <tr className="text-left text-xs font-semibold uppercase text-slate-500 dark:text-zinc-400">
+                    <tr className="text-left text-xs font-semibold uppercase text-muted">
                       <th className="px-3 py-3">Nombre</th>
                       <th className="px-3 py-3">Estado</th>
                       <th className="px-3 py-3 text-right">Acciones</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-100 dark:divide-zinc-700/50">
+                  <tbody className="divide-y divide-border">
                     {categories.map((category) => {
                       const active = category.is_active !== false
 
                       return (
-                        <tr className="align-top hover:bg-slate-50 dark:hover:bg-zinc-800/50" key={category.id}>
+                        <tr className="align-top hover:bg-surface-hover/50" key={category.id}>
                           <td className="px-3 py-4">
-                            <p className="font-semibold text-zinc-950 dark:text-zinc-100">
+                            <p className="font-semibold text-text">
                               {category.name}
                             </p>
-                            <p className="mt-1 text-xs text-slate-500 dark:text-zinc-400">
+                            <p className="mt-1 text-xs text-muted">
                               {category.description}
                             </p>
                           </td>
@@ -186,7 +182,7 @@ function CategoriesPage() {
                           <td className="px-3 py-4">
                             <div className="flex justify-end gap-2">
                               <button
-                                className="rounded-lg border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 dark:border-zinc-600 dark:text-zinc-300 dark:hover:bg-zinc-700"
+                                className="rounded-lg border border-border px-3 py-2 text-sm font-semibold text-muted transition hover:bg-surface-hover"
                                 onClick={() => toggleCategory(category)}
                                 type="button"
                               >
@@ -194,12 +190,12 @@ function CategoriesPage() {
                               </button>
                               <button
                                 aria-label="Eliminar categoria"
-                                className="grid h-10 w-10 place-items-center rounded-lg border border-rose-200 text-rose-700 transition hover:bg-rose-50 dark:border-rose-800 dark:text-rose-300 dark:hover:bg-rose-900/30"
+                                className="grid h-10 w-10 place-items-center rounded-lg border border-danger/30 text-danger transition hover:bg-danger/10"
                                 onClick={() => setConfirmDelete(category)}
                                 title="Eliminar categoria"
                                 type="button"
                               >
-                                <Icon name="trash" />
+                                <Icon name="trash" className="h-4 w-4" />
                               </button>
                             </div>
                           </td>
@@ -215,10 +211,8 @@ function CategoriesPage() {
         </Panel>
 
         <Panel>
-          <div className="border-b border-slate-200 px-5 py-4 dark:border-zinc-700">
-            <h2 className="text-base font-semibold text-zinc-950 dark:text-zinc-100">
-              Nueva categoria
-            </h2>
+          <div className="border-b border-border px-5 py-4">
+            <h2 className="text-base font-semibold text-text">Nueva categoria</h2>
           </div>
           <form className="space-y-5 p-5" onSubmit={handleSubmit}>
             <div>
@@ -226,7 +220,7 @@ function CategoriesPage() {
                 Nombre
               </label>
               <input
-                className={`${inputClass} mt-1`}
+                className={`${inputClass} mt-1.5`}
                 id="name"
                 name="name"
                 onChange={handleChange}
@@ -240,7 +234,7 @@ function CategoriesPage() {
                 Descripcion
               </label>
               <textarea
-                className={`${inputClass} mt-1 min-h-28 resize-y`}
+                className={`${inputClass} mt-1.5 min-h-28 resize-y`}
                 id="description"
                 name="description"
                 onChange={handleChange}
@@ -248,11 +242,11 @@ function CategoriesPage() {
               />
             </div>
             <button
-              className="flex w-full items-center justify-center gap-2 rounded-lg bg-indigo-700 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-800 disabled:cursor-not-allowed disabled:opacity-60"
+              className="flex w-full items-center justify-center gap-2 rounded-lg bg-accent px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-accent/90 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
               disabled={saving}
               type="submit"
             >
-              <Icon name="save" />
+              <Icon name="save" className="h-4 w-4" />
               {saving ? 'Guardando...' : 'Guardar categoria'}
             </button>
           </form>
@@ -262,7 +256,7 @@ function CategoriesPage() {
       {confirmDelete && (
         <ConfirmModal
           confirmLabel="Eliminar"
-          description={`Esta accion no se puede deshacer.`}
+          description="Esta accion no se puede deshacer."
           loading={saving}
           onCancel={() => setConfirmDelete(null)}
           onConfirm={() => removeCategory(confirmDelete)}
@@ -275,6 +269,3 @@ function CategoriesPage() {
 }
 
 export default CategoriesPage
-
-
-

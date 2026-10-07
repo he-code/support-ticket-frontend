@@ -74,7 +74,7 @@ function ProfilePage() {
       <PageHeader description="Datos de cuenta y acceso." title="Perfil" />
 
       {error && (
-        <div className="rounded-lg bg-rose-50 px-4 py-3 text-sm text-rose-700 dark:bg-rose-900/50 dark:text-rose-200">
+        <div className="rounded-lg bg-danger/15 px-4 py-3 text-sm text-danger">
           {error}
         </div>
       )}
@@ -82,15 +82,13 @@ function ProfilePage() {
       <div className="grid gap-6 xl:grid-cols-[320px_1fr]">
         <Panel className="p-5">
           <div className="flex items-center gap-4">
-            <div className="grid h-16 w-16 place-items-center rounded-lg bg-indigo-700 text-lg font-bold text-white">
+            <div className="grid h-16 w-16 place-items-center rounded-xl bg-accent text-lg font-bold text-white">
               {getInitials(user?.name ?? user?.email)}
             </div>
             <div className="min-w-0">
-              <p className="truncate font-semibold text-zinc-950 dark:text-zinc-100">
-                {user?.name}
-              </p>
-              <p className="truncate text-sm text-slate-500 dark:text-zinc-400">{user?.email}</p>
-              <p className="mt-1 text-xs font-semibold uppercase text-slate-400 dark:text-zinc-500">
+              <p className="truncate text-lg font-semibold text-text">{user?.name}</p>
+              <p className="truncate text-sm text-muted">{user?.email}</p>
+              <p className="mt-1 text-xs font-semibold uppercase text-muted">
                 {getRoleLabel(user?.role)}
               </p>
             </div>
@@ -98,10 +96,8 @@ function ProfilePage() {
         </Panel>
 
         <Panel>
-          <div className="border-b border-slate-200 px-5 py-4 dark:border-zinc-700">
-            <h2 className="text-base font-semibold text-zinc-950 dark:text-zinc-100">
-              Datos personales
-            </h2>
+          <div className="border-b border-border px-5 py-4">
+            <h2 className="text-base font-semibold text-text">Datos personales</h2>
           </div>
 
           <form className="grid gap-5 p-5 md:grid-cols-2" onSubmit={handleSubmit}>
@@ -110,7 +106,7 @@ function ProfilePage() {
                 Nombre
               </label>
               <input
-                className={`${inputClass} mt-1`}
+                className={`${inputClass} mt-1.5`}
                 id="name"
                 name="name"
                 onChange={handleChange}
@@ -124,7 +120,7 @@ function ProfilePage() {
                 Correo
               </label>
               <input
-                className={`${inputClass} mt-1`}
+                className={`${inputClass} mt-1.5`}
                 id="email"
                 name="email"
                 onChange={handleChange}
@@ -139,7 +135,7 @@ function ProfilePage() {
                 Contrasena actual
               </label>
               <input
-                className={`${inputClass} mt-1`}
+                className={`${inputClass} mt-1.5`}
                 id="current_password"
                 name="current_password"
                 onChange={handleChange}
@@ -153,7 +149,7 @@ function ProfilePage() {
                 Nueva contrasena
               </label>
               <input
-                className={`${inputClass} mt-1`}
+                className={`${inputClass} mt-1.5`}
                 id="password"
                 name="password"
                 onChange={handleChange}
@@ -167,7 +163,7 @@ function ProfilePage() {
                 Confirmar contrasena
               </label>
               <input
-                className={`${inputClass} mt-1`}
+                className={`${inputClass} mt-1.5`}
                 id="password_confirmation"
                 name="password_confirmation"
                 onChange={handleChange}
@@ -178,11 +174,11 @@ function ProfilePage() {
 
             <div className="md:col-span-2">
               <button
-                className="flex items-center gap-2 rounded-lg bg-indigo-700 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-800 disabled:cursor-not-allowed disabled:opacity-60"
+                className="flex items-center gap-2 rounded-lg bg-accent px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-accent/90 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
                 disabled={saving}
                 type="submit"
               >
-                <Icon name="save" />
+                <Icon name="save" className="h-4 w-4" />
                 {saving ? 'Guardando...' : 'Guardar perfil'}
               </button>
             </div>
@@ -194,6 +190,3 @@ function ProfilePage() {
 }
 
 export default ProfilePage
-
-
-

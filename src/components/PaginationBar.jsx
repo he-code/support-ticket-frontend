@@ -3,7 +3,7 @@ import { Icon } from './SupportUi'
 function PageButton({ page, active, onClick }) {
   if (active) {
     return (
-      <span className="grid h-9 w-9 place-items-center rounded-md bg-indigo-700 text-xs font-bold text-white dark:bg-indigo-600">
+      <span className="grid h-9 w-9 place-items-center rounded-lg bg-accent text-xs font-bold text-white">
         {page}
       </span>
     )
@@ -11,7 +11,7 @@ function PageButton({ page, active, onClick }) {
 
   return (
     <button
-      className="grid h-9 w-9 place-items-center rounded-md border border-zinc-300 bg-white text-xs font-semibold text-zinc-700 transition hover:bg-zinc-50 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
+      className="grid h-9 w-9 place-items-center rounded-lg border border-border bg-surface text-xs font-semibold text-muted transition hover:bg-surface-hover hover:text-text"
       onClick={() => onClick(page)}
       type="button"
     >
@@ -32,23 +32,23 @@ function PaginationBar({ page, totalPages, total, onPageChange }) {
   }
 
   return (
-    <div className="flex items-center justify-between border-t border-zinc-200 pt-4 dark:border-zinc-700">
-      <p className="text-xs text-zinc-500 dark:text-zinc-400">{total} resultados</p>
+    <div className="flex items-center justify-between border-t border-border pt-4">
+      <p className="text-xs text-muted">{total} resultados</p>
 
       <div className="flex items-center gap-1">
         <button
-          className="grid h-9 w-9 place-items-center rounded-md border border-zinc-300 bg-white text-xs font-semibold text-zinc-700 transition hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-40 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
+          className="grid h-9 w-9 place-items-center rounded-lg border border-border bg-surface text-xs font-semibold text-muted transition hover:bg-surface-hover disabled:cursor-not-allowed disabled:opacity-40"
           disabled={page <= 1}
           onClick={() => onPageChange(page - 1)}
           type="button"
         >
-          <Icon className="h-3 w-3" name="arrow" />
+          <Icon className="h-3 w-3" name="chevronLeft" />
         </button>
 
         {start > 1 && (
           <>
             <PageButton onClick={onPageChange} page={1} />
-            {start > 2 && <span className="px-1 text-xs text-zinc-400 dark:text-zinc-500">...</span>}
+            {start > 2 && <span className="px-1 text-xs text-muted">...</span>}
           </>
         )}
 
@@ -58,18 +58,18 @@ function PaginationBar({ page, totalPages, total, onPageChange }) {
 
         {end < totalPages && (
           <>
-            {end < totalPages - 1 && <span className="px-1 text-xs text-zinc-400 dark:text-zinc-500">...</span>}
+            {end < totalPages - 1 && <span className="px-1 text-xs text-muted">...</span>}
             <PageButton onClick={onPageChange} page={totalPages} />
           </>
         )}
 
         <button
-          className="grid h-9 w-9 place-items-center rounded-md border border-zinc-300 bg-white text-xs font-semibold text-zinc-700 transition hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-40 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
+          className="grid h-9 w-9 place-items-center rounded-lg border border-border bg-surface text-xs font-semibold text-muted transition hover:bg-surface-hover disabled:cursor-not-allowed disabled:opacity-40"
           disabled={page >= totalPages}
           onClick={() => onPageChange(page + 1)}
           type="button"
         >
-          <Icon className="h-3 w-3 rotate-180" name="arrow" />
+          <Icon className="h-3 w-3" name="chevronRight" />
         </button>
       </div>
     </div>
@@ -77,6 +77,3 @@ function PaginationBar({ page, totalPages, total, onPageChange }) {
 }
 
 export default PaginationBar
-
-
-

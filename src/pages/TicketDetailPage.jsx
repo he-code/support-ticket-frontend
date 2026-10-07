@@ -150,10 +150,10 @@ function TicketDetailPage() {
       <PageHeader
         actions={
           <Link
-            className="flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
+            className="flex items-center gap-2 rounded-lg border border-border bg-surface px-3 py-2 text-sm font-semibold text-muted transition hover:bg-surface-hover hover:text-text"
             to="/tickets"
           >
-            <Icon name="arrow" />
+            <Icon name="arrow" className="h-4 w-4" />
             Volver
           </Link>
         }
@@ -162,7 +162,7 @@ function TicketDetailPage() {
       />
 
       {error && (
-        <div className="rounded-lg bg-rose-50 px-4 py-3 text-sm text-rose-700 dark:bg-rose-900/50 dark:text-rose-200">
+        <div className="rounded-lg bg-danger/15 px-4 py-3 text-sm text-danger">
           {error}
         </div>
       )}
@@ -175,7 +175,7 @@ function TicketDetailPage() {
         <EmptyState
           action={
             <Link
-              className="rounded-lg bg-indigo-700 px-3 py-2 text-sm font-semibold text-white"
+              className="rounded-lg bg-accent px-3 py-2 text-sm font-semibold text-white"
               to="/tickets"
             >
               Ir a tickets
@@ -188,50 +188,48 @@ function TicketDetailPage() {
         <div className="grid gap-6 xl:grid-cols-[1fr_360px]">
           <div className="space-y-6">
             <Panel>
-              <div className="border-b border-slate-200 px-5 py-4 dark:border-zinc-700">
+              <div className="border-b border-border px-5 py-4">
                 <div className="flex flex-wrap gap-2">
-                  <Badge tone={ticketStatus.tone}>{ticketStatus.label}</Badge>
-                  <Badge tone={ticketPriority.tone}>{ticketPriority.label}</Badge>
+                  <Badge tone={ticketStatus?.tone}>{ticketStatus?.label}</Badge>
+                  <Badge tone={ticketPriority?.tone}>{ticketPriority?.label}</Badge>
                   <Badge tone="slate">{getTicketCategory(ticket)}</Badge>
                 </div>
               </div>
 
               <div className="space-y-5 p-5">
                 <div>
-                  <p className="text-sm font-semibold text-slate-500 dark:text-zinc-400">
-                    Descripcion
-                  </p>
-                  <p className="mt-2 whitespace-pre-wrap text-sm leading-6 text-slate-700 dark:text-zinc-300">
+                  <p className="text-sm font-semibold text-muted">Descripcion</p>
+                  <p className="mt-2 whitespace-pre-wrap text-sm leading-6 text-text/85">
                     {getTicketDescription(ticket) || 'Sin descripcion.'}
                   </p>
                 </div>
 
                 <div className="grid gap-4 md:grid-cols-3">
-                  <div className="rounded-lg border border-slate-200 p-4 dark:border-zinc-700">
-                    <p className="text-xs font-semibold uppercase text-slate-400 dark:text-zinc-500">
+                  <div className="rounded-lg border border-border p-4">
+                    <p className="text-xs font-semibold uppercase text-muted">
                       Solicitante
                     </p>
-                    <p className="mt-2 text-sm font-semibold text-zinc-950 dark:text-zinc-100">
+                    <p className="mt-2 text-sm font-semibold text-text">
                       {personName(requester, 'Sin solicitante')}
                     </p>
-                    <p className="mt-1 text-xs text-slate-500 dark:text-zinc-400">
+                    <p className="mt-1 text-xs text-muted">
                       {requester?.email}
                     </p>
                   </div>
-                  <div className="rounded-lg border border-slate-200 p-4 dark:border-zinc-700">
-                    <p className="text-xs font-semibold uppercase text-slate-400 dark:text-zinc-500">
+                  <div className="rounded-lg border border-border p-4">
+                    <p className="text-xs font-semibold uppercase text-muted">
                       Agente
                     </p>
-                    <p className="mt-2 text-sm font-semibold text-zinc-950 dark:text-zinc-100">
+                    <p className="mt-2 text-sm font-semibold text-text">
                       {personName(agent)}
                     </p>
-                    <p className="mt-1 text-xs text-slate-500 dark:text-zinc-400">{agent?.email}</p>
+                    <p className="mt-1 text-xs text-muted">{agent?.email}</p>
                   </div>
-                  <div className="rounded-lg border border-slate-200 p-4 dark:border-zinc-700">
-                    <p className="text-xs font-semibold uppercase text-slate-400 dark:text-zinc-500">
+                  <div className="rounded-lg border border-border p-4">
+                    <p className="text-xs font-semibold uppercase text-muted">
                       Creado
                     </p>
-                    <p className="mt-2 text-sm font-semibold text-zinc-950 dark:text-zinc-100">
+                    <p className="mt-2 text-sm font-semibold text-text">
                       {formatDate(getTicketCreatedAt(ticket))}
                     </p>
                   </div>
@@ -240,16 +238,16 @@ function TicketDetailPage() {
             </Panel>
 
             <Panel>
-              <div className="flex items-center gap-2 border-b border-slate-200 px-5 py-4 dark:border-zinc-700">
-                <Icon name="message" />
-                <h2 className="text-base font-semibold text-zinc-950 dark:text-zinc-100">
+              <div className="flex items-center gap-2 border-b border-border px-5 py-4">
+                <Icon name="message" className="h-4 w-4" />
+                <h2 className="text-base font-semibold text-text">
                   Comentarios
                 </h2>
               </div>
 
               <div className="space-y-5 p-5">
                 {comments.length === 0 ? (
-                  <div className="rounded-lg border border-dashed border-slate-300 px-4 py-8 text-center text-sm text-slate-500 dark:border-zinc-600 dark:text-zinc-400">
+                  <div className="rounded-lg border border-dashed border-border px-4 py-8 text-center text-sm text-muted">
                     Sin comentarios.
                   </div>
                 ) : (
@@ -261,22 +259,22 @@ function TicketDetailPage() {
 
                       return (
                         <article
-                          className="flex gap-3 rounded-lg border border-slate-200 p-4 dark:border-zinc-700"
+                          className="flex gap-3 rounded-xl border border-border p-4"
                           key={item.id ?? index}
                         >
-                          <div className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-indigo-700 text-xs font-bold text-white">
+                          <div className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-accent text-xs font-bold text-white">
                             {getInitials(personName(author, 'ST'))}
                           </div>
                           <div className="min-w-0 flex-1">
                             <div className="flex flex-wrap items-center gap-2">
-                            <p className="text-sm font-semibold text-zinc-950 dark:text-zinc-100">
+                              <p className="text-sm font-semibold text-text">
                                 {personName(author, 'Usuario')}
-                            </p>
-                            <span className="text-xs text-slate-400 dark:text-zinc-500">
+                              </p>
+                              <span className="text-xs text-muted">
                                 {formatDate(item.created_at ?? item.createdAt)}
                               </span>
                             </div>
-                            <p className="mt-2 whitespace-pre-wrap text-sm leading-6 text-slate-700 dark:text-zinc-300">
+                            <p className="mt-2 whitespace-pre-wrap text-sm leading-6 text-text/85">
                               {body}
                             </p>
                           </div>
@@ -294,15 +292,15 @@ function TicketDetailPage() {
                     className={`${inputClass} min-h-28 resize-y`}
                     id="comment"
                     onChange={(event) => setComment(event.target.value)}
-                    placeholder="Escribe una respuesta"
+                    placeholder="Escribe una respuesta..."
                     value={comment}
                   />
                   <button
-                    className="flex items-center gap-2 rounded-lg bg-indigo-700 px-3 py-2 text-sm font-semibold text-white transition hover:bg-indigo-800 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-indigo-600 dark:hover:bg-indigo-700"
+                    className="flex items-center gap-2 rounded-lg bg-accent px-3 py-2 text-sm font-semibold text-white transition hover:bg-accent/90 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
                     disabled={saving === 'comment'}
                     type="submit"
                   >
-                    <Icon name="message" />
+                    <Icon name="message" className="h-4 w-4" />
                     {saving === 'comment' ? 'Enviando...' : 'Comentar'}
                   </button>
                 </form>
@@ -312,17 +310,15 @@ function TicketDetailPage() {
 
           <aside className="space-y-6">
             <Panel>
-              <div className="border-b border-slate-200 px-5 py-4 dark:border-zinc-700">
-                <h2 className="text-base font-semibold text-zinc-950 dark:text-zinc-100">
-                  Gestion
-                </h2>
+              <div className="border-b border-border px-5 py-4">
+                <h2 className="text-base font-semibold text-text">Gestion</h2>
               </div>
               <div className="space-y-5 p-5">
                 <div>
                   <label className={labelClass} htmlFor="status">
                     Estado
                   </label>
-                  <div className="mt-1 flex gap-2">
+                  <div className="mt-1.5 flex gap-2">
                     <select
                       className={inputClass}
                       id="status"
@@ -337,13 +333,13 @@ function TicketDetailPage() {
                     </select>
                     <button
                       aria-label="Guardar estado"
-                      className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-indigo-700 text-white transition hover:bg-indigo-800 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-indigo-600 dark:hover:bg-indigo-700"
+                      className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-accent text-white transition hover:bg-accent/90 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
                       disabled={saving === 'status'}
                       onClick={saveStatus}
                       title="Guardar estado"
                       type="button"
                     >
-                      <Icon name="save" />
+                      <Icon name="save" className="h-4 w-4" />
                     </button>
                   </div>
                 </div>
@@ -352,7 +348,7 @@ function TicketDetailPage() {
                   <label className={labelClass} htmlFor="agent">
                     Asignacion
                   </label>
-                  <div className="mt-1 flex gap-2">
+                  <div className="mt-1.5 flex gap-2">
                     <select
                       className={inputClass}
                       id="agent"
@@ -368,30 +364,37 @@ function TicketDetailPage() {
                     </select>
                     <button
                       aria-label="Guardar asignacion"
-                      className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-indigo-700 text-white transition hover:bg-indigo-800 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-indigo-600 dark:hover:bg-indigo-700"
+                      className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-accent text-white transition hover:bg-accent/90 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
                       disabled={saving === 'assignment'}
                       onClick={saveAssignment}
                       title="Guardar asignacion"
                       type="button"
                     >
-                      <Icon name="save" />
+                      <Icon name="save" className="h-4 w-4" />
                     </button>
                   </div>
+                </div>
+
+                <div className="rounded-lg border border-border p-4">
+                  <p className="text-xs font-semibold uppercase text-muted">
+                    Ticket ID
+                  </p>
+                  <p className="mt-1 font-mono text-sm text-text">
+                    {getTicketCode(ticket)}
+                  </p>
                 </div>
               </div>
             </Panel>
 
             <Panel>
-              <div className="flex items-center gap-2 border-b border-slate-200 px-5 py-4 dark:border-zinc-700">
-                <Icon name="paperclip" />
-                <h2 className="text-base font-semibold text-zinc-950 dark:text-zinc-100">
-                  Adjuntos
-                </h2>
+              <div className="flex items-center gap-2 border-b border-border px-5 py-4">
+                <Icon name="paperclip" className="h-4 w-4" />
+                <h2 className="text-base font-semibold text-text">Adjuntos</h2>
               </div>
 
               <div className="space-y-4 p-5">
                 {attachments.length === 0 ? (
-                  <div className="rounded-lg border border-dashed border-slate-300 px-4 py-8 text-center text-sm text-slate-500 dark:border-zinc-600 dark:text-zinc-400">
+                  <div className="rounded-lg border border-dashed border-border px-4 py-8 text-center text-sm text-muted">
                     Sin adjuntos.
                   </div>
                 ) : (
@@ -407,14 +410,14 @@ function TicketDetailPage() {
 
                       return (
                         <a
-                          className="flex items-center justify-between gap-3 rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700 transition hover:bg-slate-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
+                          className="flex items-center justify-between gap-3 rounded-lg border border-border px-3 py-2 text-sm text-muted transition hover:bg-surface-hover"
                           href={url || '#'}
                           key={file.id ?? index}
                           rel="noreferrer"
                           target="_blank"
                         >
                           <span className="min-w-0 truncate">{name}</span>
-                          <Icon className="h-4 w-4 shrink-0" name="arrow" />
+                          <Icon name="arrow" className="h-4 w-4 shrink-0" />
                         </a>
                       )
                     })}
@@ -435,11 +438,11 @@ function TicketDetailPage() {
                     type="file"
                   />
                   <button
-                    className="flex w-full items-center justify-center gap-2 rounded-lg border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60 dark:border-zinc-600 dark:text-zinc-300 dark:hover:bg-zinc-700"
+                    className="flex w-full items-center justify-center gap-2 rounded-lg border border-border px-3 py-2 text-sm font-semibold text-muted transition hover:bg-surface-hover disabled:cursor-not-allowed disabled:opacity-60"
                     disabled={!attachment || saving === 'attachment'}
                     type="submit"
                   >
-                    <Icon name="upload" />
+                    <Icon name="upload" className="h-4 w-4" />
                     {saving === 'attachment' ? 'Cargando...' : 'Subir adjunto'}
                   </button>
                 </form>
@@ -453,6 +456,3 @@ function TicketDetailPage() {
 }
 
 export default TicketDetailPage
-
-
-

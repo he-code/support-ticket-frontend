@@ -1,9 +1,16 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useCallback, useContext, useState } from 'react'
+import { Icon } from '../components/SupportUi'
 
 const ToastContext = createContext(null)
 
 let toastId = 0
+
+const toastStyles = {
+  success: 'bg-success text-white',
+  error: 'bg-danger text-white',
+  notice: 'bg-info text-white',
+}
 
 export function ToastProvider({ children }) {
   const [toasts, setToasts] = useState([])
@@ -28,23 +35,19 @@ export function ToastProvider({ children }) {
       {children}
       <div
         aria-label="Notificaciones"
-        className="fixed bottom-4 right-4 z-50 flex flex-col gap-2 max-sm:inset-x-4 max-sm:bottom-4 sm:max-w-sm"
+        className="fixed right-4 top-4 z-50 flex flex-col gap-2 max-sm:inset-x-4 sm:max-w-sm"
         role="status"
       >
         {toasts.map((toast) => (
           <div
-            className={`flex items-start gap-3 rounded-lg px-4 py-3 text-sm font-medium shadow-lg ring-1 ring-inset transition-all animate-in slide-in-from-right-2 ${
-              toast.type === 'error'
-                ? 'bg-rose-600 text-white ring-rose-400'
-                : toast.type === 'notice'
-                  ? 'bg-violet-600 text-white ring-violet-400'
-                  : 'bg-indigo-600 text-white ring-indigo-400'
+            className={`flex items-start gap-3 rounded-xl px-4 py-3 text-sm font-medium shadow-lg animate-in ${
+              toastStyles[toast.type] ?? toastStyles.success
             }`}
             key={toast.id}
           >
             <span className="flex-1">{toast.message}</span>
             <button
-              className="-mr-1 -mt-1 grid h-6 w-6 place-items-center rounded text-white/80 hover:text-white"
+              className="-mr-1 -mt-1 grid h-6 w-6 place-items-center rounded text-white/70 hover:text-white transition"
               onClick={() => removeToast(toast.id)}
               type="button"
             >
@@ -62,6 +65,3 @@ export function ToastProvider({ children }) {
 export function useToast() {
   return useContext(ToastContext)
 }
-
-
-

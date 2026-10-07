@@ -62,22 +62,24 @@ function NotificationsPage() {
     <div className="space-y-6">
       <PageHeader
         actions={
-          <button
-            className="flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
-            disabled={saving || notifications.length === 0}
-            onClick={markAllRead}
-            type="button"
-          >
-            <Icon name="check" />
-            Marcar todas
-          </button>
+          unreadCount > 0 && (
+            <button
+              className="flex items-center gap-2 rounded-lg border border-border bg-surface px-3 py-2 text-sm font-semibold text-muted transition hover:bg-surface-hover disabled:cursor-not-allowed disabled:opacity-60"
+              disabled={saving}
+              onClick={markAllRead}
+              type="button"
+            >
+              <Icon name="check" className="h-4 w-4" />
+              Marcar todas como leidas
+            </button>
+          )
         }
         description={`${unreadCount} pendientes`}
         title="Notificaciones"
       />
 
       {error && (
-        <div className="rounded-lg bg-rose-50 px-4 py-3 text-sm text-rose-700 dark:bg-rose-900/50 dark:text-rose-200">
+        <div className="rounded-lg bg-danger/15 px-4 py-3 text-sm text-danger">
           {error}
         </div>
       )}
@@ -88,11 +90,11 @@ function NotificationsPage() {
             <SkeletonRows rows={6} />
           ) : notifications.length === 0 ? (
             <EmptyState
-              description="Sin avisos recientes de la API."
+              description="Sin avisos recientes."
               title="Sin notificaciones"
             />
           ) : (
-            <div className="divide-y divide-slate-100">
+            <div className="divide-y divide-border">
               {notifications.map((notification) => {
                 const read = Boolean(notification.read_at)
                 const title =
@@ -112,22 +114,22 @@ function NotificationsPage() {
                     key={notification.id}
                   >
                     <div className="flex gap-3">
-                      <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-indigo-700 text-white">
-                        <Icon name="bell" />
+                      <div className={`grid h-10 w-10 shrink-0 place-items-center rounded-lg ${read ? 'bg-surface-hover text-muted' : 'bg-accent text-white'}`}>
+                        <Icon name="bell" className="h-4 w-4" />
                       </div>
                       <div className="min-w-0">
                         <div className="flex flex-wrap items-center gap-2">
-                          <p className="font-semibold text-zinc-950">{title}</p>
+                          <p className="font-semibold text-text">{title}</p>
                           <Badge tone={read ? 'slate' : 'violet'}>
                             {read ? 'Leida' : 'Nueva'}
                           </Badge>
                         </div>
                         {message && (
-                          <p className="mt-1 text-sm text-slate-600">
+                          <p className="mt-1 text-sm text-muted">
                             {message}
                           </p>
                         )}
-                        <p className="mt-1 text-xs text-slate-400">
+                        <p className="mt-1 text-xs text-muted">
                           {formatDate(notification.created_at)}
                         </p>
                       </div>
@@ -135,7 +137,7 @@ function NotificationsPage() {
 
                     {!read && (
                       <button
-                        className="rounded-lg border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
+                        className="rounded-lg border border-border px-3 py-2 text-sm font-semibold text-muted transition hover:bg-surface-hover disabled:cursor-not-allowed disabled:opacity-60"
                         disabled={saving}
                         onClick={() => markRead(notification)}
                         type="button"
@@ -155,6 +157,3 @@ function NotificationsPage() {
 }
 
 export default NotificationsPage
-
-
-

@@ -1,14 +1,9 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router'
+import { Icon } from './SupportUi'
 
 export default function PublicLayout({ children }) {
   const [scrollRatio, setScrollRatio] = useState(0)
-  const [dark, setDark] = useState(() => localStorage.getItem('theme') === 'dark')
-
-  useEffect(() => {
-    document.documentElement.classList.toggle('dark', dark)
-    localStorage.setItem('theme', dark ? 'dark' : 'light')
-  }, [dark])
 
   useEffect(() => {
     const onScroll = () => {
@@ -18,87 +13,65 @@ export default function PublicLayout({ children }) {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  const bgColor = dark
-    ? `rgba(24, 24, 27, ${0.8 * scrollRatio})`
-    : `rgba(15, 23, 42, ${0.8 * scrollRatio})`
-
-  const blurPx = 12 * scrollRatio
-  const shadowOpacity = 0.12 * scrollRatio
+  const bgColor = `rgba(10, 10, 11, ${0.85 * scrollRatio})`
 
   return (
-    <div className="min-h-screen bg-[var(--color-app)]">
+    <div className="min-h-screen bg-bg">
       <nav
-        className="fixed inset-x-0 top-0 z-50"
+        className="fixed inset-x-0 top-0 z-50 border-b transition-colors"
         style={{
           backgroundColor: bgColor,
-          backdropFilter: scrollRatio > 0 ? `blur(${blurPx}px)` : 'none',
-          WebkitBackdropFilter: scrollRatio > 0 ? `blur(${blurPx}px)` : 'none',
-          boxShadow: `0 1px 3px rgba(0,0,0,${shadowOpacity})`,
+          backdropFilter: scrollRatio > 0 ? `blur(12px)` : 'none',
+          WebkitBackdropFilter: scrollRatio > 0 ? `blur(12px)` : 'none',
+          borderColor: scrollRatio > 0 ? 'var(--color-border)' : 'transparent',
         }}
       >
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
           <Link className="flex items-center gap-3" to="/">
-            <div className="grid h-10 w-10 place-items-center rounded-lg bg-indigo-400 text-sm font-bold text-indigo-950 shadow-lg shadow-indigo-400/20">
+            <div className="grid h-10 w-10 place-items-center rounded-lg bg-accent text-sm font-bold text-white shadow-lg shadow-accent/20">
               ST
             </div>
-            <span className="font-bold text-indigo-50">Support Tickets</span>
+            <span className="hidden font-semibold text-text sm:inline">Support Tickets</span>
           </Link>
 
           <div className="flex items-center gap-3">
-            <button
-              className="rounded-lg border border-indigo-700/50 p-2 text-indigo-200/70 transition hover:bg-indigo-900/30"
-              onClick={() => setDark((d) => !d)}
-              title={dark ? 'Modo claro' : 'Modo oscuro'}
-              type="button"
-            >
-              {dark ? (
-                <svg aria-hidden="true" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
-                  <circle cx="12" cy="12" r="5" /><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
-                </svg>
-              ) : (
-                <svg aria-hidden="true" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
-                  <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-                </svg>
-              )}
-            </button>
-
             <Link
-              className="rounded-lg border border-indigo-500 px-4 py-2 text-sm font-semibold text-indigo-300 transition hover:bg-indigo-900/30"
+              className="rounded-lg border border-accent/40 px-4 py-2 text-sm font-semibold text-accent transition hover:bg-accent-soft"
               to="/login"
             >
-              Iniciar sesión
+              Acceder al panel
             </Link>
           </div>
         </div>
       </nav>
 
-      <main className="pt-16">{children}</main>
+      <main className="pt-14">{children}</main>
 
-      <footer className="border-t border-zinc-200 bg-[var(--color-app)] dark:border-zinc-800">
+      <footer className="border-t border-border bg-bg">
         <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
           <div className="grid gap-8 sm:grid-cols-3">
             <div>
               <div className="flex items-center gap-3">
-                <div className="grid h-10 w-10 place-items-center rounded-lg bg-indigo-400 text-sm font-bold text-indigo-950">
+                <div className="grid h-10 w-10 place-items-center rounded-lg bg-accent text-sm font-bold text-white">
                   ST
                 </div>
-                <span className="font-bold text-zinc-950 dark:text-white">Support Tickets</span>
+                <span className="font-semibold text-text">Support Tickets</span>
               </div>
-              <p className="mt-3 text-sm leading-6 text-zinc-500 dark:text-zinc-400">
-                Plataforma de gestión de tickets para clientes, agentes y administradores.
+              <p className="mt-3 text-sm leading-6 text-muted">
+                Plataforma de gestion de tickets para clientes, agentes y administradores.
               </p>
             </div>
 
             <div>
-              <h3 className="text-sm font-semibold text-zinc-950 dark:text-zinc-100">Navegación</h3>
+              <h3 className="text-sm font-semibold text-text">Navegacion</h3>
               <ul className="mt-4 space-y-3">
                 <li>
-                  <Link className="text-sm text-zinc-500 transition hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100" to="/">
+                  <Link className="text-sm text-muted transition hover:text-text" to="/">
                     Inicio
                   </Link>
                 </li>
                 <li>
-                  <Link className="text-sm text-zinc-500 transition hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100" to="/login">
+                  <Link className="text-sm text-muted transition hover:text-text" to="/login">
                     Acceder
                   </Link>
                 </li>
@@ -106,26 +79,23 @@ export default function PublicLayout({ children }) {
             </div>
 
             <div>
-              <h3 className="text-sm font-semibold text-zinc-950 dark:text-zinc-100">Recursos</h3>
+              <h3 className="text-sm font-semibold text-text">Recursos</h3>
               <ul className="mt-4 space-y-3">
                 <li>
-                  <span className="text-sm text-zinc-400 dark:text-zinc-500">Documentación</span>
+                  <span className="text-sm text-muted">Documentacion</span>
                 </li>
                 <li>
-                  <span className="text-sm text-zinc-400 dark:text-zinc-500">Estado del sistema</span>
+                  <span className="text-sm text-muted">Estado del sistema</span>
                 </li>
               </ul>
             </div>
           </div>
 
-          <div className="mt-10 flex items-center justify-center border-t border-zinc-200 pt-8 dark:border-zinc-800">
-            <p className="text-xs text-zinc-400 dark:text-zinc-500">&copy; 2026 Support Tickets. Todos los derechos reservados.</p>
+          <div className="mt-10 flex items-center justify-center border-t border-border pt-8">
+            <p className="text-xs text-muted">&copy; 2026 Support Tickets. Todos los derechos reservados.</p>
           </div>
         </div>
       </footer>
     </div>
   )
 }
-
-
-

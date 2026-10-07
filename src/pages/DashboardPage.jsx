@@ -13,26 +13,32 @@ import {
 } from '../lib/ticket'
 
 function StatCard({ icon, title, value, loading, tone = 'slate' }) {
-  const toneClass = {
-    slate: 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300',
-    violet: 'bg-violet-50 text-violet-700 dark:bg-violet-900/50 dark:text-violet-300',
-    amber: 'bg-amber-50 text-amber-700 dark:bg-amber-900/50 dark:text-amber-300',
-    indigo: 'bg-indigo-50 text-indigo-700 dark:bg-indigo-900/50 dark:text-indigo-300',
-  }[tone]
+  const toneBg = {
+    slate: 'bg-muted/10',
+    violet: 'bg-accent/10',
+    amber: 'bg-warning/10',
+    indigo: 'bg-success/10',
+  }
+  const toneText = {
+    slate: 'text-muted',
+    violet: 'text-accent',
+    amber: 'text-warning',
+    indigo: 'text-success',
+  }
 
   return (
-    <Panel className="p-5">
+    <Panel className="p-5 transition-all duration-200 hover:border-accent/30 hover:shadow-md">
       <div className="flex items-center justify-between gap-3">
-        <p className="text-sm font-medium text-slate-500 dark:text-zinc-400">{title}</p>
-        <span className={`rounded-lg p-2 ${toneClass}`}>
+        <p className="text-sm font-medium text-muted">{title}</p>
+        <span className={`rounded-lg p-2 ${toneBg[tone] || toneBg.slate} ${toneText[tone] || toneText.slate}`}>
           <Icon className="h-4 w-4" name={icon} />
         </span>
       </div>
 
       {loading ? (
-        <div className="mt-4 h-8 w-20 animate-pulse rounded-md bg-slate-100 dark:bg-zinc-700" />
+        <div className="mt-4 h-8 w-20 rounded-md skeleton-shimmer" />
       ) : (
-        <p className="mt-3 text-3xl font-bold text-zinc-950 dark:text-zinc-100">{value}</p>
+        <p className="mt-3 text-3xl font-bold text-text">{value}</p>
       )}
     </Panel>
   )
@@ -76,17 +82,17 @@ function DashboardPage() {
         actions={
           <>
             <Link
-              className="flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
+              className="flex items-center gap-2 rounded-lg border border-border bg-surface px-3 py-2 text-sm font-semibold text-text transition hover:bg-surface-hover"
               to="/tickets"
             >
-              <Icon name="tickets" />
-              Tickets
+              <Icon name="tickets" className="h-4 w-4" />
+              Ver todos
             </Link>
             <Link
-              className="flex items-center gap-2 rounded-lg bg-indigo-700 px-3 py-2 text-sm font-semibold text-white transition hover:bg-indigo-800 dark:bg-indigo-600 dark:hover:bg-indigo-700"
+              className="flex items-center gap-2 rounded-lg bg-accent px-3 py-2 text-sm font-semibold text-white transition hover:bg-accent/90 active:scale-[0.98]"
               to="/tickets/create"
             >
-              <Icon name="plus" />
+              <Icon name="plus" className="h-4 w-4" />
               Nuevo ticket
             </Link>
           </>
@@ -96,7 +102,7 @@ function DashboardPage() {
       />
 
       {error && (
-        <div className="rounded-lg bg-rose-50 px-4 py-3 text-sm text-rose-700 dark:bg-rose-900/50 dark:text-rose-200">
+        <div className="rounded-lg bg-danger/15 px-4 py-3 text-sm text-danger">
           {error}
         </div>
       )}
@@ -132,19 +138,17 @@ function DashboardPage() {
       </div>
 
       <Panel>
-        <div className="flex items-center justify-between border-b border-slate-200 px-5 py-4 dark:border-zinc-700">
+        <div className="flex items-center justify-between border-b border-border px-5 py-4">
           <div>
-            <h2 className="text-base font-semibold text-zinc-950 dark:text-zinc-100">
-              Tickets recientes
-            </h2>
-            <p className="text-sm text-slate-500 dark:text-zinc-400">Ultimos movimientos</p>
+            <h2 className="text-base font-semibold text-text">Tickets recientes</h2>
+            <p className="text-sm text-muted">Ultimos movimientos</p>
           </div>
           <Link
-            className="flex items-center gap-2 rounded-lg border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 dark:border-zinc-600 dark:text-zinc-300 dark:hover:bg-zinc-800"
+            className="flex items-center gap-2 rounded-lg border border-border px-3 py-2 text-sm font-semibold text-muted transition hover:bg-surface-hover hover:text-text"
             to="/tickets"
           >
             Ver todos
-            <Icon name="arrow" />
+            <Icon name="arrow" className="h-4 w-4" />
           </Link>
         </div>
 
@@ -152,29 +156,29 @@ function DashboardPage() {
           {loading ? (
             <SkeletonRows rows={5} />
           ) : recentTickets.length === 0 ? (
-            <div className="py-8 text-center text-sm text-slate-500">
+            <div className="py-8 text-center text-sm text-muted">
               Sin tickets recientes.
             </div>
           ) : (
-            <div className="divide-y divide-slate-100">
+            <div className="divide-y divide-border">
               {recentTickets.map((ticket) => {
                 const status = getStatusMeta(ticket.status)
                 const priority = getPriorityMeta(ticket.priority)
 
                 return (
                   <Link
-                    className="grid gap-3 py-4 transition hover:bg-slate-50 sm:grid-cols-[1fr_auto] sm:items-center"
+                    className="grid gap-3 py-4 transition hover:bg-surface-hover/50 sm:grid-cols-[1fr_auto] sm:items-center"
                     key={ticket.id ?? ticket.uuid}
                     to={`/tickets/${ticket.id ?? ticket.uuid}`}
                   >
                     <div className="min-w-0">
-                      <p className="text-xs font-semibold uppercase text-slate-400">
+                      <p className="text-xs font-semibold uppercase text-muted font-mono">
                         {getTicketCode(ticket)}
                       </p>
-                      <p className="mt-1 truncate text-sm font-semibold text-zinc-950">
+                      <p className="mt-1 truncate text-sm font-semibold text-text">
                         {getTicketTitle(ticket)}
                       </p>
-                      <p className="mt-1 text-xs text-slate-500">
+                      <p className="mt-1 text-xs text-muted">
                         {formatDate(getTicketCreatedAt(ticket))}
                       </p>
                     </div>
@@ -194,6 +198,3 @@ function DashboardPage() {
 }
 
 export default DashboardPage
-
-
-

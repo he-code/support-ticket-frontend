@@ -165,21 +165,19 @@ function UsersPage() {
     <div className="space-y-6">
       <PageHeader
         description="Administracion de usuarios y roles."
-        title="Usuarios admin"
+        title="Usuarios"
       />
 
       {displayError && (
-        <div className="rounded-lg bg-rose-50 px-4 py-3 text-sm text-rose-700 dark:bg-rose-900/50 dark:text-rose-200">
+        <div className="rounded-lg bg-danger/15 px-4 py-3 text-sm text-danger">
           {displayError}
         </div>
       )}
 
       <div className="grid gap-6 xl:grid-cols-[1fr_380px]">
         <Panel>
-          <div className="border-b border-slate-200 px-5 py-4 dark:border-zinc-700">
-            <h2 className="text-base font-semibold text-zinc-950 dark:text-zinc-100">
-              Usuarios
-            </h2>
+          <div className="border-b border-border px-5 py-4">
+            <h2 className="text-base font-semibold text-text">Usuarios</h2>
           </div>
 
           <div className="p-5">
@@ -196,18 +194,16 @@ function UsersPage() {
                 {users.map((item) => {
                   return (
                     <article
-                      className="rounded-lg border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-700 dark:bg-zinc-800"
+                      className="rounded-xl border border-border bg-surface p-4"
                       key={item.id}
                     >
                       <div className="flex items-start gap-3">
-                        <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-indigo-700 text-xs font-bold text-white">
+                        <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-accent text-xs font-bold text-white">
                           {getInitials(item.name ?? item.email)}
                         </div>
                         <div className="min-w-0 flex-1">
-                          <p className="font-semibold text-zinc-950 dark:text-zinc-100">{item.name}</p>
-                          <p className="truncate text-xs text-slate-500 dark:text-zinc-400">
-                            {item.email}
-                          </p>
+                          <p className="font-semibold text-text">{item.name}</p>
+                          <p className="truncate text-xs text-muted">{item.email}</p>
                           <div className="mt-3">
                             <Badge tone="violet">{item.role ?? 'user'}</Badge>
                           </div>
@@ -233,28 +229,28 @@ function UsersPage() {
               </div>
 
               <div className="hidden overflow-x-auto md:block">
-                <table className="min-w-full divide-y divide-slate-200 text-sm dark:divide-zinc-700">
+                <table className="min-w-full divide-y divide-border text-sm">
                   <thead>
-                    <tr className="text-left text-xs font-semibold uppercase text-slate-500 dark:text-zinc-400">
+                    <tr className="text-left text-xs font-semibold uppercase text-muted">
                       <th className="px-3 py-3">Usuario</th>
                       <th className="px-3 py-3">Rol</th>
                       <th className="px-3 py-3">Creado</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-100 dark:divide-zinc-700/50">
+                  <tbody className="divide-y divide-border">
                     {users.map((item) => {
                       return (
-                        <tr className="align-middle hover:bg-slate-50 dark:hover:bg-zinc-800/50" key={item.id}>
+                        <tr className="align-middle hover:bg-surface-hover/50" key={item.id}>
                           <td className="px-3 py-4">
                             <div className="flex items-center gap-3">
-                              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-indigo-700 text-xs font-bold text-white">
+                              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-accent/20 text-xs font-bold text-accent">
                                 {getInitials(item.name ?? item.email)}
                               </div>
                               <div className="min-w-0">
-                                <p className="font-semibold text-zinc-950 dark:text-zinc-100">
+                                <p className="font-semibold text-text">
                                   {item.name}
                                 </p>
-                                <p className="truncate text-xs text-slate-500 dark:text-zinc-400">
+                                <p className="truncate text-xs text-muted">
                                   {item.email}
                                 </p>
                               </div>
@@ -275,7 +271,7 @@ function UsersPage() {
                               ))}
                             </select>
                           </td>
-                          <td className="px-3 py-4 text-slate-500 dark:text-zinc-400">
+                          <td className="px-3 py-4 text-muted">
                             {item.created_at}
                           </td>
                         </tr>
@@ -290,10 +286,8 @@ function UsersPage() {
         </Panel>
 
         <Panel>
-          <div className="border-b border-slate-200 px-5 py-4 dark:border-zinc-700">
-            <h2 className="text-base font-semibold text-zinc-950 dark:text-zinc-100">
-              Nuevo usuario
-            </h2>
+          <div className="border-b border-border px-5 py-4">
+            <h2 className="text-base font-semibold text-text">Nuevo usuario</h2>
           </div>
           <form className="space-y-5 p-5" onSubmit={handleSubmit}>
             <div>
@@ -301,7 +295,7 @@ function UsersPage() {
                 Nombre
               </label>
               <input
-                className={`${inputClass} mt-1`}
+                className={`${inputClass} mt-1.5`}
                 id="name"
                 name="name"
                 onChange={handleChange}
@@ -314,7 +308,7 @@ function UsersPage() {
                 Correo
               </label>
               <input
-                className={`${inputClass} mt-1`}
+                className={`${inputClass} mt-1.5`}
                 id="email"
                 name="email"
                 onChange={handleChange}
@@ -328,7 +322,7 @@ function UsersPage() {
                 Rol
               </label>
               <select
-                className={`${inputClass} mt-1`}
+                className={`${inputClass} mt-1.5`}
                 id="role"
                 name="role"
                 onChange={handleChange}
@@ -346,7 +340,7 @@ function UsersPage() {
                 Contrasena
               </label>
               <input
-                className={`${inputClass} mt-1`}
+                className={`${inputClass} mt-1.5`}
                 id="password"
                 name="password"
                 onChange={handleChange}
@@ -356,11 +350,11 @@ function UsersPage() {
               />
             </div>
             <button
-              className="flex w-full items-center justify-center gap-2 rounded-lg bg-indigo-700 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-800 disabled:cursor-not-allowed disabled:opacity-60"
+              className="flex w-full items-center justify-center gap-2 rounded-lg bg-accent px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-accent/90 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
               disabled={saving}
               type="submit"
             >
-              <Icon name="save" />
+              <Icon name="save" className="h-4 w-4" />
               {saving ? 'Guardando...' : 'Crear usuario'}
             </button>
           </form>
@@ -368,22 +362,19 @@ function UsersPage() {
       </div>
 
       <Panel>
-        <div className="grid gap-6 border-b border-slate-200 px-5 py-4 dark:border-zinc-700 lg:grid-cols-[1fr_auto] lg:items-center">
+        <div className="grid gap-6 border-b border-border px-5 py-4 lg:grid-cols-[1fr_auto] lg:items-center">
           <div>
-            <h2 className="text-base font-semibold text-zinc-950 dark:text-zinc-100">
-              Importar usuarios
-            </h2>
-            <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
-              Carga archivos CSV, TXT o XLSX con columnas name, email, role y
-              password.
+            <h2 className="text-base font-semibold text-text">Importar usuarios</h2>
+            <p className="mt-1 text-sm text-muted">
+              Carga archivos CSV, TXT o XLSX con columnas name, email, role y password.
             </p>
           </div>
           <button
-            className="flex items-center justify-center gap-2 rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm font-semibold text-zinc-700 transition hover:bg-zinc-50 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
+            className="flex items-center justify-center gap-2 rounded-lg border border-border px-3 py-2 text-sm font-semibold text-muted transition hover:bg-surface-hover"
             onClick={downloadTemplate}
             type="button"
           >
-            <Icon name="upload" />
+            <Icon name="upload" className="h-4 w-4" />
             Plantilla CSV
           </button>
         </div>
@@ -396,7 +387,7 @@ function UsersPage() {
               </label>
               <input
                 accept=".csv,.txt,.xlsx"
-                className={`${inputClass} mt-1`}
+                className={`${inputClass} mt-1.5`}
                 id="import_file"
                 key={importFileKey}
                 onChange={(event) =>
@@ -410,10 +401,10 @@ function UsersPage() {
               />
             </div>
 
-            <label className="flex items-start gap-3 rounded-lg border border-zinc-200 p-3 text-sm text-zinc-700 dark:border-zinc-700 dark:text-zinc-300">
+            <label className="flex items-start gap-3 rounded-lg border border-border p-3 text-sm text-muted">
               <input
                 checked={importForm.updateExisting}
-                className="mt-1 h-4 w-4 rounded border-zinc-300 text-indigo-700"
+                className="mt-1 h-4 w-4 rounded border-border bg-surface text-accent"
                 onChange={(event) =>
                   setImportForm((current) => ({
                     ...current,
@@ -432,7 +423,7 @@ function UsersPage() {
                 Contrasena por defecto
               </label>
               <input
-                className={`${inputClass} mt-1`}
+                className={`${inputClass} mt-1.5`}
                 id="default_password"
                 minLength={6}
                 onChange={(event) =>
@@ -448,17 +439,17 @@ function UsersPage() {
             </div>
 
             <button
-              className="flex w-full items-center justify-center gap-2 rounded-lg bg-indigo-700 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-800 disabled:cursor-not-allowed disabled:opacity-60"
+              className="flex w-full items-center justify-center gap-2 rounded-lg bg-accent px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-accent/90 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
               disabled={importing}
               type="submit"
             >
-              <Icon name="upload" />
+              <Icon name="upload" className="h-4 w-4" />
               {importing ? 'Importando...' : 'Importar usuarios'}
             </button>
           </form>
 
           <div>
-            <h3 className="text-sm font-semibold uppercase text-zinc-500 dark:text-zinc-400">
+            <h3 className="text-sm font-semibold uppercase text-muted">
               Historial
             </h3>
 
@@ -474,15 +465,15 @@ function UsersPage() {
                 <div className="space-y-3">
                   {imports.map((item) => (
                     <article
-                      className="rounded-lg border border-zinc-200 bg-white p-4 dark:border-zinc-700 dark:bg-zinc-800"
+                      className="rounded-xl border border-border bg-surface p-4"
                       key={item.id}
                     >
                       <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
                         <div className="min-w-0">
-                          <p className="truncate font-semibold text-zinc-950 dark:text-zinc-100">
+                          <p className="truncate font-semibold text-text">
                             {item.original_name}
                           </p>
-                          <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
+                          <p className="mt-1 text-xs text-muted">
                             {formatDate(item.created_at)}
                           </p>
                         </div>
@@ -500,7 +491,7 @@ function UsersPage() {
                       </div>
 
                       {Array.isArray(item.errors) && item.errors.length > 0 && (
-                        <div className="mt-4 rounded-lg bg-amber-50 p-3 text-sm text-amber-900">
+                        <div className="mt-4 rounded-lg bg-warning/10 p-3 text-sm text-warning">
                           <p className="font-semibold">Errores detectados</p>
                           <ul className="mt-2 space-y-1">
                             {item.errors.slice(0, 5).map((entry, index) => (
@@ -529,6 +520,3 @@ function UsersPage() {
 }
 
 export default UsersPage
-
-
-
