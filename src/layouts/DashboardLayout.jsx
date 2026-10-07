@@ -10,7 +10,7 @@ const navigation = [
   { name: 'Dashboard', path: '/dashboard', icon: 'dashboard', roles: ['admin', 'support_agent', 'user'] },
   { name: 'Tickets', path: '/tickets', icon: 'tickets', roles: ['admin', 'support_agent', 'user'] },
   { name: 'Nuevo ticket', path: '/tickets/create', icon: 'plus', roles: ['admin', 'support_agent', 'user'] },
-  { name: 'Categorias', path: '/categories', icon: 'categories', roles: ['admin', 'support_agent'] },
+  { name: 'Categorías', path: '/categories', icon: 'categories', roles: ['admin', 'support_agent'] },
   { name: 'Usuarios', path: '/users', icon: 'users', roles: ['admin'] },
   { name: 'Notificaciones', path: '/notifications', icon: 'bell', roles: ['admin', 'support_agent', 'user'] },
   { name: 'Perfil', path: '/profile', icon: 'user', roles: ['admin', 'support_agent', 'user'] },
@@ -133,7 +133,7 @@ function DashboardLayout() {
                   type="button"
                 >
                   <Icon name="logout" className="h-4 w-4" />
-                  Cerrar sesion
+                  Cerrar sesión
                 </button>
               </>
             )}
@@ -141,7 +141,7 @@ function DashboardLayout() {
             <button
               className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg border border-border px-2 py-2 text-sm text-muted transition hover:bg-surface-hover"
               onClick={toggleCollapsed}
-              title={collapsed ? 'Expandir sidebar' : 'Colapsar sidebar'}
+              title={collapsed ? 'Expandir barra lateral' : 'Colapsar barra lateral'}
               type="button"
             >
               <Icon name={collapsed ? 'chevronRight' : 'chevronLeft'} className="h-4 w-4" />
@@ -165,20 +165,11 @@ function DashboardLayout() {
               <button
                 className="hidden rounded-lg p-2 text-muted transition hover:text-text lg:inline-flex items-center gap-2"
                 onClick={toggleCollapsed}
-                title={collapsed ? 'Expandir sidebar' : 'Colapsar sidebar (Ctrl+B)'}
+                title={collapsed ? 'Expandir barra lateral' : 'Colapsar barra lateral (Ctrl+B)'}
                 type="button"
               >
                 <Icon name="menu" />
               </button>
-
-              <div className="relative hidden sm:block">
-                <Icon className="pointer-events-none absolute left-3 top-2.5 h-4 w-4 text-muted" name="search" />
-                <input
-                  className="w-48 rounded-lg border border-border bg-surface py-2 pl-9 pr-3 text-sm text-text outline-none transition placeholder:text-muted focus:border-accent focus:ring-2 focus:ring-accent/30"
-                  placeholder="Buscar..."
-                  type="search"
-                />
-              </div>
 
               <button
                 className="rounded-lg p-2 text-muted transition hover:text-text"
@@ -284,7 +275,7 @@ function DashboardLayout() {
                   type="button"
                 >
                   <Icon name="logout" className="h-4 w-4" />
-                  Cerrar sesion
+                  Cerrar sesión
                 </button>
               </div>
             </div>
