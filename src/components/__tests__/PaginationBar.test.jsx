@@ -107,6 +107,29 @@ describe('PaginationBar', () => {
     })
     expect(activeButton).toBe('3')
   })
+
+  it('clamps page when it exceeds totalPages and still renders page buttons', () => {
+    render(
+      <PaginationBar onPageChange={vi.fn()} page={10} total={30} totalPages={3} />,
+    )
+    expect(screen.getByText('3')).toBeInTheDocument()
+    expect(screen.getByText('1')).toBeInTheDocument()
+  })
+
+  it('marks the active page with aria-current', () => {
+    render(
+      <PaginationBar onPageChange={vi.fn()} page={2} total={25} totalPages={5} />,
+    )
+    expect(screen.getByText('2')).toHaveAttribute('aria-current', 'page')
+  })
+
+  it('exposes accessible names on prev and next buttons', () => {
+    render(
+      <PaginationBar onPageChange={vi.fn()} page={2} total={25} totalPages={5} />,
+    )
+    expect(screen.getByRole('button', { name: 'Página anterior' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Página siguiente' })).toBeInTheDocument()
+  })
 })
 
 

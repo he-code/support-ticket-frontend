@@ -3,7 +3,10 @@ import { Icon } from './SupportUi'
 function PageButton({ page, active, onClick }) {
   if (active) {
     return (
-      <span className="grid h-9 w-9 place-items-center rounded-lg bg-accent text-xs font-bold text-white">
+      <span
+        aria-current="page"
+        className="grid h-9 w-9 place-items-center rounded-lg bg-accent text-xs font-bold text-white"
+      >
         {page}
       </span>
     )
@@ -11,6 +14,7 @@ function PageButton({ page, active, onClick }) {
 
   return (
     <button
+      aria-label={`Pagina ${page}`}
       className="grid h-9 w-9 place-items-center rounded-lg border border-border bg-surface text-xs font-semibold text-muted transition hover:bg-surface-hover hover:text-text"
       onClick={() => onClick(page)}
       type="button"
@@ -23,9 +27,10 @@ function PageButton({ page, active, onClick }) {
 function PaginationBar({ page, totalPages, total, onPageChange }) {
   if (totalPages <= 1) return null
 
+  const current = Math.min(Math.max(1, page), totalPages)
   const pages = []
-  const start = Math.max(1, page - 2)
-  const end = Math.min(totalPages, page + 2)
+  const start = Math.max(1, current - 2)
+  const end = Math.min(totalPages, current + 2)
 
   for (let i = start; i <= end; i++) {
     pages.push(i)
@@ -37,9 +42,10 @@ function PaginationBar({ page, totalPages, total, onPageChange }) {
 
       <div className="flex items-center gap-1">
         <button
+          aria-label="Página anterior"
           className="grid h-9 w-9 place-items-center rounded-lg border border-border bg-surface text-xs font-semibold text-muted transition hover:bg-surface-hover disabled:cursor-not-allowed disabled:opacity-40"
-          disabled={page <= 1}
-          onClick={() => onPageChange(page - 1)}
+          disabled={current <= 1}
+          onClick={() => onPageChange(current - 1)}
           type="button"
         >
           <Icon className="h-3 w-3" name="chevronLeft" />
@@ -53,7 +59,7 @@ function PaginationBar({ page, totalPages, total, onPageChange }) {
         )}
 
         {pages.map((p) => (
-          <PageButton active={p === page} key={p} onClick={onPageChange} page={p} />
+          <PageButton active={p === current} key={p} onClick={onPageChange} page={p} />
         ))}
 
         {end < totalPages && (
@@ -64,9 +70,10 @@ function PaginationBar({ page, totalPages, total, onPageChange }) {
         )}
 
         <button
+          aria-label="Página siguiente"
           className="grid h-9 w-9 place-items-center rounded-lg border border-border bg-surface text-xs font-semibold text-muted transition hover:bg-surface-hover disabled:cursor-not-allowed disabled:opacity-40"
-          disabled={page >= totalPages}
-          onClick={() => onPageChange(page + 1)}
+          disabled={current >= totalPages}
+          onClick={() => onPageChange(current + 1)}
           type="button"
         >
           <Icon className="h-3 w-3" name="chevronRight" />
