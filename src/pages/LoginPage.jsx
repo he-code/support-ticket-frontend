@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react'
-import { Link, Navigate, useNavigate } from 'react-router'
+import { Link, Navigate, useLocation, useNavigate } from 'react-router'
 import {
   buttonPrimaryClass,
   FieldError,
@@ -43,6 +43,7 @@ const brandPoints = [
 
 function LoginPage() {
   const navigate = useNavigate()
+  const location = useLocation()
   const { login, isAuthenticated } = useAuth()
   const [showPassword, setShowPassword] = useState(false)
   const [fieldErrors, setFieldErrors] = useState({})
@@ -57,8 +58,10 @@ function LoginPage() {
 
   const { saving: loading, error, execute } = useMutation()
 
+  const from = location.state?.from?.pathname ?? '/dashboard'
+
   if (isAuthenticated) {
-    return <Navigate replace to="/dashboard" />
+    return <Navigate replace to={from} />
   }
 
   const handleChange = (event) => {
@@ -89,7 +92,7 @@ function LoginPage() {
 
     try {
       await execute(login, form)
-      navigate('/dashboard')
+      navigate(from, { replace: true })
     } catch {
       // error handled by useMutation
     }
