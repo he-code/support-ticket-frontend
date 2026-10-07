@@ -17,6 +17,8 @@ const api = axios.create({
   },
 })
 
+let redirecting = false
+
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token')
 
@@ -30,11 +32,16 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
+    const status = error.response?.status
+    const isLoginRequest = error.config?.url?.includes('/login')
+
+    if (status === 401 && !isLoginRequest) {
       localStorage.removeItem('token')
       localStorage.removeItem('user')
 
-      if (window.location.pathname !== '/login') {
+      // Guard: N respuestas 401 concurrentes disparan una sola expulsion.
+      if (!redirecting && window.location.pathname !== '/login') {
+        redirecting = true
         window.location.href = '/login'
       }
     }
