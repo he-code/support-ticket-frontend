@@ -1,4 +1,4 @@
-import { get, post, patch, del, withEndpointFallback } from '../request'
+import { get, post, patch, del, withEndpointFallback, getEnvelope } from '../request'
 
 vi.mock('../client', () => ({
   default: {
@@ -67,6 +67,21 @@ describe('request helpers', () => {
       const result = await del('/tickets/1')
       expect(api.delete).toHaveBeenCalledWith('/tickets/1', undefined)
       expect(result).toBe('deleted')
+    })
+  })
+
+  describe('getEnvelope', () => {
+    it('returns response.data without unwrapping', async () => {
+      api.get.mockResolvedValue({
+        data: { data: [{ id: 1 }, { id: 2 }], meta: { total: 30, per_page: 15 } },
+      })
+
+      const result = await getEnvelope('/tickets')
+
+      expect(result).toEqual({
+        data: [{ id: 1 }, { id: 2 }],
+        meta: { total: 30, per_page: 15 },
+      })
     })
   })
 

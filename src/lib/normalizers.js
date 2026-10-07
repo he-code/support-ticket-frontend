@@ -28,7 +28,7 @@ export function cleanParams(params) {
 }
 
 export function paginationFromPayload(payload) {
-  const value = payloadFromResponse(payload)
+  const meta = payload?.meta ?? payload?.data?.meta ?? null
 
-  return { items: collectionFromPayload(value), meta: value?.meta ?? null }
+  return { items: collectionFromPayload(payload), meta }
 }

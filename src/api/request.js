@@ -5,6 +5,11 @@ async function get(url, config) {
   return payloadFromResponse(await api.get(url, config))
 }
 
+async function getEnvelope(url, config) {
+  const response = await api.get(url, config)
+  return response?.data ?? {}
+}
+
 async function post(url, data, config) {
   return payloadFromResponse(await api.post(url, data, config))
 }
@@ -38,4 +43,4 @@ async function withEndpointFallback(endpoints, callback) {
   throw lastError
 }
 
-export { get, post, patch, del, withEndpointFallback }
+export { get, getEnvelope, post, patch, del, withEndpointFallback }

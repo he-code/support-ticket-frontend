@@ -7,7 +7,7 @@ export function getDashboardStats() {
 }
 
 export function listTickets(params = {}) {
-  return req.get(apiRoutes.tickets, { params })
+  return req.getEnvelope(apiRoutes.tickets, { params })
 }
 
 export function getTicket(ticketId) {

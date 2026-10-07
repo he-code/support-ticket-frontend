@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { payloadFromResponse, collectionFromPayload, cleanParams } from '../normalizers'
+import { payloadFromResponse, collectionFromPayload, cleanParams, paginationFromPayload } from '../normalizers'
 
 describe('payloadFromResponse', () => {
   it('extracts nested data.data', () => {
@@ -40,5 +40,34 @@ describe('cleanParams', () => {
 
   it('keeps falsy but non-empty values', () => {
     expect(cleanParams({ a: 0, b: false })).toEqual({ a: 0, b: false })
+  })
+})
+
+describe('paginationFromPayload', () => {
+  it('preserves meta from the Laravel envelope', () => {
+    const { items, meta } = paginationFromPayload({
+      data: [{ id: 1 }, { id: 2 }],
+      meta: { total: 30, per_page: 15 },
+    })
+
+    expect(items).toHaveLength(2)
+    expect(meta?.total).toBe(30)
+    expect(meta?.per_page).toBe(15)
+  })
+
+  it('reads meta from a nested envelope', () => {
+    const { items, meta } = paginationFromPayload({
+      data: { data: [{ id: 1 }], meta: { total: 5, per_page: 15 } },
+    })
+
+    expect(items).toHaveLength(1)
+    expect(meta?.total).toBe(5)
+  })
+
+  it('returns null meta for a plain array', () => {
+    const { items, meta } = paginationFromPayload([{ id: 1 }])
+
+    expect(items).toHaveLength(1)
+    expect(meta).toBeNull()
   })
 })
