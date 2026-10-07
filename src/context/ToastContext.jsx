@@ -1,5 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useCallback, useContext, useState } from 'react'
+import { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react'
 
 const ToastContext = createContext(null)
 
@@ -13,8 +13,16 @@ const toastStyles = {
 
 export function ToastProvider({ children }) {
   const [toasts, setToasts] = useState([])
+  const timersRef = useRef(new Map())
 
   const removeToast = useCallback((id) => {
+    const timer = timersRef.current.get(id)
+
+    if (timer) {
+      clearTimeout(timer)
+      timersRef.current.delete(id)
+    }
+
     setToasts((current) => current.filter((t) => t.id !== id))
   }, [])
 
@@ -23,11 +31,20 @@ export function ToastProvider({ children }) {
     setToasts((current) => [...current, { id, message, type }])
 
     if (duration > 0) {
-      setTimeout(() => removeToast(id), duration)
+      timersRef.current.set(id, setTimeout(() => removeToast(id), duration))
     }
 
     return id
   }, [removeToast])
+
+  useEffect(() => {
+    const timers = timersRef.current
+
+    return () => {
+      timers.forEach((timer) => clearTimeout(timer))
+      timers.clear()
+    }
+  }, [])
 
   return (
     <ToastContext.Provider value={{ toasts, showToast, removeToast }}>
@@ -46,6 +63,7 @@ export function ToastProvider({ children }) {
           >
             <span className="flex-1">{toast.message}</span>
             <button
+              aria-label="Cerrar notificación"
               className="-mr-1 -mt-1 grid h-6 w-6 place-items-center rounded text-white/70 hover:text-white transition"
               onClick={() => removeToast(toast.id)}
               type="button"

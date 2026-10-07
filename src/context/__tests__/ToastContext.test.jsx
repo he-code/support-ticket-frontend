@@ -68,6 +68,12 @@ describe('ToastProvider', () => {
     expect(screen.getByTestId('count').textContent).toBe('0')
   })
 
+  it('exposes an accessible name on the close button', () => {
+    renderWithProvider(<TestHarness />)
+    fireEvent.click(screen.getByText('show-success'))
+    expect(screen.getByRole('button', { name: 'Cerrar notificación' })).toBeInTheDocument()
+  })
+
   it('auto-dismisses after default duration (4000ms)', () => {
     renderWithProvider(<TestHarness />)
     fireEvent.click(screen.getByText('show-success'))
