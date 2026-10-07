@@ -4,7 +4,7 @@ import api from '../api/client'
 
 const AuthContext = createContext(null)
 
-function readAuthPayload(response, credentials) {
+function readAuthPayload(response) {
   const body = response?.data ?? {}
   const data = body.data ?? body
   const token =
@@ -16,17 +16,15 @@ function readAuthPayload(response, credentials) {
   const user =
     data.user ??
     body.user ??
-    data.profile ??
-    (credentials?.email
-      ? {
-          name: credentials.email,
-          email: credentials.email,
-          role: 'user',
-        }
-      : null)
+    body.profile ??
+    null
 
   if (!token) {
     throw new Error('La API no devolvio un token de acceso.')
+  }
+
+  if (!user) {
+    throw new Error('La API no devolvio datos de usuario.')
   }
 
   return { token, user }
@@ -49,13 +47,19 @@ export function AuthProvider({ children }) {
   const updateUser = (nextUser) => {
     const resolvedUser = nextUser?.user ?? nextUser
 
+    if (!resolvedUser) {
+      localStorage.removeItem('user')
+      setUser(null)
+      return
+    }
+
     localStorage.setItem('user', JSON.stringify(resolvedUser))
     setUser(resolvedUser)
   }
 
   const login = async (credentials) => {
     const response = await api.post('/login', credentials)
-    const auth = readAuthPayload(response, credentials)
+    const auth = readAuthPayload(response)
 
     localStorage.setItem('token', auth.token)
     localStorage.setItem('user', JSON.stringify(auth.user))
