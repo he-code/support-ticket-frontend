@@ -42,29 +42,50 @@ import { statusOptions } from '../lib/constants'
 
 function TicketDetailPage() {
   const { ticketId } = useParams()
-  const [status, setStatus] = useState('')
-  const [agentId, setAgentId] = useState('')
   const [comment, setComment] = useState('')
   const [attachment, setAttachment] = useState(null)
   const [attachmentKey, setAttachmentKey] = useState(0)
   const [saving, setSaving] = useState('')
 
   const { data: mainData, loading, error: asyncError, reload: reloadTicket } = useAsync(async () => {
-    const [ticketData, commentsData, attachmentsData] = await Promise.all([
+    const [ticketResult, commentsResult, attachmentsResult] = await Promise.allSettled([
       getTicket(ticketId),
       listTicketComments(ticketId),
       listTicketAttachments(ticketId),
     ])
-    const nextTicket = ticketData.ticket ?? ticketData
+
+    if (ticketResult.status === 'rejected') {
+      throw ticketResult.reason
+    }
+
+    const nextTicket = ticketResult.value.ticket ?? ticketResult.value
 
     return {
       ticket: nextTicket,
-      comments: collectionFromPayload(commentsData),
-      attachments: collectionFromPayload(attachmentsData),
+      comments:
+        commentsResult.status === 'fulfilled'
+          ? collectionFromPayload(commentsResult.value)
+          : [],
+      attachments:
+        attachmentsResult.status === 'fulfilled'
+          ? collectionFromPayload(attachmentsResult.value)
+          : [],
       initialStatus: nextTicket.status ?? 'open',
       initialAgentId: String(getTicketAgentId(nextTicket) ?? ''),
     }
   }, [ticketId])
+
+  const [status, setStatus] = useState('')
+  const [agentId, setAgentId] = useState('')
+  const [prevMainData, setPrevMainData] = useState(null)
+
+  // Sincronizar selects con los datos del ticket en cada carga
+  // (patron de ajuste durante render de la doc de React).
+  if (prevMainData !== mainData) {
+    setPrevMainData(mainData)
+    setStatus(mainData?.initialStatus ?? '')
+    setAgentId(mainData?.initialAgentId ?? '')
+  }
 
   const ticket = mainData?.ticket ?? null
   const comments = mainData?.comments ?? []
@@ -334,7 +355,7 @@ function TicketDetailPage() {
                     <button
                       aria-label="Guardar estado"
                       className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-accent text-white transition hover:bg-accent/90 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
-                      disabled={saving === 'status'}
+                      disabled={saving === 'status' || !status}
                       onClick={saveStatus}
                       title="Guardar estado"
                       type="button"
@@ -407,18 +428,25 @@ function TicketDetailPage() {
                         file.original_name
                       const url =
                         file.download_url ?? file.url ?? file.path ?? file.preview_url
+                      const key = file.id ?? index
+                      const rowClass =
+                        'flex items-center justify-between gap-3 rounded-lg border border-border px-3 py-2 text-sm text-muted transition hover:bg-surface-hover'
 
-                      return (
+                      return url ? (
                         <a
-                          className="flex items-center justify-between gap-3 rounded-lg border border-border px-3 py-2 text-sm text-muted transition hover:bg-surface-hover"
-                          href={url || '#'}
-                          key={file.id ?? index}
+                          className={rowClass}
+                          href={url}
+                          key={key}
                           rel="noreferrer"
                           target="_blank"
                         >
                           <span className="min-w-0 truncate">{name}</span>
                           <Icon name="arrow" className="h-4 w-4 shrink-0" />
                         </a>
+                      ) : (
+                        <div className={rowClass} key={key}>
+                          <span className="min-w-0 truncate">{name}</span>
+                        </div>
                       )
                     })}
                   </div>
