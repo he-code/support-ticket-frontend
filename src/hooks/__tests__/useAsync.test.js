@@ -86,4 +86,43 @@ describe('useAsync', () => {
     rerender({ fn, dep: 2 })
     await waitFor(() => expect(fn).toHaveBeenCalledTimes(2))
   })
+
+  it('sets loading true when deps change', async () => {
+    let resolveSecond
+    const fn = vi.fn()
+    fn.mockResolvedValueOnce('first')
+    fn.mockReturnValueOnce(new Promise((r) => { resolveSecond = r }))
+
+    const { result, rerender } = renderHook(
+      (props) => useAsync(props.fn, [props.dep]),
+      { initialProps: { fn, dep: 1 } },
+    )
+
+    await waitFor(() => expect(result.current.data).toBe('first'))
+    expect(result.current.loading).toBe(false)
+
+    act(() => rerender({ fn, dep: 2 }))
+    expect(result.current.loading).toBe(true)
+
+    resolveSecond('second')
+    await waitFor(() => expect(result.current.data).toBe('second'))
+  })
+
+  it('clears error when the next execution succeeds', async () => {
+    let call = 0
+    const fn = vi.fn(async () => {
+      call++
+      if (call === 1) throw new Error('fail')
+      return 'ok'
+    })
+
+    const { result } = renderHook(() => useAsync(fn, []))
+    await waitFor(() => expect(result.current.error).toBe('fail'))
+
+    act(() => result.current.reload())
+    await waitFor(() => expect(result.current.loading).toBe(false))
+
+    expect(result.current.error).toBeNull()
+    expect(result.current.data).toBe('ok')
+  })
 })

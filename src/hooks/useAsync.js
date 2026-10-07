@@ -19,6 +19,12 @@ export function useAsync(fn, deps = []) {
   useEffect(() => {
     let cancelled = false
 
+    // Inicio de fetch: la bandera de carga no es derivable del render
+    // (patron estandar de data fetching), por eso el disable puntual.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setLoading(true)
+    setError(null)
+
     fnRef.current()
       .then((result) => {
         if (!cancelled) setData(result)
