@@ -93,5 +93,45 @@ describe('ConfirmModal', () => {
     render(<ConfirmModal {...props} />)
     expect(screen.getByText('OK')).toBeInTheDocument()
   })
+
+  it('focuses cancel by default, not the destructive action', () => {
+    render(<ConfirmModal {...buildProps()} />)
+    expect(screen.getByText('Cancel')).toHaveFocus()
+  })
+
+  it('traps Tab within the dialog buttons', () => {
+    render(<ConfirmModal {...buildProps()} />)
+    const dialog = screen.getByRole('dialog')
+
+    fireEvent.keyDown(dialog, { key: 'Tab' })
+    expect(screen.getByText('Delete')).toHaveFocus()
+
+    fireEvent.keyDown(dialog, { key: 'Tab' })
+    expect(screen.getByText('Cancel')).toHaveFocus()
+  })
+
+  it('traps Shift+Tab cycling backwards', () => {
+    render(<ConfirmModal {...buildProps()} />)
+    fireEvent.keyDown(screen.getByRole('dialog'), { key: 'Tab', shiftKey: true })
+    expect(screen.getByText('Delete')).toHaveFocus()
+  })
+
+  it('marks the dialog as modal and labelled', () => {
+    render(<ConfirmModal {...buildProps()} />)
+    expect(screen.getByRole('dialog')).toHaveAttribute('aria-modal', 'true')
+  })
+
+  it('restores focus to the triggering element on unmount', () => {
+    const trigger = document.createElement('button')
+    document.body.appendChild(trigger)
+    trigger.focus()
+
+    const { unmount } = render(<ConfirmModal {...buildProps()} />)
+    expect(screen.getByText('Cancel')).toHaveFocus()
+    unmount()
+    expect(trigger).toHaveFocus()
+
+    document.body.removeChild(trigger)
+  })
 })
 

@@ -1,11 +1,19 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useId, useRef } from 'react'
 import { Icon } from './SupportUi'
 
 export default function ConfirmModal({ title, description, confirmLabel = 'Confirmar', cancelLabel = 'Cancelar', tone = 'rose', loading = false, onConfirm, onCancel }) {
+  const cancelRef = useRef(null)
   const confirmRef = useRef(null)
+  const previouslyFocusedRef = useRef(null)
+  const titleId = useId()
 
   useEffect(() => {
-    confirmRef.current?.focus()
+    previouslyFocusedRef.current = document.activeElement
+    cancelRef.current?.focus()
+
+    return () => {
+      previouslyFocusedRef.current?.focus?.()
+    }
   }, [])
 
   useEffect(() => {
@@ -15,6 +23,20 @@ export default function ConfirmModal({ title, description, confirmLabel = 'Confi
     document.addEventListener('keydown', handler)
     return () => document.removeEventListener('keydown', handler)
   }, [onCancel, loading])
+
+  const handleKeyDown = (event) => {
+    if (event.key !== 'Tab') return
+
+    event.preventDefault()
+
+    const buttons = [cancelRef.current, confirmRef.current]
+    const currentIndex = buttons.indexOf(document.activeElement)
+    const nextIndex = event.shiftKey
+      ? (currentIndex - 1 + buttons.length) % buttons.length
+      : (currentIndex + 1) % buttons.length
+
+    buttons[nextIndex]?.focus()
+  }
 
   const iconBg = tone === 'rose'
     ? 'bg-danger/10 text-danger'
@@ -26,8 +48,11 @@ export default function ConfirmModal({ title, description, confirmLabel = 'Confi
 
   return (
     <div
+      aria-labelledby={titleId}
+      aria-modal="true"
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm px-4"
       onClick={loading ? undefined : onCancel}
+      onKeyDown={handleKeyDown}
       role="dialog"
     >
       <div
@@ -39,7 +64,7 @@ export default function ConfirmModal({ title, description, confirmLabel = 'Confi
             <Icon className="h-5 w-5" name="trash" />
           </span>
           <div className="min-w-0 flex-1">
-            <h3 className="text-base font-semibold text-text">{title}</h3>
+            <h3 className="text-base font-semibold text-text" id={titleId}>{title}</h3>
             {description && <p className="mt-1 text-sm text-muted">{description}</p>}
           </div>
         </div>
@@ -49,6 +74,7 @@ export default function ConfirmModal({ title, description, confirmLabel = 'Confi
             className="rounded-lg border border-border px-4 py-2 text-sm font-semibold text-muted transition hover:bg-surface-hover disabled:cursor-not-allowed disabled:opacity-60"
             disabled={loading}
             onClick={onCancel}
+            ref={cancelRef}
             type="button"
           >
             {cancelLabel}
