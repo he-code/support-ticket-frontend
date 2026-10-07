@@ -71,6 +71,7 @@ export function uploadTicketAttachment(ticketId, file) {
 
   return req.post(`${routeWithId(apiRoutes.tickets, ticketId)}/attachments`, formData, {
     headers: { 'Content-Type': 'multipart/form-data' },
+    timeout: 60000,
   })
 }
 
@@ -137,6 +138,7 @@ export function importUsers({ file, updateExisting, defaultPassword }) {
 
   return req.post(apiRoutes.userImport, formData, {
     headers: { 'Content-Type': 'multipart/form-data' },
+    timeout: 60000,
   })
 }
 
