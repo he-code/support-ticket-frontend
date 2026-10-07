@@ -1,6 +1,11 @@
 {
   "rewrites": [
     {
+      "source": "/api/:path*",
+      "destination": "/404",
+      "statusCode": 404
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
