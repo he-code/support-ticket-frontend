@@ -26,8 +26,6 @@ import {
   Mail,
   Home,
   Menu,
-  Moon,
-  Sun,
   ChevronLeft,
   ChevronRight,
 } from 'lucide-react'
@@ -60,8 +58,6 @@ const iconMap = {
   mail: Mail,
   home: Home,
   menu: Menu,
-  moon: Moon,
-  sun: Sun,
   chevronLeft: ChevronLeft,
   chevronRight: ChevronRight,
 }
@@ -70,6 +66,42 @@ export const inputClass =
   'w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-text outline-none transition placeholder:text-muted/50 focus:border-accent focus:ring-2 focus:ring-accent/30 disabled:cursor-not-allowed disabled:opacity-50'
 
 export const labelClass = 'text-sm font-medium text-text/80'
+
+/*
+ * Botones unificados. El primario usa el degradado de marca con texto
+ * oscuro (#08080c) para cumplir contraste AA en todo el recorrido.
+ */
+export const buttonPrimaryClass =
+  'inline-flex items-center justify-center gap-2 rounded-lg bg-brand-gradient px-4 py-2 text-sm font-bold text-bg transition hover:opacity-90 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60'
+
+export const buttonGhostClass =
+  'inline-flex items-center justify-center gap-2 rounded-lg border border-border bg-surface px-4 py-2 text-sm font-semibold text-text transition hover:bg-surface-hover active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60'
+
+export const buttonDangerClass =
+  'inline-flex items-center justify-center gap-2 rounded-lg bg-danger px-4 py-2 text-sm font-semibold text-white transition hover:bg-danger/90 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60'
+
+/** Marca de la aplicacion: tile con degradado y glifo de ticket perforado. */
+export function LogoMark({ size = 40, withWordmark = false }) {
+  const mark = (
+    <span
+      className="grid shrink-0 place-items-center rounded-xl bg-brand-gradient text-bg shadow-lg shadow-accent/20"
+      style={{ height: size, width: size }}
+    >
+      <Ticket aria-hidden="true" className="h-[55%] w-[55%]" strokeWidth={2.4} />
+    </span>
+  )
+
+  if (!withWordmark) return mark
+
+  return (
+    <span className="flex items-center gap-3">
+      {mark}
+      <span className="font-display text-base font-semibold tracking-tight text-text">
+        Support Tickets
+      </span>
+    </span>
+  )
+}
 
 export function Icon({ name, className = 'h-4 w-4' }) {
   const LucideIcon = iconMap[name] ?? iconMap.tickets
