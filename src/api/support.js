@@ -19,11 +19,18 @@ export async function createTicket(payload, attachments = []) {
   const ticket = created.ticket ?? created
   const id = getTicketId(ticket)
 
+  // Los adjuntos no bloquean: si uno falla, el ticket ya existe en el
+  // servidor y reintentar el formulario lo duplicaria. Se reportan aparte.
+  let failedAttachments = 0
+
   if (id && attachments.length > 0) {
-    await Promise.all(attachments.map((file) => uploadTicketAttachment(id, file)))
+    const results = await Promise.allSettled(
+      attachments.map((file) => uploadTicketAttachment(id, file)),
+    )
+    failedAttachments = results.filter((r) => r.status === 'rejected').length
   }
 
-  return created
+  return { created, ticket, failedAttachments }
 }
 
 export async function updateTicketStatus(ticketId, status) {

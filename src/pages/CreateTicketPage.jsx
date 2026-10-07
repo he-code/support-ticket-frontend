@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router'
 import { createTicket, listCategories } from '../api/support'
 import {
-  FieldError,
   Icon,
   inputClass,
   labelClass,
@@ -11,6 +10,7 @@ import {
 } from '../components/SupportUi'
 import { useAsync } from '../hooks/useAsync'
 import { useMutation } from '../hooks/useMutation'
+import { useToast } from '../context/ToastContext'
 import { collectionFromPayload } from '../lib/normalizers'
 import { getTicketId } from '../lib/ticket'
 import { priorityOptions } from '../lib/constants'
@@ -29,6 +29,7 @@ function CreateTicketPage() {
   })
   const [attachments, setAttachments] = useState([])
   const { saving: loading, error, execute } = useMutation()
+  const { showToast } = useToast()
 
   const handleChange = (event) => {
     setForm((current) => ({
@@ -47,9 +48,15 @@ function CreateTicketPage() {
         category_id: form.category_id || null,
         priority: form.priority,
       }
-      const created = await execute(createTicket, payload, attachments)
-      const ticket = created.ticket ?? created
-      const ticketId = getTicketId(ticket)
+      const result = await execute(createTicket, payload, attachments)
+      const ticketId = getTicketId(result.ticket ?? result.created)
+
+      showToast(
+        result.failedAttachments > 0
+          ? `Ticket creado, pero ${result.failedAttachments} adjunto(s) no se subieron.`
+          : 'Ticket creado.',
+        result.failedAttachments > 0 ? 'notice' : 'success',
+      )
 
       navigate(ticketId ? `/tickets/${ticketId}` : '/tickets')
     } catch {
@@ -101,7 +108,6 @@ function CreateTicketPage() {
                 required
                 value={form.description}
               />
-              <FieldError message={error} />
             </div>
 
             <div className="grid gap-5 sm:grid-cols-2">
