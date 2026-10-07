@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router'
-import { Icon } from './SupportUi'
 
 export default function PublicLayout({ children }) {
   const [scrollRatio, setScrollRatio] = useState(0)

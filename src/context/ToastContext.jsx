@@ -1,6 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useCallback, useContext, useState } from 'react'
-import { Icon } from '../components/SupportUi'
 
 const ToastContext = createContext(null)
 

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { NavLink, Outlet, useNavigate, useLocation } from 'react-router'
+import { NavLink, Outlet, useNavigate } from 'react-router'
 import { Icon } from '../components/SupportUi'
 import TopProgressBar from '../components/TopProgressBar'
 import { useAuth } from '../context/AuthContext'
@@ -25,7 +25,6 @@ const mobileNav = [
 
 function DashboardLayout() {
   const navigate = useNavigate()
-  const location = useLocation()
   const { user, logout } = useAuth()
   const role = user?.role ?? 'user'
 
@@ -48,10 +47,6 @@ function DashboardLayout() {
     window.addEventListener('keydown', onKeyDown)
     return () => window.removeEventListener('keydown', onKeyDown)
   }, [])
-
-  useEffect(() => {
-    setSidebarOpen(false)
-  }, [location.pathname])
 
   const availableNavigation = navigation.filter((item) =>
     item.roles.includes(role),
